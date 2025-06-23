@@ -1,0 +1,49 @@
+{%load static%}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Wachemo School</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="card shadow p-4">
+            <div class="logo"><i class="text-center mb-4 fas lock fa-lock"></i></div>
+            <h2 class="text-center mb-4">Login to Your Account</h2>
+            <form action="validate.php" method="POST">
+            <div class="mb-3">
+    <label for="username" class="form-label small-label">Username/Email</label>
+    <div class="input-group input-group-sm">  <!-- Added input-group-sm -->
+        <span class="input-group-text"><i class="fas fa-user sm-icon"></i></span>
+        <input type="text" class="form-control form-control-sm" id="username" name="username" placeholder="Username/email" required>
+    </div>
+</div>
+<div class="mb-3">
+    <label for="password" class="form-label small-label">Password</label>
+    <div class="input-group input-group-sm">  <!-- Added input-group-sm -->
+        <span class="input-group-text"><i class="fas fa-lock sm-icon"></i></span>
+        <input type="password" class="form-control form-control-sm" id="password" name="password" placeholder="Password" required>
+    </div>
+</div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                    <label class="form-check-label" for="remember">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+                <button class="mt-4 btn btn-primary w-100"> Forgot password</button>
+                <div class="text-center mt-3">
+                    <p class="mt-4 w-100 ">Don't have an account? <a class="red" href="{% url 'signup' %}">Register here</a></p>
+            </form>
+        </div>
+    </div>
+    <script src="{% static 'js/login.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="{% static '/css/login.css' ">
+</body>
+</html>
