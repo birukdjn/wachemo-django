@@ -1,25 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render 
+from .models import news
 
 
 
-def index(request):     
-    return render(request, 'index.html')
-def about(request):
-    return render(request, 'about.html')
-def contact(request):
-    return render(request, 'contact.html')
-def gallery(request):
-    return render(request, 'gallery.html')
-def blog(request):
-    return render(request, 'blog.html')
-def faq(request):
-    return render(request, 'faq.html')
-def testimonials(request):
-    return render(request, 'testimonials.html')
-def events(request):
-    return render(request, 'events.html')
-def news(request):
-    return render(request, 'news.html')
+def index(request):
+    # Fetch the latest news from the database
+    latest_news = news.objects.all()
+    return render(request, 'index.html' , {'news': latest_news})
+
 def login(request):
     return render(request, 'login.html')
 def signup(request):

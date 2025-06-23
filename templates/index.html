@@ -325,57 +325,31 @@
                 <div class="divider-center"></div>
             </div>
             <div class="row">
+
+               {% for news in news %}
+                                    
+
                 <div class="col-lg-4 col-md-6">
                     <div class="news-card">
                         <div class="news-image">
-                            <img src="https://images.unsplash.com/photo-1618053415599-3fb6a7168d4b?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHNjaWVuY2UlMjB0YWxlbnR8ZW58MHwwfDB8fHww" alt="News Image" class="img-fluid">
-                            <div class="date-badge">
-                                <span>15</span>
-                                <span>June</span>
+                            <img src= {{ news.image}} alt="News Image" class="img-fluid">
+                            
+                                <div class="date-badge">
+                                <span>{{ news.day }}</span>
+                                <span>{{ news.month }}</span>
                             </div>
                         </div>
                         <div class="news-content">
-                            <h3>Annual Science Fair 2024</h3>
-                            <p class="news-meta"><i class="fas fa-user"></i> Admin <i class="fas fa-clock"></i> 2 days ago</p>
-                            <p>Our annual science fair will be held on June 25th with exciting projects from students across all grades.</p>
+                            <h3>{{ news.title }}</h3>
+                            <p class="news-meta"><i class="fas fa-user"></i> {{ news.reporter }} <i class="fas fa-clock"></i> {{ news.date }}</p>
+                            <p>{{news.content}}</p>
                             <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="news-card">
-                        <div class="news-image">
-                            <img src="https://images.unsplash.com/photo-1530825894095-9c184b068fcb?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGRpZ2l0YWwlMjBsZWFybmluZ3xlbnwwfHwwfHx8MA%3D%3D" alt="News Image" class="img-fluid">
-                            <div class="date-badge">
-                                <span>10</span>
-                                <span>June</span>
-                            </div>
-                        </div>
-                        <div class="news-content">
-                            <h3>New Digital Learning Initiative</h3>
-                            <p class="news-meta"><i class="fas fa-user"></i> Principal <i class="fas fa-clock"></i> 1 week ago</p>
-                            <p>We're proud to announce our new digital learning platform to enhance student engagement and learning outcomes.</p>
-                            <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="news-card">
-                        <div class="news-image">
-                            <img src="https://images.unsplash.com/photo-1683033316972-62d7eac88bec?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3BvcnQlMjBkYXl8ZW58MHx8MHx8fDA%3D" alt="News Image" class="img-fluid">
-                            <div class="date-badge">
-                                <span>05</span>
-                                <span>June</span>
-                            </div>
-                        </div>
-                        <div class="news-content">
-                            <h3>Sports Day Results</h3>
-                            <p class="news-meta"><i class="fas fa-user"></i> Sports Dept <i class="fas fa-clock"></i> 2 weeks ago</p>
-                            <p>Congratulations to all participants of wachemo SaPS in our annual sports day. View the full results and photos here.</p>
-                            <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
+                    
+                {% endfor %}
+
             </div>
             <div class="text-center mt-4">
                 <a href="#" class="btn btn-outline-primary">View All News</a>
