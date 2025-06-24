@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}wachemoSaPS{% endblock %}</title>
+    {% include 'includes/styles.html' %}  <!-- CSS links -->
+</head>
+<body>
+    {% include 'includes/header.html' %}  <!-- Navigation -->
+
+    <main>
+        {% block content %}  <!-- Content changes per page -->
+        {% endblock %}
+    </main>
+
+    {% include 'includes/footer.html' %}  <!-- Footer -->
+    {% include 'includes/scripts.html' %} <!-- JS files -->
+</body>
+</html>

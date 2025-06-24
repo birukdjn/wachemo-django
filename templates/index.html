@@ -1,138 +1,12 @@
+{% extends "base.html" %}
+
 {% load static  %}
 
+{% block title %}Home - wachemoSaPS{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>wachemoSaPS Portal - Digital Learning Platform</title>
-    
-<!-- Core CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<!-- Animation Library -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-
-<!-- Owl Carousel (Main CSS) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-
-<!-- Owl Carousel Themes -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.green.min.css">
-
-<!-- Lightbox CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
-
-<link rel="stylesheet" href="{% static 'css/styles.css' %}">
-
-
+{% block content %}
 <body>
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <ul class="top-links">
-                        <li><a href="#"><i class="fas fa-envelope"></i> info@wachemoSaPS.edu.et</a></li>
-                        <li><a href="#"><i class="fas fa-phone"></i> +251 908 574 808</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-6 text-end">
-                    <ul class="social-links">
-                        <li><a href="https://www.linkedin.com/in/birukdjn"><i class="fab fa-linkedin"></i></a></li>
-                        <li><a href="https://www.instagram.com/birukdjn"><i class="fab fa-instagram"></i></a></li>
-                        <li><a href="https://www.facebook.com/birukdjn"><i class="fab fa-facebook-f"></i></a></li>
-                        <li><a href="https://www.twitter.com/birukdjn"><i class="fab fa-twitter"></i></a></li>
-                        <li><a href="https://www.youtube.com/birukdjn"><i class="fab fa-youtube"></i></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <img src="https://1drv.ms/i/c/7389654435428074/IQR-zoIv7SkQS5SzfdUf-3qWAZ-KzS2mwEMxqVcMwm6oLx8?width=500&height=500"  alt="logo" class="logo">
-                <span class="brand-text">WSaPS</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            <i class="fas fa-home me-1"></i> Home
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">
-                            <i class="fas fa-sign-in-alt me-1"></i> Login
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#about">
-                            <i class="fas fa-info-circle me-1"></i> About
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#features">
-                            <i class="fas fa-star me-1"></i> Features
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#news">
-                            <i class="fas fa-newspaper me-1"></i> News
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#gallery">
-                            <i class="fas fa-images me-1"></i> Gallery
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contact">
-                            <i class="fas fa-envelope me-1"></i> Contact
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-external-link-alt me-1"></i> Quick Links
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-calendar-alt me-1"></i> Academic Calendar
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-calendar-check me-1"></i> School Events
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-poll me-1"></i> Exam Results
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-address-book me-1"></i> Staff Directory
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section with Slider -->
     <section class="hero-section">
         <div class="hero-slider owl-carousel owl-theme">
             <div class="hero-slide slide-1">
@@ -218,7 +92,7 @@
                 <div class="col-lg-6">
                     <div class="about-image">
                         <img src="https://images.unsplash.com/photo-1627556704290-2b1f5853ff78?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGdyYWR1YXRpb258ZW58MHx8MHx8fDA%3D" alt="About Wachemo School" class="img-fluid rounded shadow">
-                        <div class="experience-box animate__animated animate__pulse animate__infinite">
+                        <div class="experience-box animate__animated animate__pulse animate__infinite mx-4">
                             <h3>25+</h3>
                             <p>Years of Excellence</p>
                         </div>
@@ -237,7 +111,7 @@
                         <li><i class="fas fa-check-circle"></i> Comprehensive extracurricular programs</li>
                         <li><i class="fas fa-check-circle"></i> Safe and supportive learning environment</li>
                     </ul>
-                    <a href="#" class="btn btn-primary mt-3">Learn More About Us</a>
+                    <a href="{% url 'about' %}" class="btn btn-primary mt-1">Learn More About Us</a>
                 </div>
             </div>
         </div>
@@ -590,6 +464,10 @@
                     </div>
                 </div>
             </div>
+
+             <div class="text-center mt-5">
+                <a href=" {% url 'event' %} " class="btn btn-outline-primary">View All Events</a>
+            </div>
         </div>
     </section>
 
@@ -691,99 +569,12 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-widget">
-                        <img src="https://1drv.ms/i/c/7389654435428074/IQR-zoIv7SkQS5SzfdUf-3qWAZ-KzS2mwEMxqVcMwm6oLx8?width=500&height=500" alt="Wachemo School Logo" class="footer-logo">
-                        <p>Wachemo secondaryand preparatory school is committed to providing quality education through innovative teaching methods and state-of-the-art facilities.</p>
-                        <div class="footer-social">
-                            <a href="https://www.linkedin.com/in/birukdjn"><i class="fab fa-linkedin"></i></a>
-                            <a href="https://www.instagram.com/birukdjn"><i class="fab fa-instagram"></i></a>
-                            <a href="https://www.facebook.com/birukdjn"><i class="fab fa-facebook-f"></i></a>
-                            <a href="https://www.twitter.com/birukdjn"><i class="fab fa-twitter"></i></a>
-                            <a href="https://www.youtube.com/birukdjn"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-widget">
-                        <h3>Quick Links</h3>
-                        <ul class="footer-links">
-                            <li><a href="{% url 'index' %}">Home</a></li>
-                            <li><a href="{% url 'login' %}">Login</a></li>
-                            <li><a href="#about">About Us</a></li>
-                            <li><a href="#features">Portal Features</a></li>
-                            <li><a href="#news">News & Events</a></li>
-                            <li><a href="#gallery">Gallery</a></li>
-                            <li><a href="#contact">Contact Us</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-widget">
-                        <h3>Important Links</h3>
-                        <ul class="footer-links">
-                            <li><a href="#">Academic Calendar</a></li>
-                            <li><a href="#">School Policies</a></li>
-                            <li><a href="#">Exam Results</a></li>
-                            <li><a href="#">Staff Directory</a></li>
-                            <li><a href="#">School Fees</a></li>
-                            <li><a href="#">Admissions</a></li>
-                            <li><a href="#">Careers</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-widget">
-                        <h3>Contact Info</h3>
-                        <ul class="footer-contact">
-                            <li><i class="fas fa-map-marker-alt"></i> Hossana city, CERS, Ethiopia</li>
-                            <li><i class="fas fa-phone"></i> +251 908 574 808 </li>
-                            <li><i class="fas fa-envelope"></i> info@wachemoSaPS.edu.et</li>
-                            <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 5:00 PM</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="copyright">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p>&copy; 2025 Wachemo secondary and preparatory school.</p> 
-                        <p>All Rights Reserved.</p>
-                        <p>Privacy Policy | Terms of Service</p>
-                        
-                    </div>
-                    <div class="col-md-4 text-end">
-                        <p>Designed by <i class="fas fa-computer "></i>  BIRUK DEJENE</p>
-                        <p>Contact me <i class="fas fa-phone"></i> <a href="tel:+251908574808">+251 908 574 808</a></p>
-                        <p>Email  <i class="fas fa-envelope"></i> <a href="mailto:birukedjn@gmail.com"> birukedjn@gmail.com</a></p>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-
+  
     <!-- Back to Top Button -->
     <a href="#" class="back-to-top"><i class="fas fa-arrow-up"></i></a>
 
     <!-- JavaScript Libraries -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0.0/jquery.counterup.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-<script src="{% static 'js/main.js' %}"></script>
-<script src="{% static 'js/form-validation.js' %}"></script>
+{% endblock %}
+
 </body>
 </html>

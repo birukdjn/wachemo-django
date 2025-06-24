@@ -8,7 +8,17 @@ def index(request):
     latest_news = news.objects.all()
     return render(request, 'index.html' , {'news': latest_news})
 
+def about(request):
+    return render(request, 'about.html')
+
+def contact(request):
+    return render(request, 'contact.html')
+
+def event(request):
+    return render(request, 'event.html')
+
 def login(request):
     return render(request, 'login.html')
+
 def signup(request):
     return render(request, 'signup.html')

@@ -1,0 +1,101 @@
+ <div class="top-bar">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="top-links">
+                        <li><a href="#"><i class="fas fa-envelope"></i> info@wachemoSaPS.edu.et</a></li>
+                        <li><a href="#"><i class="fas fa-phone"></i> +251 908 574 808</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6 text-end">
+                    <ul class="social-links">
+                        <li><a href="https://www.linkedin.com/in/birukdjn"><i class="fab fa-linkedin"></i></a></li>
+                        <li><a href="https://www.instagram.com/birukdjn"><i class="fab fa-instagram"></i></a></li>
+                        <li><a href="https://www.facebook.com/birukdjn"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a href="https://www.twitter.com/birukdjn"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="https://www.youtube.com/birukdjn"><i class="fab fa-youtube"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://1drv.ms/i/c/7389654435428074/IQR-zoIv7SkQS5SzfdUf-3qWAZ-KzS2mwEMxqVcMwm6oLx8?width=500&height=500"  alt="logo" class="logo">
+                <span class="brand-text">WSaPS</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'index' %}">
+                            <i class="fas fa-home me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href=" {% url 'about' %} ">
+                            <i class="fas fa-info-circle me-1"></i> About
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">
+                            <i class="fas fa-star me-1"></i> Features
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#news">
+                            <i class="fas fa-newspaper me-1"></i> News
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#gallery">
+                            <i class="fas fa-images me-1"></i> Gallery
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'contact' %}">
+                            <i class="fas fa-envelope me-1"></i> Contact
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-external-link-alt me-1"></i> Quick Links
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-calendar-alt me-1"></i> Academic Calendar
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href=" {% url 'event' %} ">
+                                    <i class="fas fa-calendar-check me-1"></i> School Events
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-poll me-1"></i> Exam Results
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-address-book me-1"></i> Staff Directory
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
