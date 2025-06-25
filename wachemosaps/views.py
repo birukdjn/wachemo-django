@@ -41,9 +41,19 @@ def exams(request):
     return render(request, 'exams.html')
 
 def login(request):
-    username= request.POST.get('username')
-    password= request.POST.get('password')
-    
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = auth.authenticate(username=username, password=password)
+        if user is not None:
+            auth.login(request, user)
+            messages.success(request, 'Logged in successfully!')
+            return redirect('index')
+        else:
+            messages.error(request, 'Invalid credentials. Please try again.')
+            return redirect('login')
+    else:
+        messages.info(request, 'Please log in to continue.')
     return render(request, 'login.html')
 
 def signup(request):
