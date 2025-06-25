@@ -5,6 +5,7 @@ from django.contrib.auth.models import User, auth
 
 
 
+
 def index(request):
     context= {
         'topnews': News.objects.all().order_by('-date')[:3],  # Get the latest 3 news items
@@ -47,14 +48,12 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
         if user is not None:
             auth.login(request, user)
-            messages.success(request, 'Logged in successfully!')
             return redirect('index')
         else:
             messages.error(request, 'Invalid credentials. Please try again.')
             return redirect('login')
     else:
-        messages.info(request, 'Please log in to continue.')
-    return render(request, 'login.html')
+        return render(request, 'login.html')
 
 def signup(request):
     if request.method == 'POST':

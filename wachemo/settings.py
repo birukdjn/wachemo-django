@@ -131,3 +131,14 @@ MEDIA_URL = '/media/'                         # URL prefix for browser access
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Session settings (for auto-logout)
+SESSION_COOKIE_AGE = 300  # 5 minutes in seconds
+SESSION_SAVE_EVERY_REQUEST = True  # Reset timer on each request
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Clear session when browser closes
+
+# Security settings
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = True  # If using HTTPS
+CSRF_COOKIE_SECURE = True  # If using HTTPS

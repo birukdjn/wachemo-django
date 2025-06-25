@@ -18,23 +18,32 @@
         <div class="card shadow p-4">
             <div class="logo"><i class="text-center mb-4 fas lock fa-lock"></i></div>
             <h2 class="text-center mb-4">Login to Your Account</h2>
-
-            {% for message in messages %}
-                <div class="alert alert-danger text-danger mx-5">{{ message }}</div>
-            {% endfor %}
+            {% if request.GET.session_expired %}
+            <div class="alert alert-warning">
+                Your session expired due to inactivity. Please login again.
+            </div>
+            {% endif %}
+            {% if messages %}
+                <div class="alert alert-danger text-danger ">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
             <form action="login" method="POST">
                 {% csrf_token %}
 
             <div class="mb-3">
-                <label for="username" class="form-label small-label">Username/Email</label>
-                <div class="input-group input-group-sm">  <!-- Added input-group-sm -->
+                <label for="username" class="form-label small-label">Username</label>
+                <div class="input-group input-group-sm">  
                     <span class="input-group-text"><i class="fas fa-user sm-icon"></i></span>
                     <input type="text" class="form-control form-control-sm" id="username" name="username" placeholder="Username/email" required>
                 </div>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label small-label">Password</label>
-                <div class="input-group input-group-sm">  <!-- Added input-group-sm -->
+                <div class="input-group input-group-sm"> 
                     <span class="input-group-text"><i class="fas fa-lock sm-icon"></i></span>
                     <input type="password" class="form-control form-control-sm" id="password" name="password" placeholder="Password" required>
                 </div>

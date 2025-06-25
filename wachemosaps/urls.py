@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
@@ -13,4 +14,9 @@ urlpatterns = [
     path('gallery', views.gallery, name='gallery'),
     path('news', views.news, name='news'),
     path('exams', views.exams, name='exams'),
+    path('logout', auth_views.LogoutView.as_view(next_page='index',
+         extra_context = {'no_cache': True}),  # Prevent caching on logout
+         name='logout'  ),
+     
+    
 ]
