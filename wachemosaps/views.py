@@ -84,6 +84,5 @@ def signup(request):
             messages.success(request, 'Account created successfully!')
             return redirect('login')
     else:
-        messages.info(request, 'Please fill out the form to sign up.')
         return render(request, 'signup.html')
     

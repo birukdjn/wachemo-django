@@ -235,6 +235,14 @@ ul {
     flex-direction: column;
     align-items: center;
 }
+
+/* Make navbar flush with screen edges */
+.navbar > .container {
+    padding-left: 10px;  /* Reduced from default 15px */
+    padding-right: 10px;
+    max-width: 100%; /* Remove container max-width constraint */
+}
+
 /* Hero Section */
 .hero-section {
     position: relative;
