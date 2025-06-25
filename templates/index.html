@@ -200,9 +200,8 @@
             </div>
             <div class="row">
 
-               {% for news in news %}
+               {% for news in topnews %}
                                     
-
                 <div class="col-lg-4 col-md-6">
                     <div class="news-card">
                         <div class="news-image">
@@ -226,7 +225,7 @@
 
             </div>
             <div class="text-center mt-4">
-                <a href="#" class="btn btn-outline-primary">View All News</a>
+                <a href="{% url 'news' %}" class="btn btn-outline-primary">View All News</a>
             </div>
         </div>
     </section>
@@ -341,60 +340,20 @@
                 <div class="divider-center"></div>
             </div>
             <div class="row gallery-container">
+
+                {% for image in topimages %}
+
                 <div class="col-lg-3 col-md-4 col-sm-6 gallery-item">
-                    <img src="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjZ8fHRyaXB8ZW58MHx8MHx8fDA%3D" class="img-fluid" alt="Gallery Image">
+                    <img src="{{ image.image}}" class="img-fluid" alt="{{ image.description }}">
                     <div class="gallery-overlay">
-                        <a href="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjZ8fHRyaXB8ZW58MHx8MHx8fDA%3D" data-lightbox="gallery" class="gallery-btn"><i class="fas fa-search-plus"></i></a>
+                        <a href="{{ image.image }}" data-lightbox="gallery" class="gallery-btn"><i class="fas fa-search-plus"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 gallery-item">
-                    <img src="https://images.unsplash.com/photo-1630885408577-8d754a6329b4?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z2FtZSUyMHN0dWRlbnRzfGVufDB8fDB8fHww" class="img-fluid" alt="Gallery Image">
-                    <div class="gallery-overlay">
-                        <a href="https://images.unsplash.com/photo-1630885408577-8d754a6329b4?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z2FtZSUyMHN0dWRlbnRzfGVufDB8fDB8fHww" data-lightbox="gallery" class="gallery-btn"><i class="fas fa-search-plus"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 gallery-item">
-                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="img-fluid" alt="Gallery Image">
-                    <div class="gallery-overlay">
-                        <a href="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" data-lightbox="gallery" class="gallery-btn"><i class="fas fa-search-plus"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 gallery-item">
-                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGxlYXJuaW5nfGVufDB8fDB8fHww" class="img-fluid" alt="Gallery Image">
-                    <div class="gallery-overlay">
-                        <a href="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGxlYXJuaW5nfGVufDB8fDB8fHww" data-lightbox="gallery" class="gallery-btn"><i class="fas fa-search-plus"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 gallery-item">
-                    <img src="https://images.unsplash.com/photo-1564758866811-4780aa0a1f49?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c2Nob29sJTIwY2FmZXxlbnwwfDB8MHx8fDA%3D" class="img-fluid" alt="Gallery Image">
-                    <div class="gallery-overlay">
-                        <a href="https://images.unsplash.com/photo-1658235081452-c2ded30b8d9f?q=80&w=1628&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" data-lightbox="gallery" class="gallery-btn"><i class="fas fa-search-plus"></i></a>
-                    </div>
-                </div>
-                
-               
-                 <div class="col-lg-3 col-md-4 col-sm-6 gallery-item">
-                    <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y2xpbmljfGVufDB8fDB8fHww" class="img-fluid" alt="Gallery Image">
-                    <div class="gallery-overlay">
-                        <a href="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y2xpbmljfGVufDB8fDB8fHww" data-lightbox="gallery" class="gallery-btn"><i class="fas fa-search-plus"></i></a>
-                    </div>
-                </div>
-                
-                <div class="col-lg-3 col-md-4 col-sm-6 gallery-item">
-                    <img src="https://images.unsplash.com/photo-1627556704290-2b1f5853ff78?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdyYWR1YXRpb258ZW58MHwwfDB8fHww" class="img-fluid" alt="Gallery Image">
-                    <div class="gallery-overlay">
-                        <a href="https://images.unsplash.com/photo-1627556704290-2b1f5853ff78?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdyYWR1YXRpb258ZW58MHwwfDB8fHww" data-lightbox="gallery" class="gallery-btn"><i class="fas fa-search-plus"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 gallery-item">
-                    <img src="https://images.unsplash.com/photo-1527058918112-6e17a8213943?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2Nob29sJTIwYnVzfGVufDB8MHwwfHx8MA%3D%3D" class="img-fluid" alt="Gallery Image">
-                    <div class="gallery-overlay">
-                        <a href="https://images.unsplash.com/photo-1527058918112-6e17a8213943?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2Nob29sJTIwYnVzfGVufDB8MHwwfHx8MA%3D%3D" data-lightbox="gallery" class="gallery-btn"><i class="fas fa-search-plus"></i></a>
-                    </div>
-                </div>
+
+                {% endfor %}
             </div>
             <div class="text-center mt-4">
-                <a href="#" class="btn btn-outline-primary">View Full Gallery</a>
+                <a href="{% url 'gallery' %} " class="btn btn-outline-primary">View Full Gallery</a>
             </div>
         </div>
     </section>

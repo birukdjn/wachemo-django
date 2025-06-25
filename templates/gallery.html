@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Gallery - wachemoSaPS{% endblock %}
+
+{% block content %}
+
+<section id="gallery" class="gallery-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>School Gallery</h2>
+                <p>Moments from our school life</p>
+                <div class="divider-center"></div>
+            </div>
+            <div class="row gallery-container">
+
+                {% for image in allimages %}
+
+                <div class="col-lg-3 col-md-4 col-sm-6 gallery-item">
+                    <img src="{{ image.image}}" class="img-fluid" alt="{{ image.description }}">
+                    <div class="gallery-overlay">
+                        <a href="{{ image.image }}" data-lightbox="gallery" class="gallery-btn"><i class="fas fa-search-plus"></i></a>
+                    </div>
+                </div>
+
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+

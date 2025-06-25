@@ -1,12 +1,14 @@
 from django.shortcuts import render 
-from .models import news
+from .models import News,  Gallery
 
 
 
 def index(request):
-    # Fetch the latest news from the database
-    latest_news = news.objects.all()
-    return render(request, 'index.html' , {'news': latest_news})
+    context= {
+        'topnews': News.objects.all().order_by('-date')[:3],  # Get the latest 3 news items
+        'topimages': Gallery.objects.all().order_by('-id')[:8],  # Get the latest 8 images
+    }
+    return render(request, 'index.html', context)
 
 def about(request):
     return render(request, 'about.html')
@@ -14,8 +16,27 @@ def about(request):
 def contact(request):
     return render(request, 'contact.html')
 
+def features(request):
+    return render(request, 'features.html')
+
+def news(request):
+    allnews = News.objects.all().order_by('-date')
+    context = {
+        'allnews': allnews
+    }
+    return render(request, 'news.html', context) 
+
 def event(request):
     return render(request, 'event.html')
+
+def gallery(request):
+    context = {
+        'allimages': Gallery.objects.all()  
+    }
+    return render(request, 'gallery.html' , context)
+
+def exams(request):
+    return render(request, 'exams.html')
 
 def login(request):
     return render(request, 'login.html')

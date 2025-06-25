@@ -1,10 +1,9 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.core.exceptions import ValidationError
 
 
 # Create your models here.
-class news(models.Model):
+class News(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
     reporter = models.CharField(max_length=100)
@@ -25,5 +24,13 @@ class news(models.Model):
         ('Dec', 'December'),
     ]
     month = models.CharField(max_length=3, choices=MONTH_CHOICES)
-
     image = models.URLField(max_length=200, blank=True, null=True)
+    
+    
+    
+class Gallery(models.Model):
+    image = models.URLField(max_length=200, blank=True, null=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.description if self.description else "Gallery Image"

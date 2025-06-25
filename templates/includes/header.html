@@ -3,8 +3,8 @@
             <div class="row">
                 <div class="col-md-6">
                     <ul class="top-links">
-                        <li><a href="#"><i class="fas fa-envelope"></i> info@wachemoSaPS.edu.et</a></li>
-                        <li><a href="#"><i class="fas fa-phone"></i> +251 908 574 808</a></li>
+                        <li><a href="mailto:birukedjn@gmail.com"><i class="fas fa-envelope"></i> birukedjn@gmail.com</a></li>
+                        <li><a href="tel:+251908574808"><i class="fas fa-phone"></i> +251 908 574 808</a></li>
                     </ul>
                 </div>
                 <div class="col-md-6 text-end">
@@ -23,7 +23,7 @@
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{% url 'index' %}">
                 <img src="https://1drv.ms/i/c/7389654435428074/IQR-zoIv7SkQS5SzfdUf-3qWAZ-KzS2mwEMxqVcMwm6oLx8?width=500&height=500"  alt="logo" class="logo">
                 <span class="brand-text">WSaPS</span>
             </a>
@@ -48,17 +48,17 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#features">
+                        <a class="nav-link" href="{% url 'features' %}">
                             <i class="fas fa-star me-1"></i> Features
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#news">
+                        <a class="nav-link" href="{% url 'news' %}">
                             <i class="fas fa-newspaper me-1"></i> News
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#gallery">
+                        <a class="nav-link" href="{% url 'gallery' %}">
                             <i class="fas fa-images me-1"></i> Gallery
                         </a>
                     </li>
@@ -83,7 +83,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="{% url 'exams' %}">
                                     <i class="fas fa-poll me-1"></i> Exam Results
                                 </a>
                             </li>

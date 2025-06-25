@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}News - wachemoSaPS{% endblock %}
+
+{% block content %}
+
+ <section id="news" class="news-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>Latest News & Announcements</h2>
+                <p>Stay updated with what's happening at Wachemo School</p>
+                <div class="divider-center"></div>
+            </div>
+            <div class="row">
+
+               {% for news in allnews %}
+                                    
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="news-card">
+                        <div class="news-image">
+                            <img src= {{ news.image}} alt="News Image" class="img-fluid">
+                            
+                                <div class="date-badge">
+                                <span>{{ news.day }}</span>
+                                <span>{{ news.month }}</span>
+                            </div>
+                        </div>
+                        <div class="news-content">
+                            <h3>{{ news.title }}</h3>
+                            <p class="news-meta"><i class="fas fa-user"></i> {{ news.reporter }} <i class="fas fa-clock"></i> {{ news.date }}</p>
+                            <p>{{news.content}}</p>
+                            <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                    
+                {% endfor %}
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
