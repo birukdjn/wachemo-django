@@ -21,7 +21,13 @@
         <div class="card signup-form">
             <div class="logo"><i class="fas fa-user-plus"></i></div>
             <h2 class="form-title">Create Account</h2>
-            <form action="backend/register.php" method="POST">
+            
+            {% for message in messages %}
+            <h5 class="alert alert-danger text-danger mx-5"> {{ message }}</h5>
+            {% endfor %}
+            
+            <form action="signup" method="POST">
+                {% csrf_token %} 
                 <div class="form-columns">
                     <div class="form-column">
                         <div class="mb-3">
@@ -65,7 +71,7 @@
                             <label for="confirm-password" class="form-label">Confirm Password</label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text"><i class="fas fa-lock sm-icon"></i></span>
-                                <input type="password" class="form-control" id="confirm-password" name="confirm-password" placeholder="••••••••" required>
+                                <input type="password" class="form-control" id="confirm-password" name="confirm_password" placeholder="••••••••" required>
                             </div>
                         </div>
                     </div>

@@ -1,5 +1,7 @@
-from django.shortcuts import render 
+from django.shortcuts import render , redirect
 from .models import News,  Gallery
+from django.contrib import messages
+from django.contrib.auth.models import User, auth 
 
 
 
@@ -39,7 +41,40 @@ def exams(request):
     return render(request, 'exams.html')
 
 def login(request):
+    username= request.POST.get('username')
+    password= request.POST.get('password')
+    
     return render(request, 'login.html')
 
 def signup(request):
-    return render(request, 'signup.html')
+    if request.method == 'POST':
+        firstname = request.POST['firstname']
+        lastname = request.POST['lastname']
+        email = request.POST['email']
+        username = request.POST['username']
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+        if password != confirm_password:
+            messages.info(request, 'Passwords do not match.')
+            return redirect('signup')
+        elif User.objects.filter(username=username).exists():
+            messages.info(request, 'Username already exists.')
+            return redirect('signup')
+        elif User.objects.filter(email=email).exists():
+            messages.info(request, 'Email already exists.')
+            return redirect('signup')
+        else:
+            user = User.objects.create_user(
+                username=username,
+                password=password,
+                email = email,
+                first_name=firstname,
+                last_name=lastname,
+            )
+            user.save()
+            messages.success(request, 'Account created successfully!')
+            return redirect('login')
+    else:
+        messages.info(request, 'Please fill out the form to sign up.')
+        return render(request, 'signup.html')
+    
