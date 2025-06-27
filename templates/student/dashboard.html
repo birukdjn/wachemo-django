@@ -1,0 +1,333 @@
+{% extends "base.html" %}
+
+
+{% block title %}Student Dashboard - Wachemo School{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar shadow-sm h-10" style="position: relative;">
+            <div class="position-sticky" style="top: 80px; max-height: 80vh; overflow-y: auto;">
+            <ul class="nav flex-column align-items-start" id="sidebarMenu" style="align-items: flex-start !important;">
+                <li class="nav-item mb-2">
+                <a class="nav-link active d-flex align-items-center justify-content-start" href="{% url 'dashboard' %}" data-section="dashboard" style="white-space: nowrap;">
+                    <span class="d-inline-flex align-items-center">
+                    <i class="bi bi-house me-2"></i>
+                    <span>Dashboard Home</span>
+                    </span>
+                </a>
+                </li>
+                <li class="nav-item mb-2 ms-3">
+                <a class="nav-link d-flex align-items-center justify-content-start" href="{% url 'courses' %}" data-section="courses" style="white-space: nowrap;">
+                    <span class="d-inline-flex align-items-center">
+                    <i class="bi bi-book me-2"></i>
+                    <span>My Courses</span>
+                    </span>
+                </a>
+                </li>
+                <li class="nav-item mb-2 ms-3">
+                <a class="nav-link d-flex align-items-center justify-content-start" href="#" data-section="grades" style="white-space: nowrap;">
+                    <span class="d-inline-flex align-items-center">
+                    <i class="bi bi-bar-chart me-2"></i>
+                    <span>My Grades</span>
+                    </span>
+                </a>
+                </li>
+                <li class="nav-item mb-2 ms-3">
+                <a class="nav-link d-flex align-items-center justify-content-start" href="#" data-section="attendance" style="white-space: nowrap;">
+                    <span class="d-inline-flex align-items-center">
+                    <i class="bi bi-calendar-check me-2"></i>
+                    <span>Attendance</span>
+                    </span>
+                </a>
+                </li>
+                <li class="nav-item mb-2 ms-3">
+                <a class="nav-link d-flex align-items-center justify-content-start" href="#" data-section="assignments" style="white-space: nowrap;">
+                    <span class="d-inline-flex align-items-center">
+                    <i class="bi bi-pencil-square me-2"></i>
+                    <span>Assignments</span>
+                    </span>
+                </a>
+                </li>
+                <li class="nav-item mb-2 ms-3">
+                <a class="nav-link d-flex align-items-center justify-content-start" href="#" data-section="timetable" style="white-space: nowrap;">
+                    <span class="d-inline-flex align-items-center">
+                    <i class="bi bi-clock me-2"></i>
+                    <span>Timetable</span>
+                    </span>
+                </a>
+                </li>
+                <li class="nav-item mb-2 ms-3">
+                <a class="nav-link d-flex align-items-center justify-content-start" href="#" data-section="messages" style="white-space: nowrap;">
+                    <span class="d-inline-flex align-items-center">
+                    <i class="bi bi-chat-dots me-2"></i>
+                    <span>Messages</span>
+                    </span>
+                </a>
+                </li>
+                <li class="nav-item mb-2 ms-3">
+                <a class="nav-link d-flex align-items-center justify-content-start" href="#" data-section="library" style="white-space: nowrap;">
+                    <span class="d-inline-flex align-items-center">
+                    <i class="bi bi-journal-bookmark me-2"></i>
+                    <span>Library</span>
+                    </span>
+                </a>
+                </li>
+                <li class="nav-item mb-2 ms-3">
+                <a class="nav-link d-flex align-items-center justify-content-start" href="#" data-section="clubs" style="white-space: nowrap;">
+                    <span class="d-inline-flex align-items-center">
+                    <i class="bi bi-people me-2"></i>
+                    <span>Clubs & Activities</span>
+                    </span>
+                </a>
+                </li>
+                <li class="nav-item mb-2 ms-3">
+                <a class="nav-link d-flex align-items-center justify-content-start" href="#" data-section="events" style="white-space: nowrap;">
+                    <span class="d-inline-flex align-items-center">
+                    <i class="bi bi-calendar-event me-2"></i>
+                    <span>Events Calendar</span>
+                    </span>
+                </a>
+                </li>
+                <li class="nav-item mb-2 ms-3">
+                <a class="nav-link d-flex align-items-center justify-content-start" href="#" data-section="support" style="white-space: nowrap;">
+                    <span class="d-inline-flex align-items-center">
+                    <i class="bi bi-life-preserver me-2"></i>
+                    <span>Support</span>
+                    </span>
+                </a>
+                </li>
+            </ul>
+            </div>
+        </nav>
+        <!-- Main Content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <!-- Dashboard Home -->
+            <div id="section-dashboard" class="dashboard-section">
+                <div class="row mb-4">
+                    <div class="col text-center">
+                        <h2 class="mb-3">Welcome to Your Dashboard</h2>
+                        <p class="lead">Stay updated with your courses, grades, and school news.</p>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="alert alert-info shadow-sm" role="alert">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <strong>Tip:</strong> Check your assignments regularly to stay on top of deadlines!
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-success shadow-sm" role="alert">
+                            <i class="bi bi-calendar-event me-2"></i>
+                            <strong>Upcoming Event:</strong> School Science Fair on <span class="fw-bold">June 15</span>. Don’t miss it!
+                        </div>
+                    </div>
+                </div>
+                <!-- Quick Stats Cards -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3 col-6">
+                        <div class="card text-bg-primary shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-envelope-paper-fill fs-2 mb-2"></i>
+                                <h5 class="card-title mb-1">Messages</h5>
+                                <h3 class="fw-bold mb-0">{{ num_messages|default:"0" }}</h3>
+                                <small>Unread Messages</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="card text-bg-success shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-pencil-square fs-2 mb-2"></i>
+                                <h5 class="card-title mb-1">Assignments</h5>
+                                <h3 class="fw-bold mb-0">{{ num_assignments|default:"0" }}</h3>
+                                <small>Due Assignments</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="card text-bg-warning shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-calendar2-week-fill fs-2 mb-2"></i>
+                                <h5 class="card-title mb-1">Today's Classes</h5>
+                                <h3 class="fw-bold mb-0">{{ num_classes_today|default:"0" }}</h3>
+                                <small>Scheduled Today</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="card text-bg-info shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-bar-chart-fill fs-2 mb-2"></i>
+                                <h5 class="card-title mb-1">Attendance</h5>
+                                <h3 class="fw-bold mb-0">{{ attendance_percentage|default:"0" }}%</h3>
+                                <small>This Month</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- More Reports Section -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3 col-6">
+                        <div class="card text-bg-secondary shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-book-fill fs-2 mb-2"></i>
+                                <h5 class="card-title mb-1">Total Courses</h5>
+                                <h3 class="fw-bold mb-0">{{ num_courses|default:"0" }}</h3>
+                                <small>Enrolled</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="card text-bg-danger shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-exclamation-triangle-fill fs-2 mb-2"></i>
+                                <h5 class="card-title mb-1">Late Assignments</h5>
+                                <h3 class="fw-bold mb-0">{{ num_late_assignments|default:"0" }}</h3>
+                                <small>Past Due</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="card text-bg-light shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-star-fill fs-2 mb-2 text-warning"></i>
+                                <h5 class="card-title mb-1">Average Grade</h5>
+                                <h3 class="fw-bold mb-0">{{ average_grade|default:"N/A" }}</h3>
+                                <small>This Semester</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="card text-bg-dark shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-trophy-fill fs-2 mb-2"></i>
+                                <h5 class="card-title mb-1">Achievements</h5>
+                                <h3 class="fw-bold mb-0">{{ num_achievements|default:"0" }}</h3>
+                                <small>Earned</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- My Courses -->
+            <div id="section-courses" class="dashboard-section d-none">
+                <h3>My Courses</h3>
+                <p>View and manage your enrolled courses.</p>
+                <!-- Add your courses content here -->
+            </div>
+            <!-- My Grades -->
+            <div id="section-grades" class="dashboard-section d-none">
+                <h3>My Grades</h3>
+                <p>Check your latest grades and performance.</p>
+                <!-- Add your grades content here -->
+            </div>
+            <!-- Attendance -->
+            <div id="section-attendance" class="dashboard-section d-none">
+                <h3>Attendance</h3>
+                <p>Track your attendance records and history.</p>
+                <!-- Add your attendance content here -->
+            </div>
+            <!-- Assignments -->
+            <div id="section-assignments" class="dashboard-section d-none">
+                <h3>Assignments</h3>
+                <p>See upcoming and submitted assignments.</p>
+                <!-- Add your assignments content here -->
+            </div>
+            <!-- Profile -->
+            <div id="section-profile" class="dashboard-section d-none">
+                <h3>Profile</h3>
+                <p>Update your personal information and settings.</p>
+                <!-- Add your profile content here -->
+            </div>
+            <!-- Timetable -->
+            <div id="section-timetable" class="dashboard-section d-none">
+                <h3>Timetable</h3>
+                <p>View your daily and weekly class schedule.</p>
+                <!-- Add your timetable content here -->
+            </div>
+            <!-- Messages -->
+            <div id="section-messages" class="dashboard-section d-none">
+                <h3>Messages</h3>
+                <p>Check messages from teachers and classmates.</p>
+                <!-- Add your messages content here -->
+            </div>
+            <!-- School News -->
+            <div id="section-news" class="dashboard-section d-none">
+                <h3>School News</h3>
+                <p>Read the latest announcements and updates.</p>
+                <!-- Add your news content here -->
+            </div>
+            <!-- Library -->
+            <div id="section-library" class="dashboard-section d-none">
+                <h3>Library</h3>
+                <p>Access digital resources and library catalog.</p>
+                <!-- Add your library content here -->
+            </div>
+            <!-- Clubs & Activities -->
+            <div id="section-clubs" class="dashboard-section d-none">
+                <h3>Clubs & Activities</h3>
+                <p>Join and participate in school clubs and activities.</p>
+                <!-- Add your clubs content here -->
+            </div>
+            <!-- Events Calendar -->
+            <div id="section-events" class="dashboard-section d-none">
+                <h3>Events Calendar</h3>
+                <p>See upcoming school events and important dates.</p>
+                <!-- Add your events content here -->
+            </div>
+            <!-- Support -->
+            <div id="section-support" class="dashboard-section d-none">
+                <h3>Support</h3>
+                <p>Contact support or get help with school services.</p>
+                <!-- Add your support content here -->
+            </div>
+        </main>
+    </div>
+</div>
+<!-- Optionally include Bootstrap Icons for sidebar icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function showSection(section) {
+        document.querySelectorAll('.dashboard-section').forEach(function(div) {
+            div.classList.add('d-none');
+        });
+        var target = document.getElementById('section-' + section);
+        if (target) target.classList.remove('d-none');
+        // Update active class on sidebar
+        document.querySelectorAll('#sidebarMenu .nav-link').forEach(function(link) {
+            if (link.dataset.section === section) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
+
+    // Sidebar links
+    document.querySelectorAll('#sidebarMenu .nav-link[data-section]').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            showSection(this.dataset.section);
+        });
+    });
+
+    // Dashboard cards
+    document.querySelectorAll('.dashboard-section .btn[data-section]').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            showSection(this.dataset.section);
+        });
+    });
+
+    // Show dashboard by default
+    showSection('dashboard');
+});
+</script>
+
+{% endblock %}

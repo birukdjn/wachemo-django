@@ -48,7 +48,7 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
         if user is not None:
             auth.login(request, user)
-            return redirect('index')
+            return redirect('dashboard')  # Redirect to the student dashboard
         else:
             messages.error(request, 'Invalid credentials. Please try again.')
             return redirect('login')
