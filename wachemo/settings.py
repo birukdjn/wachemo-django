@@ -145,3 +145,6 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Clear session when browser closes
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SECURE = True  # If using HTTPS
 CSRF_COOKIE_SECURE = True  # If using HTTPS
+
+LOGIN_URL = 'login'
+# URL to redirect to for login
