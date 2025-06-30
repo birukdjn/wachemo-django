@@ -13,66 +13,31 @@
                 <div class="divider-center"></div>
             </div>
             <div class="row " >
+
+                {% for event in events %}
+
                 <div class="col-lg-6 ">
                     <div class="event-card event-container">
                         <div class="event-date">
-                            <span>25</span>
-                            <span>June</span>
+                            <span>{{ event.day }} </span>
+                            <span>{{ event.month }}</span>
                         </div>
                         <div class="event-details">
-                            <h3>Annual Science Fair</h3>
-                            <p><i class="fas fa-clock"></i> 9:00 AM - 3:00 PM <i class="fas fa-map-marker-alt"></i> School Auditorium</p>
-                            <p>Students will showcase their innovative science projects to judges and visitors.</p>
+                            <h3>{{ event.title }}</h3>
+                            <p><i class="fas fa-clock"></i> {{ event.duration }}<i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
+                            <p>{{ event.description }}</p>
                             <a href="#" class="btn btn-sm btn-outline-primary">More Details</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="event-card">
-                        <div class="event-date">
-                            <span>30</span>
-                            <span>June</span>
-                        </div>
-                        <div class="event-details">
-                            <h3>Parent-Teacher Conference</h3>
-                            <p><i class="fas fa-clock"></i> 1:00 PM - 6:00 PM <i class="fas fa-map-marker-alt"></i> Classrooms</p>
-                            <p>Meet with teachers to discuss your child's progress and academic performance.</p>
-                            <a href="#" class="btn btn-sm btn-outline-primary">More Details</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="event-card">
-                        <div class="event-date">
-                            <span>15</span>
-                            <span>July</span>
-                        </div>
-                        <div class="event-details">
-                            <h3>Cultural Day Celebration</h3>
-                            <p><i class="fas fa-clock"></i> 10:00 AM - 4:00 PM <i class="fas fa-map-marker-alt"></i> School Grounds</p>
-                            <p>Celebrate Ethiopia's rich cultural diversity with performances, food, and exhibitions.</p>
-                            <a href="#" class="btn btn-sm btn-outline-primary">More Details</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="event-card">
-                        <div class="event-date">
-                            <span>20</span>
-                            <span>July</span>
-                        </div>
-                        <div class="event-details">
-                            <h3>Career Guidance Seminar</h3>
-                            <p><i class="fas fa-clock"></i> 2:00 PM - 5:00 PM <i class="fas fa-map-marker-alt"></i> Conference Hall</p>
-                            <p>Industry professionals will share insights about various career paths for students.</p>
-                            <a href="#" class="btn btn-sm btn-outline-primary">More Details</a>
-                        </div>
-                    </div>
-                </div>
+
+                {% endfor %}
+
+              
             </div>
             
         </div>
-    </section>
+</section>
 
 
 {% endblock %}

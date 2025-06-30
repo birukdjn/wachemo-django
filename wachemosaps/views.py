@@ -1,5 +1,5 @@
 from django.shortcuts import render , redirect
-from .models import News,  Gallery
+from .models import News,  Gallery, Event
 from django.contrib import messages
 from django.contrib.auth.models import User, auth 
 
@@ -10,6 +10,7 @@ def index(request):
     context= {
         'topnews': News.objects.all().order_by('-date')[:3],  # Get the latest 3 news items
         'topimages': Gallery.objects.all().order_by('-id')[:8],  # Get the latest 8 images
+        'topevents': Event.objects.all().order_by('-day', '-month')[:4],  # Get the latest 4 events
     }
     return render(request, 'index.html', context)
 
@@ -30,7 +31,11 @@ def news(request):
     return render(request, 'news.html', context) 
 
 def event(request):
-    return render(request, 'event.html')
+    events= Event.objects.all().order_by('-day', '-month')
+    context = {
+        'events': events
+    }
+    return render(request, 'event.html', context)
 
 def gallery(request):
     context = {

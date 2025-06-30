@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import News, Gallery
+from .models import News, Gallery ,Event
 
 # Register your models here.
 
@@ -16,3 +16,10 @@ class GalleryAdmin(admin.ModelAdmin):
     list_display = ('description',)
     search_fields = ('description',)
     ordering = ('-id',)    
+    
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('title', 'day', 'month', 'location')
+    search_fields = ('title', 'location')
+    list_filter = ('day', 'month')
+    ordering = ('-day', '-month')
