@@ -1,0 +1,75 @@
+ 
+        .calendar-table {
+            table-layout: fixed;
+        }
+        .calendar-table td {
+            height: 40px;
+            vertical-align: middle;
+            position: relative;
+        }
+        .calendar-table td:hover {
+            background-color: #f8f9fa;
+            cursor: pointer;
+        }
+        .current-day {
+            background-color: #e7f5ff;
+            font-weight: bold;
+        }
+        .has-event {
+            position: relative;
+        }
+        .event-dot {
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+        .list-group-item {
+            cursor: pointer;
+        }
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+    
+
+
+
+
+
+    .month-scroller {
+        scroll-behavior: smooth;
+    }
+    .month-selector-container {
+        transition: transform 0.3s ease;
+    }
+    .calendar-table {
+        table-layout: fixed;
+    }
+    .calendar-table td {
+        height: 40px;
+        vertical-align: middle;
+        position: relative;
+    }
+    .calendar-table td:hover {
+        background-color: #f8f9fa;
+        cursor: pointer;
+    }
+    .current-day {
+        background-color: #e7f5ff;
+        font-weight: bold;
+    }
+    .has-event {
+        position: relative;
+    }
+    .event-dot {
+        position: absolute;
+        bottom: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
