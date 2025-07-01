@@ -236,6 +236,11 @@ ul {
     align-items: center;
 }
 
+.navbar-dark .navbar-nav .nav-link.active::before {
+    width: calc(100% - 30px);
+}
+
+
 /* Make navbar flush with screen edges */
 .navbar > .container {
     padding-left: 10px;  /* Reduced from default 15px */

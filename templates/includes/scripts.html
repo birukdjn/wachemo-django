@@ -14,3 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 <script src="{% static 'js/main.js' %}"></script>
 <script src="{% static 'js/form-validation.js' %}"></script>
+
+{% if request.resolver_match.url_name == 'index' %}
+<script src="{% static 'js/scroll-active.js' %}"></script>
+{% endif %}
