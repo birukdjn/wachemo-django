@@ -1,0 +1,287 @@
+{% extends "base.html" %} {% load static %} {% if not user.is_authenticated %}
+{% url 'login' as login %}
+<script>
+  window.location.href = "{{ login }}?next={{ request.path|urlencode }}";
+</script>
+{% else %} {% block title %}Student Dashboard - WachemoSaPS{% endblock %} 
+{% block content %}
+
+
+
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+     {% include "student/sidebar.html" %}
+
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+<!-- Attendance Section -->
+<div id="section-attendance" class="dashboard-section d-none">
+    <div class="row mb-4">
+        <div class="col">
+            <h3 class="mb-3">Attendance Records</h3>
+            <p class="lead">View your attendance history and statistics</p>
+            <div class="divider"></div>
+        </div>
+    </div>
+
+    <!-- Attendance Summary Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3 col-6">
+            <div class="card text-bg-success shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-check-circle fs-2 mb-2"></i>
+                    <h5 class="card-title mb-1">Present</h5>
+                    <h3 class="fw-bold mb-0">87%</h3>
+                    <small>This Semester</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card text-bg-danger shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-x-circle fs-2 mb-2"></i>
+                    <h5 class="card-title mb-1">Absent</h5>
+                    <h3 class="fw-bold mb-0">8%</h3>
+                    <small>This Semester</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card text-bg-warning shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-clock-history fs-2 mb-2"></i>
+                    <h5 class="card-title mb-1">Late</h5>
+                    <h3 class="fw-bold mb-0">5%</h3>
+                    <small>This Semester</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card text-bg-info shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-calendar-check fs-2 mb-2"></i>
+                    <h5 class="card-title mb-1">Total Days</h5>
+                    <h3 class="fw-bold mb-0">64</h3>
+                    <small>This Semester</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attendance Filter Options -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="attendanceMonth" class="form-label">Month</label>
+                            <select class="form-select" id="attendanceMonth">
+                                <option value="">All Months</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6" selected>June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="attendanceSubject" class="form-label">Subject</label>
+                            <select class="form-select" id="attendanceSubject">
+                                <option value="">All Subjects</option>
+                                <option value="math">Mathematics</option>
+                                <option value="science">Science</option>
+                                <option value="english">English</option>
+                                <option value="history">History</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="attendanceStatus" class="form-label">Status</label>
+                            <select class="form-select" id="attendanceStatus">
+                                <option value="">All Statuses</option>
+                                <option value="present">Present</option>
+                                <option value="absent">Absent</option>
+                                <option value="late">Late</option>
+                                <option value="excused">Excused</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button class="btn btn-primary w-100" id="applyFilters">
+                                <i class="bi bi-funnel me-2"></i>Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attendance Calendar View -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-calendar3 me-2"></i>Monthly Overview</h5>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary" id="prevMonthAtt">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" id="nextMonthAtt">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered attendance-calendar">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Sun</th>
+                                    <th class="text-center">Mon</th>
+                                    <th class="text-center">Tue</th>
+                                    <th class="text-center">Wed</th>
+                                    <th class="text-center">Thu</th>
+                                    <th class="text-center">Fri</th>
+                                    <th class="text-center">Sat</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendance-calendar-body">
+                                <!-- Attendance calendar will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-3">
+                        <div class="d-flex flex-wrap gap-3">
+                            <div class="d-flex align-items-center">
+                                <div class="attendance-legend present me-2"></div>
+                                <small>Present</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="attendance-legend absent me-2"></div>
+                                <small>Absent</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="attendance-legend late me-2"></div>
+                                <small>Late</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="attendance-legend excused me-2"></div>
+                                <small>Excused</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="attendance-legend holiday me-2"></div>
+                                <small>Holiday</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="attendance-legend weekend me-2"></div>
+                                <small>Weekend</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Attendance Records -->
+    <div class="row">
+        <div class="col">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="bi bi-list-check me-2"></i>Detailed Records</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Day</th>
+                                    <th>Subject</th>
+                                    <th>Status</th>
+                                    <th>Time</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2025-06-15</td>
+                                    <td>Monday</td>
+                                    <td>Mathematics</td>
+                                    <td><span class="badge bg-success">Present</span></td>
+                                    <td>08:15 AM</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>2025-06-16</td>
+                                    <td>Tuesday</td>
+                                    <td>Science</td>
+                                    <td><span class="badge bg-danger">Absent</span></td>
+                                    <td>-</td>
+                                    <td>Medical Leave</td>
+                                </tr>
+                                <tr>
+                                    <td>2025-06-17</td>
+                                    <td>Wednesday</td>
+                                    <td>English</td>
+                                    <td><span class="badge bg-warning">Late</span></td>
+                                    <td>09:05 AM</td>
+                                    <td>Traffic delay</td>
+                                </tr>
+                                <tr>
+                                    <td>2025-06-18</td>
+                                    <td>Thursday</td>
+                                    <td>History</td>
+                                    <td><span class="badge bg-success">Present</span></td>
+                                    <td>08:10 AM</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>2025-06-19</td>
+                                    <td>Friday</td>
+                                    <td>Mathematics</td>
+                                    <td><span class="badge bg-info">Excused</span></td>
+                                    <td>-</td>
+                                    <td>Family event</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <nav aria-label="Attendance pagination">
+                        <ul class="pagination justify-content-center mb-0">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+</main>
+
+
+
+{% endblock %} {% endif %}
+
+
+
+

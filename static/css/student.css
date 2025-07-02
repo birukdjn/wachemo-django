@@ -73,3 +73,137 @@
         height: 8px;
         border-radius: 50%;
     }
+nav.sidebar {
+  background:var(--dark-color);
+}
+nav-link {
+  color: var(--light-color);
+}
+nav-link.active{
+    color: red;
+}
+
+    .attendance-calendar {
+        table-layout: fixed;
+    }
+    .attendance-calendar td {
+        height: 40px;
+        vertical-align: middle;
+        position: relative;
+        text-align: center;
+    }
+    .attendance-calendar td.present {
+        background-color: rgba(25, 135, 84, 0.1);
+    }
+    .attendance-calendar td.absent {
+        background-color: rgba(220, 53, 69, 0.1);
+    }
+    .attendance-calendar td.late {
+        background-color: rgba(255, 193, 7, 0.1);
+    }
+    .attendance-calendar td.excused {
+        background-color: rgba(13, 110, 253, 0.1);
+    }
+    .attendance-calendar td.holiday {
+        background-color: rgba(108, 117, 125, 0.1);
+    }
+    .attendance-calendar td.weekend {
+        background-color: rgba(248, 249, 250, 0.5);
+    }
+    .attendance-calendar td.today {
+        border: 2px solid #0d6efd;
+    }
+    .attendance-legend {
+        width: 16px;
+        height: 16px;
+        border-radius: 3px;
+    }
+    .attendance-legend.present {
+        background-color: rgba(25, 135, 84, 0.2);
+        border: 1px solid #198754;
+    }
+    .attendance-legend.absent {
+        background-color: rgba(220, 53, 69, 0.2);
+        border: 1px solid #dc3545;
+    }
+    .attendance-legend.late {
+        background-color: rgba(255, 193, 7, 0.2);
+        border: 1px solid #ffc107;
+    }
+    .attendance-legend.excused {
+        background-color: rgba(13, 110, 253, 0.2);
+        border: 1px solid #0d6efd;
+    }
+    .attendance-legend.holiday {
+        background-color: rgba(108, 117, 125, 0.2);
+        border: 1px solid #6c757d;
+    }
+    .attendance-legend.weekend {
+        background-color: rgba(248, 249, 250, 0.5);
+        border: 1px solid #dee2e6;
+    }
+
+
+
+
+
+    .attendance-calendar {
+        table-layout: fixed;
+    }
+    .attendance-calendar td {
+        height: 40px;
+        vertical-align: middle;
+        position: relative;
+        text-align: center;
+    }
+    .attendance-calendar td.present {
+        background-color: rgba(25, 135, 84, 0.1);
+    }
+    .attendance-calendar td.absent {
+        background-color: rgba(220, 53, 69, 0.1);
+    }
+    .attendance-calendar td.late {
+        background-color: rgba(255, 193, 7, 0.1);
+    }
+    .attendance-calendar td.excused {
+        background-color: rgba(13, 110, 253, 0.1);
+    }
+    .attendance-calendar td.holiday {
+        background-color: rgba(108, 117, 125, 0.1);
+    }
+    .attendance-calendar td.weekend {
+        background-color: rgba(248, 249, 250, 0.5);
+    }
+    .attendance-calendar td.today {
+        border: 2px solid #0d6efd;
+    }
+    .attendance-legend {
+        width: 16px;
+        height: 16px;
+        border-radius: 3px;
+    }
+    .attendance-legend.present {
+        background-color: rgba(25, 135, 84, 0.2);
+        border: 1px solid #198754;
+    }
+    .attendance-legend.absent {
+        background-color: rgba(220, 53, 69, 0.2);
+        border: 1px solid #dc3545;
+    }
+    .attendance-legend.late {
+        background-color: rgba(255, 193, 7, 0.2);
+        border: 1px solid #ffc107;
+    }
+    .attendance-legend.excused {
+        background-color: rgba(13, 110, 253, 0.2);
+        border: 1px solid #0d6efd;
+    }
+    .attendance-legend.holiday {
+        background-color: rgba(108, 117, 125, 0.2);
+        border: 1px solid #6c757d;
+    }
+    .attendance-legend.weekend {
+        background-color: rgba(248, 249, 250, 0.5);
+        border: 1px solid #dee2e6;
+    }
+

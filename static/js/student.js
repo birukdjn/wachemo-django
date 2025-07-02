@@ -414,3 +414,229 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Attendance calendar navigation
+    const prevMonthAtt = document.getElementById('prevMonthAtt');
+    const nextMonthAtt = document.getElementById('nextMonthAtt');
+    let currentAttDate = new Date();
+    
+    function renderAttendanceCalendar() {
+        const year = currentAttDate.getFullYear();
+        const month = currentAttDate.getMonth();
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const daysInMonth = lastDay.getDate();
+        const startingDay = firstDay.getDay();
+        
+        let calendarBody = document.getElementById('attendance-calendar-body');
+        calendarBody.innerHTML = '';
+        
+        let date = 1;
+        for (let i = 0; i < 6; i++) {
+            if (date > daysInMonth) break;
+            
+            let row = document.createElement('tr');
+            
+            for (let j = 0; j < 7; j++) {
+                let cell = document.createElement('td');
+                cell.className = 'text-center';
+                
+                if (i === 0 && j < startingDay) {
+                    cell.textContent = '';
+                } else if (date > daysInMonth) {
+                    cell.textContent = '';
+                } else {
+                    cell.textContent = date;
+                    
+                    // Sample attendance data - replace with real data
+                    const dayOfWeek = new Date(year, month, date).getDay();
+                    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                    const isHoliday = date === 15 && month === 5; // Example holiday on June 15
+                    
+                    if (isWeekend) {
+                        cell.classList.add('weekend');
+                    } else if (isHoliday) {
+                        cell.classList.add('holiday');
+                    } else {
+                        // Sample status - replace with real data
+                        const status = ['present', 'absent', 'late', 'excused'][Math.floor(Math.random() * 4)];
+                        cell.classList.add(status);
+                    }
+                    
+                    // Highlight today
+                    const today = new Date();
+                    if (date === today.getDate() && 
+                        month === today.getMonth() && 
+                        year === today.getFullYear()) {
+                        cell.classList.add('today');
+                    }
+                    
+                    date++;
+                }
+                
+                row.appendChild(cell);
+            }
+            
+            calendarBody.appendChild(row);
+        }
+    }
+    
+    prevMonthAtt.addEventListener('click', function() {
+        currentAttDate.setMonth(currentAttDate.getMonth() - 1);
+        renderAttendanceCalendar();
+    });
+    
+    nextMonthAtt.addEventListener('click', function() {
+        currentAttDate.setMonth(currentAttDate.getMonth() + 1);
+        renderAttendanceCalendar();
+    });
+    
+    // Initialize attendance calendar
+    renderAttendanceCalendar();
+    
+    // Filter application
+    document.getElementById('applyFilters').addEventListener('click', function() {
+        // In a real app, this would filter the attendance records
+        alert('Filters would be applied here in a real implementation');
+    });
+});
+
+
+
+  document.addEventListener("DOMContentLoaded", function () {
+    function showSection(section) {
+      document.querySelectorAll(".dashboard-section").forEach(function (div) {
+        div.classList.add("d-none");
+      });
+      var target = document.getElementById("section-" + section);
+      if (target) target.classList.remove("d-none");
+      // Update active class on sidebar
+      document
+        .querySelectorAll("#sidebarMenu .nav-link")
+        .forEach(function (link) {
+          if (link.dataset.section === section) {
+            link.classList.add("active");
+          } else {
+            link.classList.remove("active");
+          }
+        });
+    }
+
+    // Sidebar links
+    document
+      .querySelectorAll("#sidebarMenu .nav-link[data-section]")
+      .forEach(function (link) {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+          showSection(this.dataset.section);
+        });
+      });
+
+    // Dashboard cards
+    document
+      .querySelectorAll(".dashboard-section .btn[data-section]")
+      .forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          showSection(this.dataset.section);
+        });
+      });
+
+    // Show dashboard by default
+    showSection("dashboard");
+  });
+
+
+
+
+
+
+// Attendance script
+document.addEventListener('DOMContentLoaded', function() {
+    // Attendance calendar navigation
+    const prevMonthAtt = document.getElementById('prevMonthAtt');
+    const nextMonthAtt = document.getElementById('nextMonthAtt');
+    let currentAttDate = new Date();
+    
+    function renderAttendanceCalendar() {
+        const year = currentAttDate.getFullYear();
+        const month = currentAttDate.getMonth();
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const daysInMonth = lastDay.getDate();
+        const startingDay = firstDay.getDay();
+        
+        let calendarBody = document.getElementById('attendance-calendar-body');
+        calendarBody.innerHTML = '';
+        
+        let date = 1;
+        for (let i = 0; i < 6; i++) {
+            if (date > daysInMonth) break;
+            
+            let row = document.createElement('tr');
+            
+            for (let j = 0; j < 7; j++) {
+                let cell = document.createElement('td');
+                cell.className = 'text-center';
+                
+                if (i === 0 && j < startingDay) {
+                    cell.textContent = '';
+                } else if (date > daysInMonth) {
+                    cell.textContent = '';
+                } else {
+                    cell.textContent = date;
+                    
+                    // Sample attendance data - replace with real data
+                    const dayOfWeek = new Date(year, month, date).getDay();
+                    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                    const isHoliday = date === 15 && month === 5; // Example holiday on June 15
+                    
+                    if (isWeekend) {
+                        cell.classList.add('weekend');
+                    } else if (isHoliday) {
+                        cell.classList.add('holiday');
+                    } else {
+                        // Sample status - replace with real data
+                        const status = ['present', 'absent', 'late', 'excused'][Math.floor(Math.random() * 4)];
+                        cell.classList.add(status);
+                    }
+                    
+                    // Highlight today
+                    const today = new Date();
+                    if (date === today.getDate() && 
+                        month === today.getMonth() && 
+                        year === today.getFullYear()) {
+                        cell.classList.add('today');
+                    }
+                    
+                    date++;
+                }
+                
+                row.appendChild(cell);
+            }
+            
+            calendarBody.appendChild(row);
+        }
+    }
+    
+    prevMonthAtt.addEventListener('click', function() {
+        currentAttDate.setMonth(currentAttDate.getMonth() - 1);
+        renderAttendanceCalendar();
+    });
+    
+    nextMonthAtt.addEventListener('click', function() {
+        currentAttDate.setMonth(currentAttDate.getMonth() + 1);
+        renderAttendanceCalendar();
+    });
+    
+    // Initialize attendance calendar
+    renderAttendanceCalendar();
+    
+    // Filter application
+    document.getElementById('applyFilters').addEventListener('click', function() {
+        // In a real app, this would filter the attendance records
+        alert('Filters would be applied here in a real implementation');
+    });
+});

@@ -1,7 +1,8 @@
 from django.shortcuts import render ,redirect
 from .models import Course
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required 
 from datetime import datetime
+from django.views.decorators.cache import cache_page
 # Create your views here.
 
 @login_required
@@ -42,3 +43,10 @@ def courses(request):
         'featured_courses': featured_courses,
     }
     return redirect('courses', context)
+
+
+def attendance(request):
+    """
+    Display the attendance page for students.
+    """
+    return render(request, 'student/attendance.html')

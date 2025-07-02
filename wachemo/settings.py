@@ -148,3 +148,16 @@ CSRF_COOKIE_SECURE = True  # If using HTTPS
 
 LOGIN_URL = 'login'
 # URL to redirect to for login
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/var/tmp/django_cache',
+        'OPTIONS': {
+            'COMPRESS': True,  # Enable compression
+            'COMPRESS_LEVEL': 6,  # Medium compression
+            'COMPRESS_MIN_SIZE': 500,  # Compress responses >500 bytes
+        }
+    }
+}
