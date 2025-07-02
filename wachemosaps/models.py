@@ -61,3 +61,23 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+    
+    
+
+class UserProfile(models.Model):
+    ROLE_CHOICES = [
+        ('student', 'Student'),
+        ('parent', 'Parent'),
+        ('teacher', 'Teacher'),
+    ]
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
+    
+    # Optional role-specific fields
+    student_id = models.CharField(max_length=20, blank=True, null=True)
+    teacher_subject = models.CharField(max_length=50, blank=True, null=True)
+    parent_phone = models.CharField(max_length=15, blank=True, null=True)
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.get_role_display()}"
