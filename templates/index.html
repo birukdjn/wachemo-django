@@ -199,43 +199,61 @@
     <!-- News Section -->
     <section id="news" class="news-section">
         <div class="container">
-            <div class="section-header text-center">
-                <h2>Latest News & Announcements</h2>
-                <p>Stay updated with what's happening at Wachemo School</p>
-                <div class="divider-center"></div>
-            </div>
-            <div class="row">
-
-               {% for news in topnews %}
-                                    
-                <div class="col-lg-4 col-md-6">
-                    <div class="news-card">
-                        <div class="news-image">
-                            <img src= {{ news.image}} alt="News Image" class="img-fluid">
-                            
-                                <div class="date-badge">
-                                <span>{{ news.day }}</span>
-                                <span>{{ news.month }}</span>
-                            </div>
-                        </div>
-                        <div class="news-content">
-                            <h3>{{ news.title }}</h3>
-                            <p class="news-meta"><i class="fas fa-user"></i> {{ news.reporter }} <i class="fas fa-clock"></i> {{ news.date }}</p>
-                            <p>{{news.content}}</p>
-                            <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+        <div class="section-header text-center">
+            <h2>Latest News & Announcements</h2>
+            <p>Stay updated with what's happening at Wachemo School</p>
+            <div class="divider-center"></div>
+        </div>
+        <div class="row">
+            {% for news in topnews %}
+            <div class="col-lg-4 col-md-6">
+                <div class="news-card">
+                    <div class="news-image">
+                        <img src="{{ news.image }}" alt="News Image" class="img-fluid">
+                        <div class="date-badge">
+                            <span>{{ news.day }}</span>
+                            <span>{{ news.month }}</span>
                         </div>
                     </div>
+                    <div class="news-content">
+                        <h3>{{ news.title }}</h3>
+                        <p class="news-meta">
+                            <i class="fas fa-user"></i> {{ news.reporter }} 
+                            <i class="fas fa-clock"></i> {{ news.date }}
+                        </p>
+                        <p class="news-excerpt">{{ news.content|truncatewords:20 }}</p>
+                        <a href="#" class="read-more" data-news-id="{{ news.id }}">
+                            Read More <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-                    
-                {% endfor %}
-
             </div>
-            <div class="text-center mt-4">
-                <a href="{% url 'news' %}" class="btn btn-outline-primary">View All News</a>
+            
+            <!-- Popup Modal for this news item -->
+            <div class="news-modal" id="news-modal-{{ news.id }}" style="display:none;">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <div class="modal-header">
+                        <h3>{{ news.title }}</h3>
+                        <p class="news-meta">
+                            <i class="fas fa-user"></i> {{ news.reporter }} 
+                            <i class="fas fa-clock"></i> {{ news.date }}
+                        </p>
+                    </div>
+                    <div class="modal-body">
+                        <img src="{{ news.image }}" alt="News Image" class="img-fluid mb-3">
+                        <p>{{ news.content }}</p>
+                    </div>
+                </div>
             </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'news' %}" class="btn btn-outline-primary">View All News</a>
+        </div>
         </div>
     </section>
-
+    
     <!-- Testimonials Section -->
     <section class="testimonials-section">
         <div class="container">

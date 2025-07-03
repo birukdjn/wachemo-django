@@ -30,7 +30,7 @@ def contact(request):
 def features(request):
     return render(request, 'features.html')
 
-@cache_page(60*60)  # Cache for 1 hour
+
 def news(request):
     allnews = News.objects.all().order_by('-date')
     context = {

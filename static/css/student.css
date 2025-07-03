@@ -76,11 +76,8 @@
 nav.sidebar {
   background:var(--dark-color);
 }
-nav-link {
-  color: var(--light-color);
-}
-nav-link.active{
-    color: red;
+.navbar .nav-link {
+  color: var(--light-color) !important;
 }
 
     .attendance-calendar {

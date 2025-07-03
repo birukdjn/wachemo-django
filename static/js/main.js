@@ -80,3 +80,36 @@ $(".testimonial-slider").owlCarousel({
         }
     }
 });
+
+
+
+
+
+// Add this script at the bottom of your template or in a separate JS file
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle Read More clicks
+    document.querySelectorAll('.read-more').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const newsId = this.getAttribute('data-news-id');
+            const modal = document.getElementById(`news-modal-${newsId}`);
+            modal.style.display = 'flex';
+        });
+    });
+
+    // Handle close button clicks
+    document.querySelectorAll('.close-modal').forEach(button => {
+        button.addEventListener('click', function() {
+            this.closest('.news-modal').style.display = 'none';
+        });
+    });
+
+    // Close modal when clicking outside content
+    document.querySelectorAll('.news-modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+    });
+});
