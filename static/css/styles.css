@@ -366,54 +366,122 @@ ul {
     font-weight: 500;
 }
 
-/* About Section */
-.about-section {
-    padding: 100px 0;
-}
 
-.about-image {
-    position: relative;
-}
 
-.experience-box {
-    position: absolute;
-    bottom: -30px;
-    right: -30px;
-    background-color: var(--primary-color);
-    color: var(--white);
-    padding: 20px;
-    border-radius: 5px;
-    text-align: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    z-index: 1;
-}
 
-.experience-box h3 {
-    font-size: 42px;
-    margin-bottom: 0;
-    line-height: 1;
-}
+    /* About Section */
+    .about-section {
+        padding: 100px 0;
+      
+    }
+    
+    .about-image {
+        position: relative;
+    }
+    
+    .experience-box {
+        position: absolute;
+        bottom: -30px;
+        right: -30px;
+        background-color: var(--primary-color);
+        color: var(--white);
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+    }
+    
+    .experience-box h3 {
+        font-size: 42px;
+        margin-bottom: 0;
+        line-height: 1;
+    }
+    
+    .experience-box p {
+        margin-bottom: 0;
+        font-weight: 500;
+    }
+    
+    .about-list {
+        margin: 20px 0;
+        list-style: none;
+        padding-left: 0;
+    }
+    
+    .about-list li {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .about-list li i {
+        color: var(--primary-color);
+        margin-right: 10px;
+        font-size: 18px;
+    }
+    
+    /* Additional Styles */
+    .icon-circle {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .mission-vision-item {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+    }
+    
+    .mission-vision-item h4 {
+        color: var(--primary-color);
+    }
+    
+    .value-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+    }
+    
+    .value-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .value-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        margin: 0 auto;
+        background-color: var(--dark-color);
+    }
+    
+    .divider-center {
+        width: 80px;
+        height: 3px;
+        background-color: var(--primary-color);
+        margin: 15px auto 30px;
+    }
+    
+    .card {
+        transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
 
-.experience-box p {
-    margin-bottom: 0;
-    font-weight: 500;
-}
-
-.about-list {
-    margin: 20px 0;
-}
-
-.about-list li {
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-}
-
-.about-list li i {
-    color: var(--primary-color);
-    margin-right: 10px;
-    font-size: 18px;
-}
 
 /* Features Section */
 .features-section {

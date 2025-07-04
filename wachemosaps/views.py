@@ -2,7 +2,6 @@ from django.shortcuts import render , redirect
 from .models import News,  Gallery, Event
 from django.contrib import messages
 from django.contrib.auth.models import User, auth, Permission
-from django.views.decorators.cache import cache_page
 from django.contrib.auth import login as auth_login
 from .models import UserProfile
 
@@ -18,15 +17,13 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
-@cache_page(60*60)  # Cache for 1 hour
 def about(request):
     return render(request, 'about.html')
 
-@cache_page(60*60)  # Cache for 1 hour
+
 def contact(request):
     return render(request, 'contact.html')
 
-@cache_page(60*60)     # Cache for 1 hour
 def features(request):
     return render(request, 'features.html')
 
@@ -38,7 +35,7 @@ def news(request):
     }
     return render(request, 'news.html', context) 
 
-@cache_page(60*60)  # Cache for 1 hour
+
 def event(request):
     events= Event.objects.all().order_by('-day', '-month')
     context = {
@@ -46,14 +43,13 @@ def event(request):
     }
     return render(request, 'event.html', context)
 
-@cache_page(60*60)  # Cache for 1 hour
+
 def gallery(request):
     context = {
         'allimages': Gallery.objects.all()  
     }
     return render(request, 'gallery.html' , context)
 
-@cache_page(60*60)  # Cache for 1 hour
 def exams(request):
     return render(request, 'exams.html')
 
