@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environments
+env/
+venv/
+ENV/
+.venv/
+
+# Django static & media (keep if needed, usually generated)
+staticfiles/
+media/
+
+# Local SQLite DB (optional — if you don’t want to push it)
+*.sqlite3
+
+# VS Code, PyCharm, etc.
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+
+# Environment files
+.env
+
+# Node/npm (if you use it)
+node_modules/
+
+# Mac system files
+*.swp
+
+# Coverage reports
+htmlcov/
+.coverage
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+
+# Pytest
+.pytest_cache/
+
+# Migrations (optional: usually you DO commit these!)
+# **Uncomment only if you really want to ignore them**
+# */migrations/
+
+# Build
+build/
+dist/
+*.egg-info/
