@@ -46,7 +46,7 @@ def event(request):
 
 def gallery(request):
     context = {
-        'allimages': Gallery.objects.all()  
+        'allimages': Gallery.objects.all().order_by('-id')  
     }
     return render(request, 'gallery.html' , context)
 

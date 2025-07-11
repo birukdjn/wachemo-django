@@ -30,9 +30,6 @@ def dashboard(request):
 
 @login_required
 def courses(request):
-    """
-    Display a list of active courses with their instructors and other important details.
-    """
     courses = Course.objects.filter(is_active=True).select_related('instructor')
     total_courses = courses.count()
     featured_courses = courses.filter(is_featured=True) if hasattr(Course, 'is_featured') else []
@@ -42,11 +39,29 @@ def courses(request):
         'total_courses': total_courses,
         'featured_courses': featured_courses,
     }
-    return redirect('courses', context)
+    return render(request, 'student/courses.html', context)
 
-
+@login_required
 def attendance(request):
     """
     Display the attendance page for students.
     """
     return render(request, 'student/attendance.html')
+
+@login_required
+def support(request):
+    return render(request, 'student/support.html')
+
+@login_required
+def settings(request):
+    """
+    Display the settings page for students.
+    """
+    return render(request, 'student/settings.html', {'active_section': 'settings'})
+
+@login_required
+def library(request):
+    """
+    Display the library page for students.
+    """
+    return render(request, 'student/library.html')

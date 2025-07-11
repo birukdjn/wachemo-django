@@ -3,7 +3,7 @@
 <script>
   window.location.href = "{{ login }}?next={{ request.path|urlencode }}";
 </script>
-{% else %} {% block title %}Student Dashboard - WachemoSaPS{% endblock %} 
+{% else %} {% block title %}Attendance - WachemoSaPS{% endblock %} 
 {% block content %}
 
 
@@ -15,7 +15,7 @@
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 <!-- Attendance Section -->
-<div id="section-attendance" class="dashboard-section d-none">
+<div id="section-attendance" class=" ">
     <div class="row mb-4">
         <div class="col">
             <h3 class="mb-3">Attendance Records</h3>
@@ -274,6 +274,7 @@
         </div>
     </div>
 </div>
+
 </div>
 
 </main>
