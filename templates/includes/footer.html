@@ -1,98 +1,81 @@
     <!-- Newsletter Section -->
-    <section class="newsletter-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h3>Subscribe to Our Newsletter</h3>
-                    <p>Stay updated with the latest news, events, and announcements from Wachemo secondary and preparatory school.</p>
+    <section class="bg-blue-50">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <div>
+                    <h3 class="text-xl font-semibold">Subscribe to Our Newsletter</h3>
+                    <p class="text-gray-600">Stay updated with the latest news, events, and announcements from Wachemo secondary and preparatory school.</p>
                 </div>
-                <div class="col-lg-6">
-                    <form class="newsletter-form">
-                        <div class="input-group">
-                            <input type="email" class="form-control" placeholder="Your Email Address">
-                            <button class="btn btn-primary" type="submit">Subscribe</button>
-                        </div>
+                <div>
+                    <form class="flex gap-2">
+                        <input type="email" class="flex-1 px-3 py-2 border rounded" placeholder="Your Email Address">
+                        <button class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded" type="submit">Subscribe</button>
                     </form>
                 </div>
             </div>
         </div>
     </section>
 
-  
-  
-  <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-widget">
-                        <img src="https://1drv.ms/i/c/7389654435428074/IQR-zoIv7SkQS5SzfdUf-3qWAZ-KzS2mwEMxqVcMwm6oLx8?width=500&height=500" alt="Wachemo School Logo" class="footer-logo">
-                        <p>Wachemo secondaryand preparatory school is committed to providing quality education through innovative teaching methods and state-of-the-art facilities.</p>
-                        <div class="footer-social">
-                            <a href="https://www.linkedin.com/in/birukdjn"><i class="fab fa-linkedin"></i></a>
-                            <a href="https://www.instagram.com/birukdjn"><i class="fab fa-instagram"></i></a>
-                            <a href="https://www.facebook.com/birukdjn"><i class="fab fa-facebook-f"></i></a>
-                            <a href="https://www.twitter.com/birukdjn"><i class="fab fa-twitter"></i></a>
-                            <a href="https://www.youtube.com/birukdjn"><i class="fab fa-youtube"></i></a>
-                        </div>
+  <footer class="bg-gray-900 text-gray-300">
+        <div class="max-w-7xl mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div>
+                    <img src="https://1drv.ms/i/c/7389654435428074/IQR-zoIv7SkQS5SzfdUf-3qWAZ-KzS2mwEMxqVcMwm6oLx8?width=500&height=500" alt="Wachemo School Logo" class="h-12 w-12 rounded-full">
+                    <p class="mt-3 text-sm">Wachemo secondaryand preparatory school is committed to providing quality education through innovative teaching methods and state-of-the-art facilities.</p>
+                    <div class="flex gap-3 mt-3 text-xl">
+                        <a href="https://www.linkedin.com/in/birukdjn" class="hover:text-white"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://www.instagram.com/birukdjn" class="hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/birukdjn" class="hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.twitter.com/birukdjn" class="hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.youtube.com/birukdjn" class="hover:text-white"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-widget">
-                        <h3>Quick Links</h3>
-                        <ul class="footer-links">
-                            <li><a href="{% url 'index' %}">Home</a></li>
-                            <li><a href="{% url 'login' %}">Login</a></li>
-                            <li><a href="{% url 'about' %}">About Us</a></li>
-                            <li><a href="{% url 'features' %}">Portal Features</a></li>
-                            <li><a href="{% url 'news' %} ">News </a></li>
-                            <li><a href="{% url 'gallery' %}">Gallery</a></li>
-                            <li><a href="{% url 'event' %}">Events</a></li>
-
-                        </ul>
-                    </div>
+                <div>
+                    <h3 class="text-white font-semibold">Quick Links</h3>
+                    <ul class="mt-3 space-y-2">
+                        <li><a class="hover:text-white" href="{% url 'index' %}">Home</a></li>
+                        <li><a class="hover:text-white" href="{% url 'login' %}">Login</a></li>
+                        <li><a class="hover:text-white" href="{% url 'about' %}">About Us</a></li>
+                        <li><a class="hover:text-white" href="{% url 'features' %}">Portal Features</a></li>
+                        <li><a class="hover:text-white" href="{% url 'news' %} ">News </a></li>
+                        <li><a class="hover:text-white" href="{% url 'gallery' %}">Gallery</a></li>
+                        <li><a class="hover:text-white" href="{% url 'event' %}">Events</a></li>
+                    </ul>
                 </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-widget">
-                        <h3>Important Links</h3>
-                        <ul class="footer-links">
-                            <li><a href="#">Academic Calendar</a></li>
-                            <li><a href="#">School Policies</a></li>
-                            <li><a href="#">Exam Results</a></li>
-                            <li><a href="#">Staff Directory</a></li>
-                            <li><a href="#">School Fees</a></li>
-                            <li><a href="#">Admissions</a></li>
-                            <li><a href="#">Careers</a></li>
-                        </ul>
-                    </div>
+                <div>
+                    <h3 class="text-white font-semibold">Important Links</h3>
+                    <ul class="mt-3 space-y-2">
+                        <li><a class="hover:text-white" href="#">Academic Calendar</a></li>
+                        <li><a class="hover:text-white" href="#">School Policies</a></li>
+                        <li><a class="hover:text-white" href="#">Exam Results</a></li>
+                        <li><a class="hover:text-white" href="#">Staff Directory</a></li>
+                        <li><a class="hover:text-white" href="#">School Fees</a></li>
+                        <li><a class="hover:text-white" href="#">Admissions</a></li>
+                        <li><a class="hover:text-white" href="#">Careers</a></li>
+                    </ul>
                 </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-widget">
-                        <h3>Contact Info</h3>
-                        <ul class="footer-contact">
-                            <li><i class="fas fa-map-marker-alt"></i> Hossana city, CERS, Ethiopia</li>
-                            <li><i class="fas fa-phone"></i> +251 908 574 808 </li>
-                            <li><i class="fas fa-envelope"></i> info@wachemoSaPS.edu.et</li>
-                            <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 5:00 PM</li>
-                        </ul>
-                    </div>
+                <div>
+                    <h3 class="text-white font-semibold">Contact Info</h3>
+                    <ul class="mt-3 space-y-2 text-sm">
+                        <li><i class="fas fa-map-marker-alt mr-2"></i> Hossana city, CERS, Ethiopia</li>
+                        <li><i class="fas fa-phone mr-2"></i> +251 908 574 808 </li>
+                        <li><i class="fas fa-envelope mr-2"></i> info@wachemoSaPS.edu.et</li>
+                        <li><i class="fas fa-clock mr-2"></i> Mon-Fri: 8:00 AM - 5:00 PM</li>
+                    </ul>
                 </div>
             </div>
         </div>
-        <div class="copyright">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6">
+        <div class="bg-gray-950">
+            <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="text-sm">
                         <p>&copy; 2025 Wachemo secondary and preparatory school.</p> 
                         <p>All Rights Reserved.</p>
                         <p>Privacy Policy | Terms of Service</p>
-                        
-                    </div>
-                    <div class="col-md-4 text-end">
-                        <p>Designed by <i class="fas fa-computer "></i>  BIRUK DEJENE</p>
-                        <p>Contact me <i class="fas fa-phone"></i> <a href="tel:+251908574808">+251 908 574 808</a></p>
-                        <p>Email  <i class="fas fa-envelope"></i> <a href="mailto:birukedjn@gmail.com"> birukedjn@gmail.com</a></p>
-                        
-                    </div>
+                </div>
+                <div class="text-sm md:text-right">
+                    <p>Designed by <i class="fas fa-computer "></i>  BIRUK DEJENE</p>
+                    <p>Contact me <i class="fas fa-phone"></i> <a href="tel:+251908574808" class="hover:text-white">+251 908 574 808</a></p>
+                    <p>Email  <i class="fas fa-envelope"></i> <a href="mailto:birukedjn@gmail.com" class="hover:text-white"> birukedjn@gmail.com</a></p>
                 </div>
             </div>
         </div>

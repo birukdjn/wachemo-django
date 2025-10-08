@@ -6,280 +6,203 @@
 {% else %} {% block title %}Attendance - WachemoSaPS{% endblock %} 
 {% block content %}
 
+<div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-[16rem_1fr] gap-6">
+  {% include "student/sidebar.html" %}
+  <main>
+    <div id="section-attendance" class="space-y-6">
+      <div>
+        <h3 class="text-2xl font-semibold">Attendance Records</h3>
+        <p class="text-gray-600">View your attendance history and statistics</p>
+      </div>
 
-
-<div class="container-fluid">
-  <div class="row">
-    <!-- Sidebar -->
-     {% include "student/sidebar.html" %}
-
-<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-<!-- Attendance Section -->
-<div id="section-attendance" class=" ">
-    <div class="row mb-4">
-        <div class="col">
-            <h3 class="mb-3">Attendance Records</h3>
-            <p class="lead">View your attendance history and statistics</p>
-            <div class="divider"></div>
+      <!-- Summary -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-green-600 text-white rounded p-4 text-center">
+          <div class="text-2xl mb-1"><i class="fas fa-check-circle"></i></div>
+          <h5 class="font-semibold">Present</h5>
+          <h3 class="text-2xl font-bold">87%</h3>
+          <small>This Semester</small>
         </div>
+        <div class="bg-red-600 text-white rounded p-4 text-center">
+          <div class="text-2xl mb-1"><i class="fas fa-times-circle"></i></div>
+          <h5 class="font-semibold">Absent</h5>
+          <h3 class="text-2xl font-bold">8%</h3>
+          <small>This Semester</small>
+        </div>
+        <div class="bg-yellow-500 text-white rounded p-4 text-center">
+          <div class="text-2xl mb-1"><i class="fas fa-clock"></i></div>
+          <h5 class="font-semibold">Late</h5>
+          <h3 class="text-2xl font-bold">5%</h3>
+          <small>This Semester</small>
+        </div>
+        <div class="bg-cyan-600 text-white rounded p-4 text-center">
+          <div class="text-2xl mb-1"><i class="fas fa-calendar-check"></i></div>
+          <h5 class="font-semibold">Total Days</h5>
+          <h3 class="text-2xl font-bold">64</h3>
+          <small>This Semester</small>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="border rounded p-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label for="attendanceMonth" class="block text-sm font-medium">Month</label>
+            <select class="mt-1 w-full border rounded px-3 py-2" id="attendanceMonth">
+              <option value="">All Months</option>
+              <option value="1">January</option>
+              <option value="2">February</option>
+              <option value="3">March</option>
+              <option value="4">April</option>
+              <option value="5">May</option>
+              <option value="6" selected>June</option>
+              <option value="7">July</option>
+              <option value="8">August</option>
+              <option value="9">September</option>
+              <option value="10">October</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
+            </select>
+          </div>
+          <div>
+            <label for="attendanceSubject" class="block text-sm font-medium">Subject</label>
+            <select class="mt-1 w-full border rounded px-3 py-2" id="attendanceSubject">
+              <option value="">All Subjects</option>
+              <option value="math">Mathematics</option>
+              <option value="science">Science</option>
+              <option value="english">English</option>
+              <option value="history">History</option>
+            </select>
+          </div>
+          <div>
+            <label for="attendanceStatus" class="block text-sm font-medium">Status</label>
+            <select class="mt-1 w-full border rounded px-3 py-2" id="attendanceStatus">
+              <option value="">All Statuses</option>
+              <option value="present">Present</option>
+              <option value="absent">Absent</option>
+              <option value="late">Late</option>
+              <option value="excused">Excused</option>
+            </select>
+          </div>
+          <div class="flex items-end">
+            <button class="w-full bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded" id="applyFilters">
+              <i class="fas fa-filter mr-2"></i>Apply Filters
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calendar Table -->
+      <div class="border rounded">
+        <div class="flex items-center justify-between px-4 py-2 bg-gray-50 border-b">
+          <h5 class="font-semibold"><i class="fas fa-calendar-alt mr-2"></i>Monthly Overview</h5>
+          <div class="space-x-2">
+            <button class="px-3 py-1 border rounded" id="prevMonthAtt">‹</button>
+            <button class="px-3 py-1 border rounded" id="nextMonthAtt">›</button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead>
+            <tr>
+                <th class="text-center px-2 py-2">Sun</th>
+                <th class="text-center px-2 py-2">Mon</th>
+                <th class="text-center px-2 py-2">Tue</th>
+                <th class="text-center px-2 py-2">Wed</th>
+                <th class="text-center px-2 py-2">Thu</th>
+                <th class="text-center px-2 py-2">Fri</th>
+                <th class="text-center px-2 py-2">Sat</th>
+              </tr>
+            </thead>
+            <tbody id="attendance-calendar-body"></tbody>
+          </table>
+        </div>
+        <div class="px-4 py-3">
+          <div class="flex flex-wrap gap-4 text-sm">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 bg-green-500 inline-block"></span><small>Present</small></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 bg-red-500 inline-block"></span><small>Absent</small></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 bg-yellow-400 inline-block"></span><small>Late</small></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 bg-cyan-400 inline-block"></span><small>Excused</small></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 bg-gray-400 inline-block"></span><small>Holiday</small></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 bg-gray-200 inline-block border"></span><small>Weekend</small></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Records -->
+      <div class="border rounded">
+        <div class="px-4 py-2 bg-gray-50 border-b">
+          <h5 class="font-semibold"><i class="fas fa-list-check mr-2"></i>Detailed Records</h5>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="text-left px-4 py-2">Date</th>
+                <th class="text-left px-4 py-2">Day</th>
+                <th class="text-left px-4 py-2">Subject</th>
+                <th class="text-left px-4 py-2">Status</th>
+                <th class="text-left px-4 py-2">Time</th>
+                <th class="text-left px-4 py-2">Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t">
+                <td class="px-4 py-2">2025-06-15</td>
+                <td class="px-4 py-2">Monday</td>
+                <td class="px-4 py-2">Mathematics</td>
+                <td class="px-4 py-2"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-green-100 text-green-700">Present</span></td>
+                <td class="px-4 py-2">08:15 AM</td>
+                <td class="px-4 py-2">-</td>
+              </tr>
+              <tr class="border-t">
+                <td class="px-4 py-2">2025-06-16</td>
+                <td class="px-4 py-2">Tuesday</td>
+                <td class="px-4 py-2">Science</td>
+                <td class="px-4 py-2"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-red-100 text-red-700">Absent</span></td>
+                <td class="px-4 py-2">-</td>
+                <td class="px-4 py-2">Medical Leave</td>
+              </tr>
+              <tr class="border-t">
+                <td class="px-4 py-2">2025-06-17</td>
+                <td class="px-4 py-2">Wednesday</td>
+                <td class="px-4 py-2">English</td>
+                <td class="px-4 py-2"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-yellow-100 text-yellow-800">Late</span></td>
+                <td class="px-4 py-2">09:05 AM</td>
+                <td class="px-4 py-2">Traffic delay</td>
+              </tr>
+              <tr class="border-t">
+                <td class="px-4 py-2">2025-06-18</td>
+                <td class="px-4 py-2">Thursday</td>
+                <td class="px-4 py-2">History</td>
+                <td class="px-4 py-2"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-green-100 text-green-700">Present</span></td>
+                <td class="px-4 py-2">08:10 AM</td>
+                <td class="px-4 py-2">-</td>
+              </tr>
+              <tr class="border-t">
+                <td class="px-4 py-2">2025-06-19</td>
+                <td class="px-4 py-2">Friday</td>
+                <td class="px-4 py-2">Mathematics</td>
+                <td class="px-4 py-2"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-cyan-100 text-cyan-800">Excused</span></td>
+                <td class="px-4 py-2">-</td>
+                <td class="px-4 py-2">Family event</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="px-4 py-3 border-t">
+          <div class="flex items-center justify-center gap-2 text-sm">
+            <button class="px-3 py-1 border rounded text-gray-600 opacity-50 cursor-not-allowed">Previous</button>
+            <button class="px-3 py-1 border rounded bg-blue-600 text-white">1</button>
+            <button class="px-3 py-1 border rounded">2</button>
+            <button class="px-3 py-1 border rounded">3</button>
+            <button class="px-3 py-1 border rounded">Next</button>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <!-- Attendance Summary Cards -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-3 col-6">
-            <div class="card text-bg-success shadow-sm h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-check-circle fs-2 mb-2"></i>
-                    <h5 class="card-title mb-1">Present</h5>
-                    <h3 class="fw-bold mb-0">87%</h3>
-                    <small>This Semester</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-6">
-            <div class="card text-bg-danger shadow-sm h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-x-circle fs-2 mb-2"></i>
-                    <h5 class="card-title mb-1">Absent</h5>
-                    <h3 class="fw-bold mb-0">8%</h3>
-                    <small>This Semester</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-6">
-            <div class="card text-bg-warning shadow-sm h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-clock-history fs-2 mb-2"></i>
-                    <h5 class="card-title mb-1">Late</h5>
-                    <h3 class="fw-bold mb-0">5%</h3>
-                    <small>This Semester</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-6">
-            <div class="card text-bg-info shadow-sm h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-calendar-check fs-2 mb-2"></i>
-                    <h5 class="card-title mb-1">Total Days</h5>
-                    <h3 class="fw-bold mb-0">64</h3>
-                    <small>This Semester</small>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Attendance Filter Options -->
-    <div class="row mb-4">
-        <div class="col">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <label for="attendanceMonth" class="form-label">Month</label>
-                            <select class="form-select" id="attendanceMonth">
-                                <option value="">All Months</option>
-                                <option value="1">January</option>
-                                <option value="2">February</option>
-                                <option value="3">March</option>
-                                <option value="4">April</option>
-                                <option value="5">May</option>
-                                <option value="6" selected>June</option>
-                                <option value="7">July</option>
-                                <option value="8">August</option>
-                                <option value="9">September</option>
-                                <option value="10">October</option>
-                                <option value="11">November</option>
-                                <option value="12">December</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="attendanceSubject" class="form-label">Subject</label>
-                            <select class="form-select" id="attendanceSubject">
-                                <option value="">All Subjects</option>
-                                <option value="math">Mathematics</option>
-                                <option value="science">Science</option>
-                                <option value="english">English</option>
-                                <option value="history">History</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="attendanceStatus" class="form-label">Status</label>
-                            <select class="form-select" id="attendanceStatus">
-                                <option value="">All Statuses</option>
-                                <option value="present">Present</option>
-                                <option value="absent">Absent</option>
-                                <option value="late">Late</option>
-                                <option value="excused">Excused</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 d-flex align-items-end">
-                            <button class="btn btn-primary w-100" id="applyFilters">
-                                <i class="bi bi-funnel me-2"></i>Apply Filters
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Attendance Calendar View -->
-    <div class="row mb-4">
-        <div class="col">
-            <div class="card shadow-sm">
-                <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="bi bi-calendar3 me-2"></i>Monthly Overview</h5>
-                    <div>
-                        <button class="btn btn-sm btn-outline-primary" id="prevMonthAtt">
-                            <i class="bi bi-chevron-left"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-primary" id="nextMonthAtt">
-                            <i class="bi bi-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered attendance-calendar">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">Sun</th>
-                                    <th class="text-center">Mon</th>
-                                    <th class="text-center">Tue</th>
-                                    <th class="text-center">Wed</th>
-                                    <th class="text-center">Thu</th>
-                                    <th class="text-center">Fri</th>
-                                    <th class="text-center">Sat</th>
-                                </tr>
-                            </thead>
-                            <tbody id="attendance-calendar-body">
-                                <!-- Attendance calendar will be populated by JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="mt-3">
-                        <div class="d-flex flex-wrap gap-3">
-                            <div class="d-flex align-items-center">
-                                <div class="attendance-legend present me-2"></div>
-                                <small>Present</small>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <div class="attendance-legend absent me-2"></div>
-                                <small>Absent</small>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <div class="attendance-legend late me-2"></div>
-                                <small>Late</small>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <div class="attendance-legend excused me-2"></div>
-                                <small>Excused</small>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <div class="attendance-legend holiday me-2"></div>
-                                <small>Holiday</small>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <div class="attendance-legend weekend me-2"></div>
-                                <small>Weekend</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Detailed Attendance Records -->
-    <div class="row">
-        <div class="col">
-            <div class="card shadow-sm">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0"><i class="bi bi-list-check me-2"></i>Detailed Records</h5>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Day</th>
-                                    <th>Subject</th>
-                                    <th>Status</th>
-                                    <th>Time</th>
-                                    <th>Remarks</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>2025-06-15</td>
-                                    <td>Monday</td>
-                                    <td>Mathematics</td>
-                                    <td><span class="badge bg-success">Present</span></td>
-                                    <td>08:15 AM</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td>2025-06-16</td>
-                                    <td>Tuesday</td>
-                                    <td>Science</td>
-                                    <td><span class="badge bg-danger">Absent</span></td>
-                                    <td>-</td>
-                                    <td>Medical Leave</td>
-                                </tr>
-                                <tr>
-                                    <td>2025-06-17</td>
-                                    <td>Wednesday</td>
-                                    <td>English</td>
-                                    <td><span class="badge bg-warning">Late</span></td>
-                                    <td>09:05 AM</td>
-                                    <td>Traffic delay</td>
-                                </tr>
-                                <tr>
-                                    <td>2025-06-18</td>
-                                    <td>Thursday</td>
-                                    <td>History</td>
-                                    <td><span class="badge bg-success">Present</span></td>
-                                    <td>08:10 AM</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td>2025-06-19</td>
-                                    <td>Friday</td>
-                                    <td>Mathematics</td>
-                                    <td><span class="badge bg-info">Excused</span></td>
-                                    <td>-</td>
-                                    <td>Family event</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="card-footer bg-light">
-                    <nav aria-label="Attendance pagination">
-                        <ul class="pagination justify-content-center mb-0">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Previous</a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
+  </main>
 </div>
-
-</div>
-
-</main>
-
-
 
 {% endblock %} {% endif %}
 

@@ -5,38 +5,32 @@
 
 {% block content %}
 
-<section class="events-section">
-        <div class="container ">
-            <div class="section-header text-center">
-                <h2>Upcoming Events</h2>
-                <p>Mark your calendars for these important dates</p>
-                <div class="divider-center"></div>
-            </div>
-            <div class="row " >
-
-                {% for event in events %}
-
-                <div class="col-lg-6 ">
-                    <div class="event-card event-container">
-                        <div class="event-date">
-                            <span>{{ event.day }} </span>
-                            <span>{{ event.month }}</span>
-                        </div>
-                        <div class="event-details">
-                            <h3>{{ event.title }}</h3>
-                            <p><i class="fas fa-clock"></i> {{ event.duration }}<i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
-                            <p>{{ event.description }}</p>
-                            <a href="#" class="btn btn-sm btn-outline-primary">More Details</a>
-                        </div>
-                    </div>
-                </div>
-
-                {% endfor %}
-
-              
-            </div>
-            
+<section class="bg-white">
+  <div class="max-w-7xl mx-auto px-4 py-10">
+    <div class="text-center mb-8">
+      <h2 class="text-2xl font-semibold">Upcoming Events</h2>
+      <p class="text-gray-600">Mark your calendars for these important dates</p>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {% for event in events %}
+      <div class="border rounded shadow-sm p-4 flex gap-4 items-start">
+        <div class="bg-blue-600 text-white rounded px-3 py-2 text-center">
+          <span class="block text-xl leading-none">{{ event.day }}</span>
+          <span class="block text-xs leading-none">{{ event.month }}</span>
         </div>
+        <div class="flex-1">
+          <h3 class="font-semibold">{{ event.title }}</h3>
+          <p class="text-sm text-gray-600 flex items-center gap-4 mt-1">
+            <span><i class="fas fa-clock mr-1"></i>{{ event.duration }}</span>
+            <span><i class="fas fa-map-marker-alt mr-1"></i>{{ event.location }}</span>
+          </p>
+          <p class="mt-2 text-gray-700 text-sm">{{ event.description }}</p>
+          <a href="#" class="inline-block mt-3 text-sm text-blue-600 hover:underline">More Details</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </section>
 
 

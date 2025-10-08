@@ -1,0 +1,185 @@
+{% extends 'student/base.html' %}
+{% load static %}
+
+{% block title %}Assignments - Wachemo SaPS{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+            {% include 'student/sidebar.html' %}
+        </div>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2 text-gray-800">My Assignments</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Filter</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assignment Stats -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3 col-6">
+                    <div class="card text-bg-primary h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-tasks fa-2x mb-2"></i>
+                            <h5 class="card-title mb-1">Total Assignments</h5>
+                            <h3 class="mb-0">{{ assignments|length }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card text-bg-warning h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-clock fa-2x mb-2"></i>
+                            <h5 class="card-title mb-1">Pending</h5>
+                            <h3 class="mb-0">{{ assignments|length }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card text-bg-success h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-check-circle fa-2x mb-2"></i>
+                            <h5 class="card-title mb-1">Submitted</h5>
+                            <h3 class="mb-0">{{ submissions|length }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card text-bg-info h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-star fa-2x mb-2"></i>
+                            <h5 class="card-title mb-1">Average Grade</h5>
+                            <h3 class="mb-0">85%</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Assignments -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="text-gray-800 mb-3">Upcoming Assignments</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Assignment</th>
+                                    <th>Course</th>
+                                    <th>Due Date</th>
+                                    <th>Points</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for assignment in assignments %}
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <h6 class="mb-1">{{ assignment.title }}</h6>
+                                            <small class="text-muted">{{ assignment.description|truncatechars:50 }}</small>
+                                        </div>
+                                    </td>
+                                    <td>{{ assignment.course.code }} - {{ assignment.course.name }}</td>
+                                    <td>
+                                        <span class="{% if assignment.due_date|date:'Y-m-d' < today %}text-danger{% elif assignment.due_date|date:'Y-m-d' == today %}text-warning{% else %}text-success{% endif %}">
+                                            {{ assignment.due_date|date:"M d, Y H:i" }}
+                                        </span>
+                                    </td>
+                                    <td>{{ assignment.max_points }}</td>
+                                    <td>
+                                        {% for submission in submissions %}
+                                            {% if submission.assignment == assignment %}
+                                                {% if submission.is_graded %}
+                                                    <span class="badge bg-success">Graded</span>
+                                                {% else %}
+                                                    <span class="badge bg-info">Submitted</span>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% empty %}
+                                            <span class="badge bg-warning">Not Submitted</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary">View</button>
+                                        <button class="btn btn-sm btn-outline-primary">Submit</button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No assignments found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submitted Assignments -->
+            <div class="row">
+                <div class="col-12">
+                    <h4 class="text-gray-800 mb-3">Submitted Assignments</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Assignment</th>
+                                    <th>Course</th>
+                                    <th>Submitted</th>
+                                    <th>Points Earned</th>
+                                    <th>Grade</th>
+                                    <th>Feedback</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for submission in submissions %}
+                                <tr>
+                                    <td>{{ submission.assignment.title }}</td>
+                                    <td>{{ submission.assignment.course.code }}</td>
+                                    <td>{{ submission.submitted_at|date:"M d, Y H:i" }}</td>
+                                    <td>
+                                        {% if submission.is_graded %}
+                                            {{ submission.points_earned }}/{{ submission.assignment.max_points }}
+                                        {% else %}
+                                            <span class="text-muted">Pending</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if submission.is_graded %}
+                                            <span class="badge bg-success">{{ submission.points_earned|floatformat:0 }}%</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Not Graded</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if submission.feedback %}
+                                            <button class="btn btn-sm btn-outline-info" data-bs-toggle="tooltip" title="{{ submission.feedback }}">
+                                                View Feedback
+                                            </button>
+                                        {% else %}
+                                            <span class="text-muted">No feedback</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No submitted assignments found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

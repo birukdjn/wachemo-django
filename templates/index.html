@@ -5,506 +5,229 @@
 {% block title %}Home - wachemoSaPS{% endblock %}
 
 {% block content %}
-<body>
 
-    <section class="hero-section">
-        <div class="hero-slider owl-carousel owl-theme">
-            <div class="hero-slide slide-1">
-                <div class="container">
-                    <div class="hero-content animate__animated animate__fadeInUp">
-                        <h1>Empowering Future Leaders</h1>
-                        <p>Quality education for the 21st century with modern digital learning tools</p>
-                        <div class="hero-buttons">
-                           
-                            {% if not request.user.is_authenticated %}
-                                <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-3">Login</a>
-                                <a href="{% url 'signup' %}" class="btn btn-outline-light btn-lg">Signup</a>
-                            {% else %}
-                                <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg me-3">Dashboard</a>
-                                <a href="{% url 'logout' %}" class="btn btn-outline-light btn-lg">Logout</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="hero-slide slide-2">
-                <div class="container">
-                    <div class="hero-content animate__animated animate__fadeInUp">
-                        <h1>Excellence in Education</h1>
-                        <p>Join our community of learners and achievers</p>
-                        <div class="hero-buttons">
-                            <a href="#about" class="btn btn-primary btn-lg me-3">Learn More</a>
-                            <a href="#contact" class="btn btn-outline-light btn-lg">Contact Us</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="hero-slide slide-3">
-                <div class="container">
-                    <div class="hero-content animate__animated animate__fadeInUp">
-                        <h1>Innovative Learning</h1>
-                        <p>Discover our cutting-edge digital learning platform</p>
-                        <div class="hero-buttons">
-                            <a href="#features" class="btn btn-primary btn-lg me-3">Explore Features</a>
-                            <a href="#gallery" class="btn btn-outline-light btn-lg">Virtual Tour</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Quick Info Section -->
-    <section class="quick-info">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3 col-sm-6">
-                    <div class="info-box">
-                        <i class="fas fa-users"></i>
-                        <h3>2,500+</h3>
-                        <p>Students</p>
-                    </div>
-                </div>
-                
-                <div class="col-md-3 col-sm-6">
-                    <div class="info-box">
-                        <i class="fas fa-chalkboard-teacher"></i>
-                        <h3>120+</h3>
-                        <p>Qualified Teachers</p>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="info-box">
-                        <i class="fas fa-graduation-cap"></i>
-                        <h3>98%</h3>
-                        <p>Graduation Rate</p>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="info-box">
-                        <i class="fas fa-trophy"></i>
-                        <h3>50+</h3>
-                        <p>Awards Won</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="about-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <div class="about-image">
-                        <img src="https://images.unsplash.com/photo-1627556704290-2b1f5853ff78?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGdyYWR1YXRpb258ZW58MHx8MHx8fDA%3D" alt="About Wachemo School" class="img-fluid rounded shadow">
-                        <div class="experience-box animate__animated animate__pulse animate__infinite mx-4">
-                            <h3>25+</h3>
-                            <p>Years of Excellence</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="section-header">
-                        <h2>About Wachemo School</h2>
-                        <div class="divider"></div>
-                    </div>
-                    <p>Wachemo SaPS is a premier educational institution committed to providing quality education through innovative teaching methods and state-of-the-art facilities.</p>
-                    <p>Our mission is to nurture young minds to become responsible global citizens with strong moral values and academic excellence.</p>
-                    <ul class="about-list">
-                        <li><i class="fas fa-check-circle"></i> Modern digital learning platform</li>
-                        <li><i class="fas fa-check-circle"></i> Highly qualified teaching staff</li>
-                        <li><i class="fas fa-check-circle"></i> Comprehensive extracurricular programs</li>
-                        <li><i class="fas fa-check-circle"></i> Safe and supportive learning environment</li>
-                    </ul>
-                    <a href="{% url 'about' %}" class="btn btn-primary mt-1">Learn More About Us</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="features-section">
-        <div class="container">
-            <div class="section-header text-center">
-                <h2>Portal Features</h2>
-                <p>Explore our comprehensive digital learning platform</p>
-                <div class="divider-center"></div>
-            </div>
-            <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-laptop-code"></i>
-                        </div>
-                        <h3>E-Learning Platform</h3>
-                        <p>Access course materials, submit assignments, and take quizzes through our intuitive online platform.</p>
-                        <a href="#" class="read-more">Learn more <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <h3>Grade Tracking</h3>
-                        <p>Real-time access to grades and performance analytics for students and parents.</p>
-                        <a href="#" class="read-more">Learn more <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-calendar-alt"></i>
-                        </div>
-                        <h3>Interactive Calendar</h3>
-                        <p>Never miss important dates with our comprehensive school calendar and event notifications.</p>
-                        <a href="#" class="read-more">Learn more <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-comments"></i>
-                        </div>
-                        <h3>Parent-Teacher Communication</h3>
-                        <p>Direct messaging system for seamless communication between parents and teachers.</p>
-                        <a href="#" class="read-more">Learn more <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-book-open"></i>
-                        </div>
-                        <h3>Digital Library</h3>
-                        <p>Access thousands of e-books, research papers, and educational resources.</p>
-                        <a href="#" class="read-more">Learn more <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-bell"></i>
-                        </div>
-                        <h3>Notification System</h3>
-                        <p>Instant alerts for assignments, exams, events, and important announcements.</p>
-                        <a href="#" class="read-more">Learn more <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- News Section -->
-    <section id="news" class="news-section">
-        <div class="container">
-        <div class="section-header text-center">
-            <h2>Latest News & Announcements</h2>
-            <p>Stay updated with what's happening at Wachemo School</p>
-            <div class="divider-center"></div>
-        </div>
-        <div class="row">
-            {% for news in topnews %}
-            <div class="col-lg-4 col-md-6">
-                <div class="news-card">
-                    <div class="news-image">
-                        <img src="{{ news.image }}" alt="News Image" class="img-fluid">
-                        <div class="date-badge">
-                            <span>{{ news.day }}</span>
-                            <span>{{ news.month }}</span>
-                        </div>
-                    </div>
-                    <div class="news-content">
-                        <h3>{{ news.title }}</h3>
-                        <p class="news-meta">
-                            <i class="fas fa-user"></i> {{ news.reporter }} 
-                            <i class="fas fa-clock"></i> {{ news.date }}
-                        </p>
-                        <p class="news-excerpt">{{ news.content|truncatewords:20 }}</p>
-                        <a href="#" class="read-more" data-news-id="{{ news.id }}">
-                            Read More <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Popup Modal for this news item -->
-            <div class="news-modal" id="news-modal-{{ news.id }}" style="display:none;">
-                <div class="modal-content">
-                    <span class="close-modal">&times;</span>
-                    <div class="modal-header">
-                        <h3>{{ news.title }}</h3>
-                        <p class="news-meta">
-                            <i class="fas fa-user"></i> {{ news.reporter }} 
-                            <i class="fas fa-clock"></i> {{ news.date }}
-                        </p>
-                    </div>
-                    <div class="modal-body">
-                        <img src="{{ news.image }}" alt="News Image" class="img-fluid mb-3">
-                        <p>{{ news.content }}</p>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        <div class="text-center mt-4">
-            <a href="{% url 'news' %}" class="btn btn-outline-primary">View All News</a>
-        </div>
-        </div>
-    </section>
-    
-    <!-- Testimonials Section -->
-    <section class="testimonials-section">
-        <div class="container">
-            <div class="section-header text-center">
-                <h2>What People Say</h2>
-                <p>Testimonials from our students, parents, and staff</p>
-                <div class="divider-center"></div>
-            </div>
-            <div class="testimonial-slider owl-carousel owl-theme">
-                <div class="testimonial-item">
-                    <div class="testimonial-content">
-                        <i class="fas fa-quote-left"></i>
-                        <p>Wachemo SaPS has provided my child with an excellent education and numerous opportunities to grow both academically and personally.</p>
-                        <div class="testimonial-author">
-                            <img id="imgt" src="https://images.unsplash.com/photo-1564156280315-1d42b4651629?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGFyZW50fGVufDB8fDB8fHww" alt="Parent">
-                            <h4>Ato Kebede Molla</h4>
-                            <span>Parent</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-item">
-                    <div class="testimonial-content">
-                        <i class="fas fa-quote-left"></i>
-                        <p>The new digital portal has made it so easy to track my academic progress and communicate with my teachers. It's a game-changer!</p>
-                        <div class="testimonial-author">
-                            <img id="imgt" src="https://images.unsplash.com/photo-1514355315815-2b64b0216b14?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzF8fHN0dWRlbnR8ZW58MHx8MHx8fDA%3D" alt="Student">
-                            <h4>Selamawit Abebe</h4>
-                            <span>Grade 11 Student</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-item">
-                    <div class="testimonial-content">
-                        <i class="fas fa-quote-left"></i>
-                        <p>As a teacher, I appreciate how the portal streamlines communication with students and parents while providing excellent tools for teaching.</p>
-                        <div class="testimonial-author">
-                            <img id="imgt" src="https://images.unsplash.com/photo-1590650213165-c1fef80648c4?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHRlYWNoZXJ8ZW58MHx8MHx8fDA%3D" alt="Teacher">
-                            <h4>Wro. Tigist Hailu</h4>
-                            <span>Mathematics Teacher</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-item">
-                    <div class="testimonial-content">
-                        <i class="fas fa-quote-left"></i>
-                        <p>This digital platform has revolutionized how we manage school operations and communicate with our community. The efficiency gains have been remarkable.</p>
-                        <div class="testimonial-author">
-                            <img  id="imgt" src="https://images.unsplash.com/photo-1520891512168-7c1ed8f75832?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGFkbWluaXN0cmF0b3J8ZW58MHx8MHx8fDA%3D" alt="Administrator">
-                            <h4>Ato Solomon Tekle</h4>
-                            <span>School Principal</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-item">
-                    <div class="testimonial-content">
-                        <i class="fas fa-quote-left"></i>
-                        <p>The skills I gained through Wachemo's digital learning platform gave me a competitive edge in university admissions and my first year of college.</p>
-                        <div class="testimonial-author">
-                            <img  id="imgt" src="https://images.unsplash.com/photo-1621376225372-c86f16f47a09?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGdyYWR1YXRlfGVufDB8fDB8fHww" alt="Graduate">
-                            <h4>Meron Assefa</h4>
-                            <span>Class of 2023 Graduate</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-item">
-                    <div class="testimonial-content">
-                        <i class="fas fa-quote-left"></i>
-                        <p>Being able to track my child's daily progress and communicate directly with teachers through the portal has given me peace of mind about their education.</p>
-                        <div class="testimonial-author">
-                            <img id="imgt"  src="https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBhcmVudHxlbnwwfHwwfHx8MA%3D%3D" alt="Parent">
-                            <h4>Wzo. Almaz Bekele</h4>
-                            <span>Parent of Grade 5 Student</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-item">
-                    <div class="testimonial-content">
-                        <i class="fas fa-quote-left"></i>
-                        <p>The foundation I received at Wachemo SaPS, especially in digital literacy, directly contributed to my success in the tech industry today.</p>
-                        <div class="testimonial-author">
-                            <img  id="imgt" src="https://images.unsplash.com/photo-1725131481715-f0aa4357665d?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y29kZXIlMjBtYW58ZW58MHx8MHx8fDA%3D" alt="Alumni">
-                            <h4>Daniel Getachew</h4>
-                            <span>Software Engineer | Class of 2015</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-item">
-                    <div class="testimonial-content">
-                        <i class="fas fa-quote-left"></i>
-                        <p>The accessibility features in the school portal have made it possible for all our students to participate fully in digital learning experiences.</p>
-                        <div class="testimonial-author">
-                            <img  id="imgt" src="https://images.unsplash.com/photo-1736939678218-bd648b5ef3bb?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3BlY2lhbCUyMGVkdWNhdGlvbiUyMGNvb3JkaW5hdG9yfGVufDB8fDB8fHww" alt="Special Education Teacher">
-                            <h4>Wro. Sarah Mohammed</h4>
-                            <span>Special Education Coordinator</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Gallery Section -->
-    <section id="gallery" class="gallery-section">
-        <div class="container">
-            <div class="section-header text-center">
-                <h2>School Gallery</h2>
-                <p>Moments from our school life</p>
-                <div class="divider-center"></div>
-            </div>
-            <div class="row gallery-container">
-
-                {% for image in topimages %}
-
-                <div class="col-lg-3 col-md-4 col-sm-6 gallery-item">
-                    <img src="{{ image.image}}" class="img-fluid" alt="{{ image.description }}">
-                    <div class="gallery-overlay">
-                        <a href="{{ image.image }}" data-lightbox="gallery" class="gallery-btn"><i class="fas fa-search-plus"></i></a>
-                    </div>
-                </div>
-
-                {% endfor %}
-            </div>
-            <div class="text-center mt-4">
-                <a href="{% url 'gallery' %} " class="btn btn-outline-primary">View Full Gallery</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Events Section -->
-    <section class="events-section">
-        <div class="container ">
-            <div class="section-header text-center">
-                <h2>Upcoming Events</h2>
-                <p>Mark your calendars for these important dates</p>
-                <div class="divider-center"></div>
-            </div>
-            <div class="row " >
-
-                {% for event in topevents %}
-
-                <div class="col-lg-6 ">
-                    <div class="event-card event-container">
-                        <div class="event-date">
-                            <span>{{ event.day }} </span>
-                            <span>{{ event.month }}</span>
-                        </div>
-                        <div class="event-details">
-                            <h3>{{ event.title }}</h3>
-                            <p><i class="fas fa-clock"></i> {{ event.duration }}<i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
-                            <p>{{ event.description }}</p>
-                            <a href="#" class="btn btn-sm btn-outline-primary">More Details</a>
-                        </div>
-                    </div>
-                </div>
-
-                {% endfor %}
-
-              
-            </div>
-            <div class="text-center mt-4 mt-5">
-                <a href="{% url 'event' %} " class="btn btn-outline-primary">View All events</a>
-            </div>
-        </div>
+<!-- Hero -->
+<section class="relative bg-[url('https://images.unsplash.com/photo-1627556704290-2b1f5853ff78?w=1600&q=60&auto=format&fit=crop')] bg-cover bg-center">
+  <div class="bg-black/50">
+    <div class="max-w-7xl mx-auto px-4 py-24 text-white">
+      <h1 class="text-3xl md:text-5xl font-bold">Empowering Future Leaders</h1>
+      <p class="mt-3 text-lg max-w-2xl">Quality education for the 21st century with modern digital learning tools</p>
+      <div class="mt-6 flex gap-3">
+        {% if not request.user.is_authenticated %}
+          <a href="{% url 'login' %}" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded">Login</a>
+          <a href="{% url 'signup' %}" class="border border-white hover:bg-white hover:text-black px-5 py-2 rounded">Signup</a>
+        {% else %}
+          <a href="{% url 'dashboard' %}" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded">Dashboard</a>
+          <a href="{% url 'logout' %}" class="border border-white hover:bg-white hover:text-black px-5 py-2 rounded">Logout</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </section>
 
+<!-- Quick Info -->
+<section class="bg-white">
+  <div class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="text-center p-4 border rounded">
+      <i class="fas fa-users text-2xl text-blue-600"></i>
+      <h3 class="text-xl font-semibold">2,500+</h3>
+      <p class="text-gray-600">Students</p>
+    </div>
+    <div class="text-center p-4 border rounded">
+      <i class="fas fa-chalkboard-teacher text-2xl text-blue-600"></i>
+      <h3 class="text-xl font-semibold">120+</h3>
+      <p class="text-gray-600">Qualified Teachers</p>
+    </div>
+    <div class="text-center p-4 border rounded">
+      <i class="fas fa-graduation-cap text-2xl text-blue-600"></i>
+      <h3 class="text-xl font-semibold">98%</h3>
+      <p class="text-gray-600">Graduation Rate</p>
+    </div>
+    <div class="text-center p-4 border rounded">
+      <i class="fas fa-trophy text-2xl text-blue-600"></i>
+      <h3 class="text-xl font-semibold">50+</h3>
+      <p class="text-gray-600">Awards Won</p>
+    </div>
+  </div>
+</section>
 
+<!-- About -->
+<section id="about" class="bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+    <div>
+      <img src="https://images.unsplash.com/photo-1627556704290-2b1f5853ff78?w=900&auto=format&fit=crop&q=60" alt="About Wachemo School" class="rounded shadow">
+    </div>
+    <div>
+      <h2 class="text-2xl font-semibold">About Wachemo School</h2>
+      <p class="mt-3">Wachemo SaPS is a premier educational institution committed to providing quality education through innovative teaching methods and state-of-the-art facilities.</p>
+      <p class="mt-2">Our mission is to nurture young minds to become responsible global citizens with strong moral values and academic excellence.</p>
+      <ul class="mt-4 space-y-2 text-sm text-gray-700">
+        <li><i class="fas fa-check-circle text-blue-600 mr-2"></i> Modern digital learning platform</li>
+        <li><i class="fas fa-check-circle text-blue-600 mr-2"></i> Highly qualified teaching staff</li>
+        <li><i class="fas fa-check-circle text-blue-600 mr-2"></i> Comprehensive extracurricular programs</li>
+        <li><i class="fas fa-check-circle text-blue-600 mr-2"></i> Safe and supportive learning environment</li>
+      </ul>
+      <a href="{% url 'about' %}" class="inline-block mt-4 bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded">Learn More About Us</a>
+    </div>
+  </div>
+</section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact-section">
-        <div class="container">
-            <div class="section-header text-center">
-                <h2>Contact Us</h2>
-                <p>We'd love to hear from you</p>
-                <div class="divider-center"></div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="contact-info">
-                        <h3>Get in Touch</h3>
-                        <p>Have questions about our school or the portal? Reach out to us through any of these channels.</p>
-                        <ul class="contact-list">
-                            <li>
-                                <i class="fas fa-map-marker-alt"></i>
-                                <div>
-                                    <h5>Address</h5>
-                                    <p>HV74+HG7, Hosaina, CERS, Ethiopia</p>
-                                </div>
-                            </li>
-                            <li>
-                                <i class="fas fa-phone"></i>
-                                <div>
-                                    <h5>Phone</h5>
-                                    <p><a href="tel:+251908574808">+251 908 574 808</a></p>
-                                    <p><a href="tel:+251777888325">+251 777 888 325</a></p>
+<!-- Features -->
+<section id="features" class="bg-white">
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="text-center mb-8">
+      <h2 class="text-2xl font-semibold">Portal Features</h2>
+      <p class="text-gray-600">Explore our comprehensive digital learning platform</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="border rounded p-5">
+        <div class="text-3xl text-blue-600 mb-2"><i class="fas fa-laptop-code"></i></div>
+        <h3 class="font-semibold">E-Learning Platform</h3>
+        <p class="text-gray-700 text-sm">Access course materials, submit assignments, and take quizzes through our intuitive online platform.</p>
+      </div>
+      <div class="border rounded p-5">
+        <div class="text-3xl text-blue-600 mb-2"><i class="fas fa-chart-line"></i></div>
+        <h3 class="font-semibold">Grade Tracking</h3>
+        <p class="text-gray-700 text-sm">Real-time access to grades and performance analytics for students and parents.</p>
+      </div>
+      <div class="border rounded p-5">
+        <div class="text-3xl text-blue-600 mb-2"><i class="fas fa-calendar-alt"></i></div>
+        <h3 class="font-semibold">Interactive Calendar</h3>
+        <p class="text-gray-700 text-sm">Never miss important dates with our comprehensive school calendar and event notifications.</p>
+      </div>
+      <div class="border rounded p-5">
+        <div class="text-3xl text-blue-600 mb-2"><i class="fas fa-comments"></i></div>
+        <h3 class="font-semibold">Parent-Teacher Communication</h3>
+        <p class="text-gray-700 text-sm">Direct messaging system for seamless communication between parents and teachers.</p>
+      </div>
+      <div class="border rounded p-5">
+        <div class="text-3xl text-blue-600 mb-2"><i class="fas fa-book-open"></i></div>
+        <h3 class="font-semibold">Digital Library</h3>
+        <p class="text-gray-700 text-sm">Access thousands of e-books, research papers, and educational resources.</p>
+      </div>
+      <div class="border rounded p-5">
+        <div class="text-3xl text-blue-600 mb-2"><i class="fas fa-bell"></i></div>
+        <h3 class="font-semibold">Notification System</h3>
+        <p class="text-gray-700 text-sm">Instant alerts for assignments, exams, events, and important announcements.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-                                </div>
-                            </li>
-                            <li>
-                                <i class="fas fa-envelope"></i>
-                                <div>
-                                    <h5>Email</h5>
-                                    <p>info@wachemoschool.edu.et</p>
-                                </div>
-                            </li>
-                            <li>
-                                <i class="fas fa-clock"></i>
-                                <div>
-                                    <h5>Office Hours</h5>
-                                    <p>Monday - Friday: 8:00 AM - 5:00 PM</p>
-                                    <p>Saturday: 9:00 AM - 1:00 PM</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="contact-form">
-                        <h3>Send Us a Message</h3>
-                        <form id="contactForm">
-                            <div class="mb-3">
-                                <input type="text" class="form-control" placeholder="Your Name" required>
-                            </div>
-                            <div class="mb-3">
-                                <input type="email" class="form-control" placeholder="Your Email" required>
-                            </div>
-                            <div class="mb-3">
-                                <input type="text" class="form-control" placeholder="Subject">
-                            </div>
-                            <div class="mb-3">
-                                <textarea class="form-control" rows="5" placeholder="Your Message" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Send Message</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+<!-- News Preview -->
+<section id="news" class="bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="text-center mb-8">
+      <h2 class="text-2xl font-semibold">Latest News & Announcements</h2>
+      <p class="text-gray-600">Stay updated with what's happening at Wachemo School</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for news in topnews %}
+      <article class="rounded overflow-hidden border bg-white shadow-sm">
+        <div class="relative h-44 bg-gray-100">
+          <img src="{{ news.image }}" alt="News Image" class="w-full h-full object-cover">
+          <div class="absolute top-2 left-2 bg-blue-600 text-white rounded px-2 py-1 text-xs text-center">
+            <span class="block leading-none">{{ news.day }}</span>
+            <span class="block leading-none">{{ news.month }}</span>
+          </div>
         </div>
-    </section>
+        <div class="p-4 space-y-2">
+          <h3 class="font-semibold">{{ news.title }}</h3>
+          <p class="text-xs text-gray-500 flex items-center gap-3">
+            <span><i class="fas fa-user mr-1"></i>{{ news.reporter }}</span>
+            <span><i class="fas fa-clock mr-1"></i>{{ news.date }}</span>
+          </p>
+          <p class="text-sm text-gray-700">{{ news.content|truncatewords:20 }}</p>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-6">
+      <a href="{% url 'news' %}" class="inline-block border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-5 py-2 rounded">View All News</a>
+    </div>
+  </div>
+</section>
 
-    <!-- Map Section -->
-    <div class="map-section">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d200.52304608904757!2d37.85709541862455!3d7.564094664250556!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x17b249d665555555%3A0x7c019d3f6fae862e!2sWachamo%20Preparatory%20And%20High%20School!5e1!3m2!1sen!2set!4v1747052298964!5m2!1sen!2set" width="100" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>  
+<!-- Gallery Preview -->
+<section id="gallery" class="bg-white">
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="text-center mb-8">
+      <h2 class="text-2xl font-semibold">School Gallery</h2>
+      <p class="text-gray-600">Moments from our school life</p>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      {% for image in topimages %}
+      <figure class="relative group overflow-hidden rounded border bg-gray-50">
+        <img src="{{ image.image}}" class="w-full h-44 object-cover" alt="{{ image.description }}">
+      </figure>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-6">
+      <a href="{% url 'gallery' %}" class="inline-block border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-5 py-2 rounded">View Full Gallery</a>
+    </div>
+  </div>
+</section>
 
-  
-  
-    <!-- Back to Top Button -->
-    <a href="#" class="back-to-top"><i class="fas fa-arrow-up"></i></a>
+<!-- Events Preview -->
+<section class="bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="text-center mb-8">
+      <h2 class="text-2xl font-semibold">Upcoming Events</h2>
+      <p class="text-gray-600">Mark your calendars for these important dates</p>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {% for event in topevents %}
+      <div class="border rounded shadow-sm p-4 flex gap-4 items-start">
+        <div class="bg-blue-600 text-white rounded px-3 py-2 text-center">
+          <span class="block text-xl leading-none">{{ event.day }}</span>
+          <span class="block text-xs leading-none">{{ event.month }}</span>
+        </div>
+        <div class="flex-1">
+          <h3 class="font-semibold">{{ event.title }}</h3>
+          <p class="text-sm text-gray-600 flex items-center gap-4 mt-1">
+            <span><i class="fas fa-clock mr-1"></i>{{ event.duration }}</span>
+            <span><i class="fas fa-map-marker-alt mr-1"></i>{{ event.location }}</span>
+          </p>
+          <p class="mt-2 text-gray-700 text-sm">{{ event.description }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-6">
+      <a href="{% url 'event' %}" class="inline-block border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-5 py-2 rounded">View All events</a>
+    </div>
+  </div>
+</section>
 
-    <!-- JavaScript Libraries -->
+<!-- Contact -->
+<section id="contact" class="bg-white">
+  <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div>
+      <h2 class="text-2xl font-semibold">Contact Us</h2>
+      <p class="text-gray-600">We'd love to hear from you</p>
+      <ul class="mt-4 space-y-3 text-sm">
+        <li class="flex items-start gap-3"><i class="fas fa-map-marker-alt mt-1 text-blue-600"></i><div><h5 class="font-semibold">Address</h5><p>HV74+HG7, Hosaina, CERS, Ethiopia</p></div></li>
+        <li class="flex items-start gap-3"><i class="fas fa-phone mt-1 text-blue-600"></i><div><h5 class="font-semibold">Phone</h5><p><a href="tel:+251908574808" class="text-blue-600">+251 908 574 808</a></p><p><a href="tel:+251777888325" class="text-blue-600">+251 777 888 325</a></p></div></li>
+        <li class="flex items-start gap-3"><i class="fas fa-envelope mt-1 text-blue-600"></i><div><h5 class="font-semibold">Email</h5><p>info@wachemoschool.edu.et</p></div></li>
+        <li class="flex items-start gap-3"><i class="fas fa-clock mt-1 text-blue-600"></i><div><h5 class="font-semibold">Office Hours</h5><p>Monday - Friday: 8:00 AM - 5:00 PM</p><p>Saturday: 9:00 AM - 1:00 PM</p></div></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="font-semibold">Send Us a Message</h3>
+      <form id="contactForm" class="mt-3 space-y-3">
+        <input type="text" class="w-full px-3 py-2 border rounded" placeholder="Your Name" required>
+        <input type="email" class="w-full px-3 py-2 border rounded" placeholder="Your Email" required>
+        <input type="text" class="w-full px-3 py-2 border rounded" placeholder="Subject">
+        <textarea class="w-full px-3 py-2 border rounded" rows="5" placeholder="Your Message" required></textarea>
+        <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded">Send Message</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Map -->
+<div class="w-full">
+  <iframe class="w-full h-[450px]" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d200.52304608904757!2d37.85709541862455!3d7.564094664250556!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x17b249d665555555%3A0x7c019d3f6fae862e!2sWachamo%20Preparatory%20And%20High%20School!5e1!3m2!1sen!2set!4v1747052298964!5m2!1sen!2set" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+
 {% endblock %}
-
-</body>
-</html>

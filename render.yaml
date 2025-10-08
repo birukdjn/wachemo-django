@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: wachemo
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate --noinput
+    startCommand: gunicorn wachemo.wsgi
+    envVars:
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: wachemo.onrender.com,localhost,127.0.0.1
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+

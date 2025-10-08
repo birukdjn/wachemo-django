@@ -4,28 +4,24 @@
 
 {% block content %}
 
-<section id="gallery" class="gallery-section">
-        <div class="container">
-            <div class="section-header text-center">
-                <h2>School Gallery</h2>
-                <p>Moments from our school life</p>
-                <div class="divider-center"></div>
-            </div>
-            <div class="row gallery-container">
-
-                {% for image in allimages %}
-
-                <div class="col-lg-3 col-md-4 col-sm-6 gallery-item">
-                    <img src="{{ image.image}}" class="img-fluid" alt="{{ image.description }}">
-                    <div class="gallery-overlay">
-                        <a href="{{ image.image }}" data-lightbox="gallery" class="gallery-btn"><i class="fas fa-search-plus"></i></a>
-                    </div>
-                </div>
-
-                {% endfor %}
-            </div>
-        </div>
-    </section>
+<section id="gallery" class="bg-white">
+  <div class="max-w-7xl mx-auto px-4 py-10">
+    <div class="text-center mb-8">
+      <h2 class="text-2xl font-semibold">School Gallery</h2>
+      <p class="text-gray-600">Moments from our school life</p>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      {% for image in allimages %}
+      <figure class="relative group overflow-hidden rounded border bg-gray-50">
+        <img src="{{ image.image}}" class="w-full h-44 object-cover" alt="{{ image.description }}">
+        <a href="{{ image.image }}" class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-2xl">
+          <i class="fas fa-search-plus"></i>
+        </a>
+      </figure>
+      {% endfor %}
+    </div>
+  </div>
+</section>
 
 {% endblock %}
 

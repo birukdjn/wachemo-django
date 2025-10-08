@@ -1,179 +1,76 @@
-<nav
-  class="col-md-3 col-lg-2 d-md-block sidebar shadow-sm py-2"
-  style="position: relative"
->
-  <div
-    class="position-sticky"
-    style="top: 80px; max-height: 80vh; overflow-y: auto"
-  >
-    <ul
-      class="nav flex-column align-items-start"
-      id="sidebarMenu"
-      style="align-items: flex-start !important"
-    >
-      <li class="nav-item mb-2">
-        <a
-          class="nav-link active d-flex align-items-center justify-content-start"
-          href="{% url 'dashboard' %}"
-          style="white-space: nowrap"
-        >
-          <span class="d-inline-flex align-items-center">
-            <i class="bi bi-house me-2"></i>
-            <span>Dashboard Home</span>
-          </span>
-        </a>
-      </li>
-      <li class="nav-item mb-2 ms-3">
-        <a
-          class="nav-link d-flex align-items-center justify-content-start"
-          href="{% url 'courses' %}"
-          style="white-space: nowrap"
-        >
-          <span class="d-inline-flex align-items-center">
-            <i class="bi bi-book me-2"></i>
-            <span>My Courses</span>
-          </span>
-        </a>
-      </li>
-      <li class="nav-item mb-2 ms-3">
-        <a
-          class="nav-link d-flex align-items-center justify-content-start"
-          href="#"
-          data-section="grades"
-          style="white-space: nowrap"
-        >
-          <span class="d-inline-flex align-items-center">
-            <i class="bi bi-bar-chart me-2"></i>
-            <span>My Grades</span>
-          </span>
-        </a>
-      </li>
-      <li class="nav-item mb-2 ms-3">
-        <a
-          class="nav-link d-flex align-items-center justify-content-start"
-          href="{% url 'attendance' %}"
-          style="white-space: nowrap"
-        >
-          <span class="d-inline-flex align-items-center">
-            <i class="bi bi-calendar-check me-2"></i>
-            <span>Attendance</span>
-          </span>
-        </a>
-      </li>
-      <li class="nav-item mb-2 ms-3">
-        <a
-          class="nav-link d-flex align-items-center justify-content-start"
-          href="#"
-          data-section="assignments"
-          style="white-space: nowrap"
-        >
-          <span class="d-inline-flex align-items-center">
-            <i class="bi bi-pencil-square me-2"></i>
-            <span>Assignments</span>
-          </span>
-        </a>
-      </li>
-      <li class="nav-item mb-2 ms-3">
-        <a
-          class="nav-link d-flex align-items-center justify-content-start"
-          href="#"
-          data-section="timetable"
-          style="white-space: nowrap"
-        >
-          <span class="d-inline-flex align-items-center">
-            <i class="bi bi-clock me-2"></i>
-            <span>Timetable</span>
-          </span>
-        </a>
-      </li>
-      <li class="nav-item mb-2 ms-3">
-        <a
-          class="nav-link d-flex align-items-center justify-content-start"
-          href="#"
-          data-section="messages"
-          style="white-space: nowrap"
-        >
-          <span class="d-inline-flex align-items-center">
-            <i class="bi bi-chat-dots me-2"></i>
-            <span>Messages</span>
-          </span>
-        </a>
-      </li>
-      <li class="nav-item mb-2 ms-3">
-        <a
-          class="nav-link d-flex align-items-center justify-content-start"
-          href="{% url 'library' %}"
-          style="white-space: nowrap"
-        >
-          <span class="d-inline-flex align-items-center">
-            <i class="bi bi-journal-bookmark me-2"></i>
-            <span>Library</span>
-          </span>
-        </a>
-      </li>
-      <li class="nav-item mb-2 ms-3">
-        <a
-          class="nav-link d-flex align-items-center justify-content-start"
-          href="#"
-          data-section="clubs"
-          style="white-space: nowrap"
-        >
-          <span class="d-inline-flex align-items-center">
-            <i class="bi bi-people me-2"></i>
-            <span>Clubs & Activities</span>
-          </span>
-        </a>
-      </li>
-
-      <li class="nav-item mb-2 ms-3">
-        <a
-          class="nav-link d-flex align-items-center justify-content-start"
-          href="{% url 'support' %}"
-          style="white-space: nowrap"
-        >
-          <span class="d-inline-flex align-items-center">
-            <i class="bi bi-life-preserver me-2"></i>
-            <span>Support</span>
-          </span>
-        </a>
-      </li>
-      <li class="nav-item mb-2 ms-3">
-        <a
-          class="nav-link d-flex align-items-center justify-content-start"
-          href="{% url 'settings' %}"
-          style="white-space: nowrap"
-        >
-          <span class="d-inline-flex align-items-center">
-            <i class="bi bi-gear me-2"></i>
-            <span>settings</span>
-          </span>
-        </a>
-      </li>
-    </ul>
-  </div>
+<nav class="w-full md:w-64 bg-gray-900 text-gray-100 p-3 md:sticky md:top-20 md:max-h-[80vh] md:overflow-y-auto">
+  <ul class="space-y-1" id="sidebarMenu">
+    <li>
+      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'dashboard' %}">
+        <i class="fas fa-house"></i>
+        <span>Dashboard Home</span>
+      </a>
+    </li>
+    <li>
+      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'courses' %}">
+        <i class="fas fa-book"></i>
+        <span>My Courses</span>
+      </a>
+    </li>
+    <li>
+      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'assignments' %}">
+        <i class="fas fa-tasks"></i>
+        <span>Assignments</span>
+      </a>
+    </li>
+    <li>
+      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'exams' %}">
+        <i class="fas fa-clipboard-list"></i>
+        <span>Exams</span>
+      </a>
+    </li>
+    <li>
+      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'grades' %}">
+        <i class="fas fa-chart-line"></i>
+        <span>My Grades</span>
+      </a>
+    </li>
+    <li>
+      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'attendance' %}">
+        <i class="fas fa-calendar-check"></i>
+        <span>Attendance</span>
+      </a>
+    </li>
+    <li>
+      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="#" data-section="timetable">
+        <i class="fas fa-clock"></i>
+        <span>Timetable</span>
+      </a>
+    </li>
+    <li>
+      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="#" data-section="messages">
+        <i class="fas fa-comments"></i>
+        <span>Messages</span>
+      </a>
+    </li>
+    <li>
+      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'library' %}">
+        <i class="fas fa-book-open"></i>
+        <span>Library</span>
+      </a>
+    </li>
+    <li>
+      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="#" data-section="clubs">
+        <i class="fas fa-people-group"></i>
+        <span>Clubs & Activities</span>
+      </a>
+    </li>
+    <li>
+      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'support' %}">
+        <i class="fas fa-life-ring"></i>
+        <span>Support</span>
+      </a>
+    </li>
+    <li>
+      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'settings' %}">
+        <i class="fas fa-gear"></i>
+        <span>Settings</span>
+      </a>
+    </li>
+  </ul>
 </nav>
-
-<style>
-  .sidebar {
-    background-color: var(--dark-color);
-    color: var(--light-color);
-  }
-
-  .sidebar .nav-link {
-    color: var(--light-color);
-  }
-
-  .sidebar .nav-link.active {
-    color: var(--primary-color);
-    font-weight: bold;
-  }
-
-  .sidebar .nav-link:hover {
-    color: var(--primary-color);
-  }
-
-  .sidebar i {
-    margin-right: 8px;
-    font-size:1.1em;
-  }
-</style>

@@ -1,135 +1,115 @@
- <div class="top-bar">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <ul class="top-links">
-                        <li><a href="mailto:birukedjn@gmail.com"><i class="fas fa-envelope"></i> birukedjn@gmail.com</a></li>
-                        <li><a href="tel:+251908574808"><i class="fas fa-phone"></i> +251 908 574 808</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-6 text-end">
-                    <ul class="social-links">
-                        <li><a href="https://www.linkedin.com/in/birukdjn"><i class="fab fa-linkedin"></i></a></li>
-                        <li><a href="https://www.instagram.com/birukdjn"><i class="fab fa-instagram"></i></a></li>
-                        <li><a href="https://www.facebook.com/birukdjn"><i class="fab fa-facebook-f"></i></a></li>
-                        <li><a href="https://www.twitter.com/birukdjn"><i class="fab fa-twitter"></i></a></li>
-                        <li><a href="https://www.youtube.com/birukdjn"><i class="fab fa-youtube"></i></a></li>
-                    </ul>
-                </div>
-            </div>
+ <div class="bg-gray-100 text-sm">
+        <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
+            <ul class="flex gap-4 text-gray-600">
+                <li><a href="mailto:birukedjn@gmail.com" class="hover:text-gray-900"><i class="fas fa-envelope mr-1"></i> birukedjn@gmail.com</a></li>
+                <li><a href="tel:+251908574808" class="hover:text-gray-900"><i class="fas fa-phone mr-1"></i> +251 908 574 808</a></li>
+            </ul>
+            <ul class="flex gap-3 text-gray-600">
+                <li><a href="https://www.linkedin.com/in/birukdjn" class="hover:text-gray-900"><i class="fab fa-linkedin"></i></a></li>
+                <li><a href="https://www.instagram.com/birukdjn" class="hover:text-gray-900"><i class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.facebook.com/birukdjn" class="hover:text-gray-900"><i class="fab fa-facebook-f"></i></a></li>
+                <li><a href="https://www.twitter.com/birukdjn" class="hover:text-gray-900"><i class="fab fa-twitter"></i></a></li>
+                <li><a href="https://www.youtube.com/birukdjn" class="hover:text-gray-900"><i class="fab fa-youtube"></i></a></li>
+            </ul>
         </div>
     </div>
 
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="{% url 'index' %}">
-                <img src="https://1drv.ms/i/c/7389654435428074/IQR-zoIv7SkQS5SzfdUf-3qWAZ-KzS2mwEMxqVcMwm6oLx8?width=500&height=500"  alt="logo" class="logo">
-                <span class="brand-text">WSaPS</span>
+    <nav class="sticky top-0 z-40 bg-blue-700 text-white">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a class="flex items-center gap-2 font-semibold" href="{% url 'index' %}">
+                <img src="https://1drv.ms/i/c/7389654435428074/IQR-zoIv7SkQS5SzfdUf-3qWAZ-KzS2mwEMxqVcMwm6oLx8?width=500&height=500"  alt="logo" class="h-8 w-8 rounded-full">
+                <span class="tracking-wide">WSaPS</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class="lg:hidden" id="navToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                       <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'index' %}">
-                            <i class="fas fa-home me-1"></i> Home
-                        </a>
-
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/about' %}active{% endif %}" href="{% url 'about' %}">
-                            <i class="fas fa-info-circle me-1"></i> About
-                        </a>
-
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/features' %}active{% endif %}" href="{% url 'features' %}">
-                            <i class="fas fa-star me-1"></i> Features
+            <div id="navbarNav" class="hidden lg:flex lg:items-center lg:gap-6">
+                <ul class="flex flex-col lg:flex-row gap-2 lg:gap-6">
+                    <li>
+                       <a class="hover:text-gray-200 {% if request.path == '/' %}underline font-semibold{% endif %}" href="{% url 'index' %}">
+                            <i class="fas fa-home mr-1"></i> Home
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/news' %}active{% endif %}" href="{% url 'news' %}">
-                            <i class="fas fa-newspaper me-1"></i> News
+                    <li>
+                        <a class="hover:text-gray-200 {% if request.path == '/about' %}underline font-semibold{% endif %}" href="{% url 'about' %}">
+                            <i class="fas fa-info-circle mr-1"></i> About
                         </a>
                     </li>
-                    <li class="nav-item">
-                          <a class="nav-link {% if request.path == '/gallery' %}active{% endif %}" href="{% url 'gallery' %}">
-                            <i class="fas fa-images me-1"></i> Gallery
+                    <li>
+                        <a class="hover:text-gray-200 {% if request.path == '/features' %}underline font-semibold{% endif %}" href="{% url 'features' %}">
+                            <i class="fas fa-star mr-1"></i> Features
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/contact' %}active{% endif %}" href="{% url 'contact' %}">
-                            <i class="fas fa-envelope me-1"></i> Contact
+                    <li>
+                        <a class="hover:text-gray-200 {% if request.path == '/news' %}underline font-semibold{% endif %}" href="{% url 'news' %}">
+                            <i class="fas fa-newspaper mr-1"></i> News
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-external-link-alt me-1"></i> Quick Links
+                    <li>
+                          <a class="hover:text-gray-200 {% if request.path == '/gallery' %}underline font-semibold{% endif %}" href="{% url 'gallery' %}">
+                            <i class="fas fa-images mr-1"></i> Gallery
                         </a>
-                        <ul class="dropdown-menu">
+                    </li>
+                    <li>
+                        <a class="hover:text-gray-200 {% if request.path == '/contact' %}underline font-semibold{% endif %}" href="{% url 'contact' %}">
+                            <i class="fas fa-envelope mr-1"></i> Contact
+                        </a>
+                    </li>
+                    <li class="relative group">
+                        <button class="hover:text-gray-200 flex items-center gap-1">
+                            <i class="fas fa-external-link-alt mr-1"></i> Quick Links
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        <ul class="absolute hidden group-hover:block bg-white text-gray-800 rounded shadow-lg mt-2 min-w-56">
                             <li>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-calendar-alt me-1"></i> Academic Calendar
+                                <a class="block px-4 py-2 hover:bg-gray-100" href="#">
+                                    <i class="fas fa-calendar-alt mr-1"></i> Academic Calendar
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href=" {% url 'event' %} ">
-                                    <i class="fas fa-calendar-check me-1"></i> School Events
+                                <a class="block px-4 py-2 hover:bg-gray-100" href=" {% url 'event' %} ">
+                                    <i class="fas fa-calendar-check mr-1"></i> School Events
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{% url 'exams' %}">
-                                    <i class="fas fa-poll me-1"></i> Exam Results
+                                <a class="block px-4 py-2 hover:bg-gray-100" href="{% url 'exams' %}">
+                                    <i class="fas fa-poll mr-1"></i> Exam Results
                                 </a>
                             </li>
-                            <li><hr class="dropdown-divider"></li>
+                            <li><hr class="my-1"></li>
                             <li>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-address-book me-1"></i> Staff Directory
+                                <a class="block px-4 py-2 hover:bg-gray-100" href="#">
+                                    <i class="fas fa-address-book mr-1"></i> Staff Directory
                                 </a>
                             </li>
                         </ul>
                     </li>
                 </ul>
             </div>
-            <div class="account"> 
+            <div class="ml-4">
                 {% if user.is_authenticated %}
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-user-circle me-1"></i> {{ user.username }}
+        <div class="relative inline-block text-left" x-data="{open:false}">
+            <button class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded inline-flex items-center gap-2" type="button" id="dropdownMenuButton">
+                <i class="fas fa-user-circle"></i> {{ user.username }}
             </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href=" {% url 'dashboard' %}"><i class="fas fa-user-edit me-1"></i> Profile</a></li>
+            <ul class="hidden absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded shadow-lg" aria-labelledby="dropdownMenuButton">
+                <li><a class="block px-4 py-2 hover:bg-gray-100" href=" {% url 'student_profile' %}"><i class="fas fa-user-edit mr-1"></i> Profile</a></li>
                 <li>
         <form method="post" action="{% url 'logout' %}">
           {% csrf_token %}
-          <button type="submit" class="dropdown-item">
-         <i class="fas fa-sign-out-alt me-1"></i> Logout
+          <button type="submit" class="w-full text-left block px-4 py-2 hover:bg-gray-100">
+         <i class="fas fa-sign-out-alt mr-1"></i> Logout
            </button>
          </form>
         </li>
             </ul>
 
             {% else %}
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="loginDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-user-circle me-1"></i> Account
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="loginDropdown">
-                <li>
-                    <a class="dropdown-item" href="{% url 'login' %}">
-                    <i class="fas fa-sign-in-alt me-1"></i> Login
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" href="{% url 'signup' %}">
-                    <i class="fas fa-user-plus me-1"></i> Signup
-                    </a>
-                </li>
-                </ul>
+            <div class="relative inline-block text-left">
+                <a class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded inline-flex items-center gap-2" href="{% url 'login' %}">
+                <i class="fas fa-user-circle"></i> Account
+                </a>
             </div>
             {% endif %}
             </div>

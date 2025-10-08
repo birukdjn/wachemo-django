@@ -1,92 +1,57 @@
-$(document).ready(function() {
-    // Initialize Owl Carousels
-    $(".hero-slider").owlCarousel({
-        items: 1,
-        loop: true,
-        autoplay: true,
-        smartSpeed: 1000,
-        dots: true,
-        nav: true
-    });
-
-    $(".testimonial-slider").owlCarousel({
-        items: 1,
-        loop: true,
-        autoplay: true,
-        dots: true
-    });
-
-    // Initialize Lightbox
-    lightbox.option({
-        'resizeDuration': 200,
-        'wrapAround': true
-    });
-
-    // Initialize WOW.js
-    new WOW().init();
-
-    // Smooth scroll for anchor links
-    $('a[href*="#"]').on('click', function(e) {
-        // Exclude elements that shouldn't smooth scroll
-        if ($(this).hasClass('no-smooth-scroll') || 
-            $(this).attr('data-toggle') === 'dropdown') {
-            return;
-        }
-        
-        e.preventDefault();
-        var target = $(this).attr('href');
-        if (target === '#') return;
-        
-        $('html, body').animate({
-            scrollTop: $(target).offset().top
-        }, 500, 'linear');
-    });
-
-    // Back to top button
-    var backToTop = $('.back-to-top');
-    $(window).scroll(function() {
-        if ($(this).scrollTop() > 300) {
-            backToTop.fadeIn();
-        } else {
-            backToTop.fadeOut();
-        }
-    });
-    
-    backToTop.click(function(e) {
-        e.preventDefault();
-        $('html, body').animate({scrollTop: 0}, 'slow');
-    });
-});
-
-
-
-
-$(".testimonial-slider").owlCarousel({
-    items: 3, // Display 3 items at once
-    loop: true,
-    autoplay: true,
-    dots: true,
-    nav: true,
-    margin: 30, // Space between items
-    responsive: {
-        0: { // For mobile
-            items: 1
-        },
-        768: { // For tablets
-            items: 2
-        },
-        992: { // For desktops
-            items: 3
-        }
-    }
-});
-
-
-
-
-
-// Add this script at the bottom of your template or in a separate JS file
+// Core UI interactions without external plugins
 document.addEventListener('DOMContentLoaded', function() {
+    // Mobile nav toggle
+    var navToggle = document.getElementById('navToggle');
+    var navbarNav = document.getElementById('navbarNav');
+    if (navToggle && navbarNav) {
+        navToggle.addEventListener('click', function () {
+            navbarNav.classList.toggle('hidden');
+        });
+    }
+
+    // Profile dropdown toggle
+    var profileBtn = document.getElementById('dropdownMenuButton');
+    if (profileBtn) {
+        var dropdownMenu = profileBtn.parentElement.querySelector('ul');
+        profileBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            if (dropdownMenu) dropdownMenu.classList.toggle('hidden');
+        });
+        document.addEventListener('click', function () {
+            if (dropdownMenu) dropdownMenu.classList.add('hidden');
+        });
+    }
+
+    // Smooth scroll (basic)
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function (e) {
+            var targetId = this.getAttribute('href');
+            if (targetId && targetId.length > 1) {
+                var el = document.querySelector(targetId);
+                if (el) {
+                    e.preventDefault();
+                    el.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    });
+
+    // Back to top (optional if element exists)
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 300) {
+                backToTop.style.display = 'block';
+            } else {
+                backToTop.style.display = 'none';
+            }
+        });
+        backToTop.addEventListener('click', function (e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
     // Handle Read More clicks
     document.querySelectorAll('.read-more').forEach(button => {
         button.addEventListener('click', function(e) {

@@ -12,9 +12,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('DJANGO_SECRET_KEY', default='unsafe-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config('DJANGO_DEBUG', default='False').lower() == 'true'
 
-ALLOWED_HOSTS = ["wachemo.onrender.com"]
+
+
+ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='wachemo.onrender.com,localhost,127.0.0.1').split(',')
 
 
 # Application definition
@@ -28,11 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'wachemosaps',
     'student',
-    
-    
-    
-    
-
+    'teacher',
 ]
 
 MIDDLEWARE = [
@@ -78,9 +76,6 @@ DATABASES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -96,10 +91,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -109,12 +100,10 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [ BASE_DIR / 'static' ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Where files are stored
@@ -132,8 +121,14 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Clear session when browser closes
 
 # Security settings
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SECURE = True  # If using HTTPS
-CSRF_COOKIE_SECURE = True  # If using HTTPS
+SESSION_COOKIE_SECURE = not DEBUG  # Secure in production
+CSRF_COOKIE_SECURE = not DEBUG  # Secure in production
+
+# Optional production hardening
+SECURE_SSL_REDIRECT = config('DJANGO_SSL_REDIRECT', default='True').lower() == 'true' if not DEBUG else False
+SECURE_HSTS_SECONDS = int(config('DJANGO_HSTS_SECONDS', default='31536000')) if not DEBUG else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
+SECURE_HSTS_PRELOAD = not DEBUG
 
 LOGIN_URL = 'login'
 # URL to redirect to for login

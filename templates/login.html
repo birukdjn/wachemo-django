@@ -1,64 +1,59 @@
 {% load static %}
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Wachemo School</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
-
 </head>
-<body>
-    <div class="container">
-        <div class="card shadow p-4">
-            <div class="logo"><i class="text-center mb-4 fas lock fa-lock"></i></div>
-            <h2 class="text-center mb-4">Login to Your Account</h2>
-            {% if request.GET.session_expired %}
-            <div class="alert alert-warning">
-                Your session expired due to inactivity. Please login again.
+<body class="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div class="w-full max-w-md bg-white shadow rounded p-6">
+        <div class="text-center mb-4 text-blue-600 text-4xl"><i class="fas fa-lock"></i></div>
+        <h2 class="text-center text-xl font-semibold mb-4">Login to Your Account</h2>
+        {% if request.GET.session_expired %}
+        <div class="mb-3 text-yellow-800 bg-yellow-100 border border-yellow-200 rounded p-3">
+            Your session expired due to inactivity. Please login again.
+        </div>
+        {% endif %}
+        {% if messages %}
+            <div class="mb-3 text-red-700 bg-red-100 border border-red-200 rounded p-3">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
             </div>
-            {% endif %}
-            {% if messages %}
-                <div class="alert alert-danger text-danger ">
-                    {% for message in messages %}
-                        <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            
-            <form action="login" method="POST">
-                {% csrf_token %}
+        {% endif %}
+        
+        <form action="login" method="POST" class="space-y-4">
+            {% csrf_token %}
 
-            <div class="mb-3">
-                <label for="username" class="form-label small-label">Username</label>
-                <div class="input-group input-group-sm">  
-                    <span class="input-group-text"><i class="fas fa-user sm-icon"></i></span>
-                    <input type="text" class="form-control form-control-sm" id="username" name="username" placeholder="Username/email" required>
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                <div class="mt-1 relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fas fa-user"></i></span>
+                    <input type="text" id="username" name="username" placeholder="Username/email" required class="w-full pl-10 pr-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
             </div>
-            <div class="mb-3">
-                <label for="password" class="form-label small-label">Password</label>
-                <div class="input-group input-group-sm"> 
-                    <span class="input-group-text"><i class="fas fa-lock sm-icon"></i></span>
-                    <input type="password" class="form-control form-control-sm" id="password" name="password" placeholder="Password" required>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <div class="mt-1 relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fas fa-lock"></i></span>
+                    <input type="password" id="password" name="password" placeholder="Password" required class="w-full pl-10 pr-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
             </div>
-            <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                    <label class="form-check-label" for="remember">Remember me</label>
-                </div>
-                            <button type="submit" class="btn btn-primary w-100">Login</button>
-                            <button class="mt-4 btn btn-primary w-100"> Forgot password</button>
-                            <div class="text-center mt-3">
-                                <p class="mt-4 w-100 ">Don't have an account? <a class="red" href="{% url 'signup' %}">Register here</a></p>
-                        </form>
-                    </div>
-                </div>
-                <script src="{% static 'js/login.js' %}"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <div class="flex items-center justify-between">
+                <label class="inline-flex items-center gap-2">
+                    <input type="checkbox" id="remember" name="remember" class="rounded">
+                    <span class="text-sm">Remember me</span>
+                </label>
+                <a href="#" class="text-sm text-blue-600 hover:underline">Forgot password?</a>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded">Login</button>
+            <p class="text-center text-sm">Don't have an account? <a class="text-blue-600 hover:underline" href="{% url 'signup' %}">Register here</a></p>
+        </form>
+    </div>
+    <script src="{% static 'js/login.js' %}"></script>
 </body>
 </html>

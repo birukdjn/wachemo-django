@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Profile - Student{% endblock %}
+{% block content %}
+<section class="bg-gray-50">
+  <div class="max-w-5xl mx-auto px-4 py-8">
+    <h1 class="text-2xl font-semibold mb-6">My Profile</h1>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="md:col-span-1 bg-white rounded shadow p-4">
+        <div class="flex items-center gap-3">
+          <div class="h-16 w-16 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-2xl">
+            <i class="fas fa-user"></i>
+          </div>
+          <div>
+            <p class="font-semibold">{{ user.get_full_name|default:user.username }}</p>
+            <p class="text-sm text-gray-600">{{ user.email }}</p>
+          </div>
+        </div>
+        <div class="mt-4 text-sm">
+          <p><span class="text-gray-500">Role:</span> {{ profile.get_role_display|default:'N/A' }}</p>
+          <p><span class="text-gray-500">Username:</span> {{ user.username }}</p>
+        </div>
+      </div>
+      <div class="md:col-span-2 space-y-6">
+        <div class="bg-white rounded shadow p-4">
+          <h2 class="font-semibold mb-3">Account Details</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <p><span class="text-gray-500">First name:</span> {{ user.first_name }}</p>
+            <p><span class="text-gray-500">Last name:</span> {{ user.last_name }}</p>
+            {% if profile and profile.role == 'student' %}
+            <p><span class="text-gray-500">Student ID:</span> {{ profile.student_id|default:'—' }}</p>
+            {% elif profile and profile.role == 'teacher' %}
+            <p><span class="text-gray-500">Subject:</span> {{ profile.teacher_subject|default:'—' }}</p>
+            {% elif profile and profile.role == 'parent' %}
+            <p><span class="text-gray-500">Phone:</span> {{ profile.parent_phone|default:'—' }}</p>
+            {% endif %}
+          </div>
+        </div>
+        <div class="bg-white rounded shadow p-4">
+          <h2 class="font-semibold mb-3">Quick Actions</h2>
+          <div class="flex gap-3">
+            <a href="{% url 'courses' %}" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">My Courses</a>
+            <a href="{% url 'settings' %}" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded">Settings</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+

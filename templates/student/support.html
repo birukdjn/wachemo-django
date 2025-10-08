@@ -10,387 +10,136 @@
 
 {% block content %}
 
+<div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-[16rem_1fr] gap-6">
+  {% include "student/sidebar.html" %}
+  <main>
+    <div id="section-support" class="space-y-6">
+      <div>
+        <h3 class="text-2xl font-semibold">Support Center</h3>
+        <p class="text-gray-600">Get help with school services and technical issues</p>
+      </div>
 
+      <!-- Quick Help Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="border rounded shadow-sm p-4 text-center">
+          <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center mx-auto mb-3"><i class="fas fa-circle-question"></i></div>
+          <h5 class="font-semibold">FAQs</h5>
+          <p class="text-sm text-gray-600">Find answers to common questions about the portal and school services.</p>
+          <a href="#faqs" class="inline-block mt-2 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-3 py-1 rounded">View FAQs</a>
+        </div>
+        <div class="border rounded shadow-sm p-4 text-center">
+          <div class="w-12 h-12 rounded-full bg-green-600 text-white flex items-center justify-center mx-auto mb-3"><i class="fas fa-comments"></i></div>
+          <h5 class="font-semibold">Live Chat</h5>
+          <p class="text-sm text-gray-600">Chat with our support team in real-time during school hours.</p>
+          <button class="mt-2 border border-green-600 text-green-600 hover:bg-green-600 hover:text-white px-3 py-1 rounded" id="startChatBtn">Start Chat</button>
+        </div>
+        <div class="border rounded shadow-sm p-4 text-center">
+          <div class="w-12 h-12 rounded-full bg-cyan-600 text-white flex items-center justify-center mx-auto mb-3"><i class="fas fa-phone"></i></div>
+          <h5 class="font-semibold">Call Support</h5>
+          <p class="text-sm text-gray-600">Speak directly with our IT help desk during working hours.</p>
+          <a href="tel:+251908574808" class="inline-block mt-2 border border-cyan-600 text-cyan-600 hover:bg-cyan-600 hover:text-white px-3 py-1 rounded">Call Now</a>
+        </div>
+      </div>
 
-<div class="container-fluid">
-  <div class="row">
-    <!-- Sidebar -->
-     {% include "student/sidebar.html" %}
-     
-
-<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4"> 
- <!-- Support Section -->
-      <div id="section-support" class="">
-        <div class="row mb-4">
-          <div class="col">
-            <h3 class="mb-3">Support Center</h3>
-            <p class="lead">
-              Get help with school services and technical issues
-            </p>
-            <div class="divider"></div>
+      <!-- Ticket + Info -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div class="border rounded shadow-sm">
+          <div class="px-4 py-2 bg-gray-50 border-b">
+            <h5 class="font-semibold"><i class="fas fa-ticket mr-2"></i>Submit a Support Ticket</h5>
+          </div>
+          <div class="p-4">
+            <form id="supportTicketForm" class="space-y-3">
+              <div>
+                <label for="ticketSubject" class="block text-sm font-medium">Subject</label>
+                <input type="text" class="mt-1 w-full border rounded px-3 py-2" id="ticketSubject" placeholder="Briefly describe your issue" required />
+              </div>
+              <div>
+                <label for="ticketCategory" class="block text-sm font-medium">Category</label>
+                <select class="mt-1 w-full border rounded px-3 py-2" id="ticketCategory" required>
+                  <option value="" selected disabled>Select a category</option>
+                  <option value="technical">Technical Issue</option>
+                  <option value="academic">Academic Support</option>
+                  <option value="account">Account Help</option>
+                  <option value="course">Course Enrollment</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label for="ticketDescription" class="block text-sm font-medium">Description</label>
+                <textarea class="mt-1 w-full border rounded px-3 py-2" id="ticketDescription" rows="4" placeholder="Please describe your issue in detail..." required></textarea>
+              </div>
+              <div>
+                <label for="ticketAttachment" class="block text-sm font-medium">Attachments (if any)</label>
+                <input class="mt-1 w-full border rounded px-3 py-2" type="file" id="ticketAttachment" multiple />
+                <div class="text-xs text-gray-600 mt-1">You can upload screenshots or documents related to your issue (max 5MB)</div>
+              </div>
+              <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">Submit Ticket</button>
+            </form>
           </div>
         </div>
 
-        <div class="row">
-          <!-- Quick Help Cards -->
-          <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-              <div class="card-body text-center">
-                <div class="icon-circle bg-primary mb-3 mx-auto">
-                  <i class="bi bi-question-circle-fill text-white fs-4"></i>
-                </div>
-                <h5 class="card-title">FAQs</h5>
-                <p class="card-text">
-                  Find answers to common questions about the portal and school
-                  services.
-                </p>
-                <a href="#faqs" class="btn btn-outline-primary">View FAQs</a>
-              </div>
-            </div>
+        <div class="border rounded shadow-sm">
+          <div class="px-4 py-2 bg-gray-50 border-b">
+            <h5 class="font-semibold"><i class="fas fa-circle-info mr-2"></i>Additional Support Options</h5>
           </div>
-
-          <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-              <div class="card-body text-center">
-                <div class="icon-circle bg-success mb-3 mx-auto">
-                  <i class="bi bi-chat-left-text-fill text-white fs-4"></i>
-                </div>
-                <h5 class="card-title">Live Chat</h5>
-                <p class="card-text">
-                  Chat with our support team in real-time during school hours.
-                </p>
-                <button class="btn btn-outline-success" id="startChatBtn">
-                  Start Chat
-                </button>
-              </div>
+          <div class="p-4 space-y-4">
+            <div>
+              <h6 class="font-semibold"><i class="fas fa-building mr-2"></i>IT Help Desk</h6>
+              <p class="text-sm">Location: Administration Building, Room 105</p>
+              <p class="text-sm">Hours: Mon-Fri 8:00 AM - 5:00 PM</p>
+              <p class="text-sm">Phone: <a href="tel:+251908574808" class="text-blue-600">+251 908 574 808</a></p>
+              <p class="text-sm">Phone: <a href="tel:+251777888325" class="text-blue-600">+251 777 888 325</a></p>
             </div>
-          </div>
-
-          <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-              <div class="card-body text-center">
-                <div class="icon-circle bg-info mb-3 mx-auto">
-                  <i class="bi bi-telephone-fill text-white fs-4"></i>
-                </div>
-                <h5 class="card-title">Call Support</h5>
-                <p class="card-text">
-                  Speak directly with our IT help desk during working hours.
-                </p>
-                <a href="tel:+251908574808" class="btn btn-outline-info"
-                  >Call Now</a
-                >
-              </div>
+            <div>
+              <h6 class="font-semibold"><i class="fas fa-envelope mr-2"></i>Email Support</h6>
+              <p class="text-sm">Technical Issues: <a href="mailto:it-support@wachemoschool.edu.et" class="text-blue-600">it-support@wachemoschool.edu.et</a></p>
+              <p class="text-sm">Academic Support: <a href="mailto:academic-support@wachemoschool.edu.et" class="text-blue-600">academic-support@wachemoschool.edu.et</a></p>
+              <p class="text-sm">General Inquiries: <a href="mailto:birukedjn@gmail.com" class="text-blue-600">Birukedjn@gmail.com</a></p>
             </div>
-          </div>
-        </div>
-
-        <!-- Support Ticket and Contact Info - Side by Side -->
-        <div class="row mb-4">
-          <!-- Support Ticket Form -->
-          <div class="col-lg-6 mb-4 d-flex">
-            <div class="card shadow-sm flex-fill">
-              <div class="card-header bg-light">
-                <h5 class="mb-0">
-                  <i class="bi bi-ticket-detailed me-2"></i>Submit a Support
-                  Ticket
-                </h5>
-              </div>
-              <div class="card-body d-flex flex-column">
-                <form id="supportTicketForm" class="flex-grow-1">
-                  <div class="mb-3">
-                    <label for="ticketSubject" class="form-label"
-                      >Subject</label
-                    >
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="ticketSubject"
-                      placeholder="Briefly describe your issue"
-                      required
-                    />
-                  </div>
-                  <div class="mb-3">
-                    <label for="ticketCategory" class="form-label"
-                      >Category</label
-                    >
-                    <select class="form-select" id="ticketCategory" required>
-                      <option value="" selected disabled>
-                        Select a category
-                      </option>
-                      <option value="technical">Technical Issue</option>
-                      <option value="academic">Academic Support</option>
-                      <option value="account">Account Help</option>
-                      <option value="course">Course Enrollment</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-                  <div class="mb-3">
-                    <label for="ticketDescription" class="form-label"
-                      >Description</label
-                    >
-                    <textarea
-                      class="form-control"
-                      id="ticketDescription"
-                      rows="4"
-                      placeholder="Please describe your issue in detail..."
-                      required
-                    ></textarea>
-                  </div>
-                  <div class="mb-3">
-                    <label for="ticketAttachment" class="form-label"
-                      >Attachments (if any)</label
-                    >
-                    <input
-                      class="form-control"
-                      type="file"
-                      id="ticketAttachment"
-                      multiple
-                    />
-                    <div class="form-text">
-                      You can upload screenshots or documents related to your
-                      issue (max 5MB)
-                    </div>
-                  </div>
-                  <div class="mt-auto">
-                    <button type="submit" class="btn btn-primary w-100">
-                      Submit Ticket
-                    </button>
-                  </div>
-                </form>
-              </div>
+            <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded p-3">
+              <strong>Response Time:</strong> We aim to respond to all support tickets within 24 hours during school days.
             </div>
-          </div>
-
-          <!-- Additional Support Options -->
-          <div class="col-lg-6 mb-4 d-flex">
-            <div class="card shadow-sm flex-fill">
-              <div class="card-header bg-light">
-                <h5 class="mb-0">
-                  <i class="bi bi-info-circle me-2"></i>Additional Support
-                  Options
-                </h5>
-              </div>
-              <div class="card-body d-flex flex-column">
-                <div class="mb-3">
-                  <h6><i class="bi bi-building me-2"></i>IT Help Desk</h6>
-                  <p class="mb-1">
-                    Location: Administration Building, Room 105
-                  </p>
-                  <p class="mb-1">Hours: Mon-Fri 8:00 AM - 5:00 PM</p>
-                  <p class="mb-1">
-                    Phone: <a href="tel:+251908574808">+251 908 574 808</a>
-                  </p>
-                  <p>Phone: <a href="tel:+251777888325">+251 777 888 325</a></p>
-                </div>
-
-                <div class="mb-3">
-                  <h6><i class="bi bi-envelope me-2"></i>Email Support</h6>
-                  <p class="mb-1">
-                    Technical Issues:
-                    <a href="mailto:it-support@wachemoschool.edu.et"
-                      >it-support@wachemoschool.edu.et</a
-                    >
-                  </p>
-                  <p class="mb-1">
-                    Academic Support:
-                    <a href="mailto:academic-support@wachemoschool.edu.et"
-                      >academic-support@wachemoschool.edu.et</a
-                    >
-                  </p>
-                  <p>
-                    General Inquiries:
-                    <a href="mailto:birukedjn@gmail.com">
-                      Birukedjn@gmail.com</a
-                    >
-                  </p>
-                </div>
-
-                <div class="alert alert-info mt-auto mb-0">
-                  <i class="bi bi-clock-history me-2"></i>
-                  <strong>Response Time:</strong> We aim to respond to all
-                  support tickets within 24 hours during school days.
-                </div>
-                <div class="alert alert-warning mt-3 mb-0">
-                  <i class="bi bi-exclamation-triangle me-2"></i>
-                  <strong>Note:</strong> Please check your email for updates
-                  regarding your support requests.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- FAQs Section -->
-        <div class="row" id="faqs">
-          <div class="col-lg-12">
-            <div class="card shadow-sm">
-              <div class="card-header bg-light">
-                <h5 class="mb-0">
-                  <i class="bi bi-question-circle me-2"></i>Frequently Asked
-                  Questions
-                </h5>
-              </div>
-              <div class="card-body">
-                <div class="accordion" id="faqAccordion">
-                  <!-- Technical FAQs -->
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingTechnical">
-                      <button
-                        class="accordion-button"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapseTechnical"
-                        aria-expanded="true"
-                        aria-controls="collapseTechnical"
-                      >
-                        Technical Issues
-                      </button>
-                    </h2>
-                    <div
-                      id="collapseTechnical"
-                      class="accordion-collapse collapse show"
-                      aria-labelledby="headingTechnical"
-                      data-bs-parent="#faqAccordion"
-                    >
-                      <div class="accordion-body">
-                        <div class="faq-item mb-3">
-                          <h6>
-                            Q: I can't log in to my account. What should I do?
-                          </h6>
-                          <p>
-                            A: First try resetting your password using the
-                            'Forgot Password' link. If that doesn't work,
-                            contact IT support with your student ID.
-                          </p>
-                        </div>
-                        <div class="faq-item mb-3">
-                          <h6>
-                            Q: The portal is loading very slowly. How can I fix
-                            this?
-                          </h6>
-                          <p>
-                            A: Try clearing your browser cache or using a
-                            different browser. If the problem persists, it might
-                            be a system issue - please report it.
-                          </p>
-                        </div>
-                        <div class="faq-item">
-                          <h6>
-                            Q: I'm getting an error message when trying to
-                            submit an assignment. What does this mean?
-                          </h6>
-                          <p>
-                            A: Check the file size and format requirements. If
-                            your file meets these but still won't upload, take a
-                            screenshot of the error and submit a support ticket.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Account FAQs -->
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingAccount">
-                      <button
-                        class="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapseAccount"
-                        aria-expanded="false"
-                        aria-controls="collapseAccount"
-                      >
-                        Account Help
-                      </button>
-                    </h2>
-                    <div
-                      id="collapseAccount"
-                      class="accordion-collapse collapse"
-                      aria-labelledby="headingAccount"
-                      data-bs-parent="#faqAccordion"
-                    >
-                      <div class="accordion-body">
-                        <div class="faq-item mb-3">
-                          <h6>Q: How do I change my password?</h6>
-                          <p>
-                            A: Go to Settings > Security Settings. You'll need
-                            to enter your current password before setting a new
-                            one.
-                          </p>
-                        </div>
-                        <div class="faq-item mb-3">
-                          <h6>
-                            Q: My personal information is incorrect. How can I
-                            update it?
-                          </h6>
-                          <p>
-                            A: Some information can be updated in your profile
-                            settings. For official records (like name or ID),
-                            please contact the registrar's office.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Academic FAQs -->
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingAcademic">
-                      <button
-                        class="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapseAcademic"
-                        aria-expanded="false"
-                        aria-controls="collapseAcademic"
-                      >
-                        Academic Support
-                      </button>
-                    </h2>
-                    <div
-                      id="collapseAcademic"
-                      class="accordion-collapse collapse"
-                      aria-labelledby="headingAcademic"
-                      data-bs-parent="#faqAccordion"
-                    >
-                      <div class="accordion-body">
-                        <div class="faq-item mb-3">
-                          <h6>
-                            Q: I can't see one of my courses in the portal. What
-                            should I do?
-                          </h6>
-                          <p>
-                            A: First check with your instructor to confirm
-                            you're properly enrolled. If you are, submit a
-                            support ticket with the course details.
-                          </p>
-                        </div>
-                        <div class="faq-item mb-3">
-                          <h6>
-                            Q: How do I access course materials from previous
-                            semesters?
-                          </h6>
-                          <p>
-                            A: Archived courses can be accessed through the
-                            'Previous Courses' option in the Courses section.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="bg-yellow-50 border border-yellow-200 text-yellow-800 rounded p-3">
+              <strong>Note:</strong> Please check your email for updates regarding your support requests.
             </div>
           </div>
         </div>
       </div>
 
-</main>
-
-
+      <!-- FAQs Section -->
+      <div class="border rounded shadow-sm" id="faqs">
+        <div class="px-4 py-2 bg-gray-50 border-b">
+          <h5 class="font-semibold"><i class="fas fa-circle-question mr-2"></i>Frequently Asked Questions</h5>
+        </div>
+        <div class="p-4 space-y-4">
+          <details class="border rounded">
+            <summary class="px-4 py-2 cursor-pointer">Technical Issues</summary>
+            <div class="p-4 space-y-3 text-sm">
+              <div><h6 class="font-semibold">Q: I can't log in to my account. What should I do?</h6><p>A: First try resetting your password using the 'Forgot Password' link. If that doesn't work, contact IT support with your student ID.</p></div>
+              <div><h6 class="font-semibold">Q: The portal is loading very slowly. How can I fix this?</h6><p>A: Try clearing your browser cache or using a different browser. If the problem persists, it might be a system issue - please report it.</p></div>
+              <div><h6 class="font-semibold">Q: I'm getting an error message when trying to submit an assignment. What does this mean?</h6><p>A: Check the file size and format requirements. If your file meets these but still won't upload, take a screenshot of the error and submit a support ticket.</p></div>
+            </div>
+          </details>
+          <details class="border rounded">
+            <summary class="px-4 py-2 cursor-pointer">Account Help</summary>
+            <div class="p-4 space-y-3 text-sm">
+              <div><h6 class="font-semibold">Q: How do I change my password?</h6><p>A: Go to Settings > Security Settings. You'll need to enter your current password before setting a new one.</p></div>
+              <div><h6 class="font-semibold">Q: My personal information is incorrect. How can I update it?</h6><p>A: Some information can be updated in your profile settings. For official records (like name or ID), please contact the registrar's office.</p></div>
+            </div>
+          </details>
+          <details class="border rounded">
+            <summary class="px-4 py-2 cursor-pointer">Academic Support</summary>
+            <div class="p-4 space-y-3 text-sm">
+              <div><h6 class="font-semibold">Q: I can't see one of my courses in the portal. What should I do?</h6><p>A: First check with your instructor to confirm you're properly enrolled. If you are, submit a support ticket with the course details.</p></div>
+              <div><h6 class="font-semibold">Q: How do I access course materials from previous semesters?</h6><p>A: Archived courses can be accessed through the 'Previous Courses' option in the Courses section.</p></div>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
 
 {% endblock %} 
-
-
 
 {% endif %}

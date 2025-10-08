@@ -4,5 +4,87 @@
 
 {% block content %}
 
+<section class="bg-white">
+  <div class="max-w-7xl mx-auto px-4 py-10">
+    <div class="text-center mb-8">
+      <h1 class="text-2xl font-semibold">Examinations</h1>
+      <p class="text-gray-600">Schedules, guidelines, and recent results</p>
+    </div>
+
+    <!-- Upcoming Exams -->
+    <div class="mb-10">
+      <h2 class="text-xl font-semibold mb-3">Upcoming Exams</h2>
+      <div class="overflow-x-auto border rounded">
+        <table class="min-w-full text-sm">
+          <thead class="bg-gray-50 text-gray-700">
+            <tr>
+              <th class="text-left px-4 py-2">Date</th>
+              <th class="text-left px-4 py-2">Time</th>
+              <th class="text-left px-4 py-2">Subject</th>
+              <th class="text-left px-4 py-2">Grade</th>
+              <th class="text-left px-4 py-2">Room</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y">
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-2">2025-10-15</td>
+              <td class="px-4 py-2">8:30 AM</td>
+              <td class="px-4 py-2">Mathematics</td>
+              <td class="px-4 py-2">Grade 11</td>
+              <td class="px-4 py-2">Room A1</td>
+            </tr>
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-2">2025-10-16</td>
+              <td class="px-4 py-2">1:30 PM</td>
+              <td class="px-4 py-2">English</td>
+              <td class="px-4 py-2">Grade 11</td>
+              <td class="px-4 py-2">Room B2</td>
+            </tr>
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-2">2025-10-17</td>
+              <td class="px-4 py-2">8:30 AM</td>
+              <td class="px-4 py-2">Physics</td>
+              <td class="px-4 py-2">Grade 12</td>
+              <td class="px-4 py-2">Hall 1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Exam Guidelines -->
+    <div class="mb-10">
+      <h2 class="text-xl font-semibold mb-3">Exam Guidelines</h2>
+      <ul class="list-disc pl-6 space-y-2 text-gray-700">
+        <li>Arrive at least 15 minutes before the exam starts.</li>
+        <li>Bring your student ID and required stationery (no smart devices).</li>
+        <li>Mobile phones and smart watches are strictly prohibited in the exam hall.</li>
+        <li>Any misconduct will be subject to disciplinary action per school policy.</li>
+      </ul>
+    </div>
+
+    <!-- Recent Results -->
+    <div>
+      <h2 class="text-xl font-semibold mb-3">Recent Results</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="border rounded p-4">
+          <h3 class="font-semibold">Grade 12 Midterms</h3>
+          <p class="text-sm text-gray-600">Published: 2025-09-30</p>
+          <a href="#" class="inline-block mt-2 text-blue-600 hover:underline">View Results</a>
+        </div>
+        <div class="border rounded p-4">
+          <h3 class="font-semibold">Grade 11 Midterms</h3>
+          <p class="text-sm text-gray-600">Published: 2025-09-28</p>
+          <a href="#" class="inline-block mt-2 text-blue-600 hover:underline">View Results</a>
+        </div>
+        <div class="border rounded p-4">
+          <h3 class="font-semibold">Grade 10 Assessments</h3>
+          <p class="text-sm text-gray-600">Published: 2025-09-25</p>
+          <a href="#" class="inline-block mt-2 text-blue-600 hover:underline">View Results</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 {% endblock %}

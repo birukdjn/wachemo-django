@@ -1,0 +1,193 @@
+{% extends 'student/base.html' %}
+{% load static %}
+
+{% block title %}Exams - Wachemo SaPS{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+            {% include 'student/sidebar.html' %}
+        </div>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2 text-gray-800">My Exams</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Filter</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exam Stats -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3 col-6">
+                    <div class="card text-bg-primary h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-clipboard-list fa-2x mb-2"></i>
+                            <h5 class="card-title mb-1">Total Exams</h5>
+                            <h3 class="mb-0">{{ exams|length }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card text-bg-warning h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-clock fa-2x mb-2"></i>
+                            <h5 class="card-title mb-1">Upcoming</h5>
+                            <h3 class="mb-0">{{ exams|length }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card text-bg-success h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-check-circle fa-2x mb-2"></i>
+                            <h5 class="card-title mb-1">Completed</h5>
+                            <h3 class="mb-0">{{ exam_results|length }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card text-bg-info h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-star fa-2x mb-2"></i>
+                            <h5 class="card-title mb-1">Average Score</h5>
+                            <h3 class="mb-0">78%</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Exams -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="text-gray-800 mb-3">Upcoming Exams</h4>
+                    <div class="row g-3">
+                        {% for exam in exams %}
+                        <div class="col-lg-4 col-md-6">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="card-title">{{ exam.title }}</h6>
+                                        <span class="badge bg-{% if exam.exam_type == 'final' %}danger{% elif exam.exam_type == 'midterm' %}warning{% else %}info{% endif %}">
+                                            {{ exam.get_exam_type_display }}
+                                        </span>
+                                    </div>
+                                    <p class="card-text small text-muted mb-2">{{ exam.course.code }} - {{ exam.course.name }}</p>
+                                    <p class="card-text small mb-2">{{ exam.description|truncatechars:100 }}</p>
+                                    <div class="row text-center">
+                                        <div class="col-4">
+                                            <small class="text-muted">Date</small>
+                                            <div class="fw-bold">{{ exam.exam_date|date:"M d" }}</div>
+                                        </div>
+                                        <div class="col-4">
+                                            <small class="text-muted">Time</small>
+                                            <div class="fw-bold">{{ exam.exam_date|time:"H:i" }}</div>
+                                        </div>
+                                        <div class="col-4">
+                                            <small class="text-muted">Duration</small>
+                                            <div class="fw-bold">{{ exam.duration_minutes }}min</div>
+                                        </div>
+                                    </div>
+                                    {% if exam.location %}
+                                    <div class="mt-2">
+                                        <small class="text-muted">
+                                            <i class="fas fa-map-marker-alt me-1"></i>{{ exam.location }}
+                                        </small>
+                                    </div>
+                                    {% endif %}
+                                    <div class="mt-3">
+                                        <button class="btn btn-sm btn-primary w-100">View Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12">
+                            <div class="text-center text-muted py-4">
+                                <i class="fas fa-clipboard-list fa-3x mb-3"></i>
+                                <p>No upcoming exams found</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exam Results -->
+            <div class="row">
+                <div class="col-12">
+                    <h4 class="text-gray-800 mb-3">Exam Results</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Exam</th>
+                                    <th>Course</th>
+                                    <th>Type</th>
+                                    <th>Date</th>
+                                    <th>Score</th>
+                                    <th>Grade</th>
+                                    <th>Feedback</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for result in exam_results %}
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <h6 class="mb-1">{{ result.exam.title }}</h6>
+                                            <small class="text-muted">Max: {{ result.exam.max_points }} points</small>
+                                        </div>
+                                    </td>
+                                    <td>{{ result.exam.course.code }} - {{ result.exam.course.name }}</td>
+                                    <td>
+                                        <span class="badge bg-{% if result.exam.exam_type == 'final' %}danger{% elif result.exam.exam_type == 'midterm' %}warning{% else %}info{% endif %}">
+                                            {{ result.exam.get_exam_type_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ result.exam.exam_date|date:"M d, Y" }}</td>
+                                    <td>
+                                        <span class="fw-bold">{{ result.points_earned }}/{{ result.exam.max_points }}</span>
+                                        <div class="progress mt-1" style="height: 4px;">
+                                            <div class="progress-bar" role="progressbar" 
+                                                style="width: {% widthratio result.points_earned result.exam.max_points 100 %}%"></div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if result.grade %}
+                                            <span class="badge bg-{% if result.grade == 'A' %}success{% elif result.grade == 'B' %}info{% elif result.grade == 'C' %}warning{% else %}danger{% endif %}">
+                                                {{ result.grade }}
+                                            </span>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if result.feedback %}
+                                            <button class="btn btn-sm btn-outline-info" data-bs-toggle="tooltip" title="{{ result.feedback }}">
+                                                View Feedback
+                                            </button>
+                                        {% else %}
+                                            <span class="text-muted">No feedback</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted">No exam results found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}
