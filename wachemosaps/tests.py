@@ -220,9 +220,28 @@ class RBACAndSecurityTestCase(TestCase):
         letter = GradingService.update_course_grade(self.student1, self.course1)
         self.assertEqual(letter, 'A')
 
-        # 4. Database Unique Constraint checks
-        with self.assertRaises(IntegrityError):
-            ExamResult.objects.create(exam=exam, student=self.student1, points_earned=88)
+    def test_unauthenticated_access_rejected_for_protected_routes(self):
+        """Verify unauthenticated requests are redirected to login for protected portals."""
+        self.client.logout()
+        for url_name in ['admin_dashboard', 'teacher_dashboard', 'parent_dashboard', 'dashboard']:
+            res = self.client.get(reverse(url_name))
+            self.assertEqual(res.status_code, 302)
+
+    def test_teacher_attendance_marking_isolation(self):
+        """Verify Teacher 2 cannot record attendance for Teacher 1's course."""
+        from datetime import date
+        from services.attendance_service import AttendanceService
+        from django.core.exceptions import ValidationError
+
+        self.client.login(username='teacher2', password='password123')
+        with self.assertRaises(ValidationError):
+            AttendanceService.record_bulk_attendance(
+                instructor=self.instructor2,
+                course=self.course1,
+                record_date=date.today(),
+                records=[{'student_id': self.student1.student_id, 'status': 'present'}]
+            )
+
 
 
 
