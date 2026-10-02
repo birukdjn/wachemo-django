@@ -1,97 +1,222 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}About Us - wachemoSaPS{% endblock %} 
- 
+{% block title %}About Us | WSaPS - Wachemo School Academic Portal{% endblock %}
+
 {% block content %}
 
-<!-- About Section -->
-<section id="about" class="bg-white">
-  <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-    <div>
-      <img src="{% static 'images/about-2.jpg' %}" alt="About Wachemo School" class="rounded shadow">
-    </div>
-    <div>
-      <h2 class="text-2xl font-semibold">About Wachemo School</h2>
-      <p class="mt-3">Wachemo SaPS is a premier educational institution committed to providing quality education through innovative teaching methods and state-of-the-art facilities.</p>
-      <p class="mt-2">Our mission is to nurture young minds to become responsible global citizens with strong moral values and academic excellence.</p>
-      <ul class="mt-4 space-y-2 text-sm text-gray-700">
-        <li><i class="fas fa-check-circle text-blue-600 mr-2"></i> Modern digital learning platform</li>
-        <li><i class="fas fa-check-circle text-blue-600 mr-2"></i> Highly qualified teaching staff</li>
-        <li><i class="fas fa-check-circle text-blue-600 mr-2"></i> Comprehensive extracurricular programs</li>
-        <li><i class="fas fa-check-circle text-blue-600 mr-2"></i> Safe and supportive learning environment</li>
-      </ul>
-    </div>
+<!-- Hero Banner Section -->
+<section class="relative bg-navy-900 py-16 overflow-hidden border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-4 relative z-10 text-center">
+    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-blue/10 text-blue-400 text-xs font-bold uppercase tracking-widest border border-brand-blue/20 mb-4">
+      <i class="fas fa-graduation-cap"></i> Discover Our Legacy
+    </span>
+    <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
+      About Wachemo School
+    </h1>
+    <p class="text-gray-300 text-base md:text-lg max-w-2xl mx-auto font-light leading-relaxed">
+      Empowering young minds through academic excellence, innovation, and character building since 1998.
+    </p>
   </div>
+</section>
 
-  <!-- Additional Content Sections -->
-  <div class="max-w-7xl mx-auto px-4 pb-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="border rounded shadow-sm p-6 text-center">
-      <div class="w-12 h-12 rounded-full bg-gray-900 text-white flex items-center justify-center mx-auto mb-3"><i class="fas fa-graduation-cap"></i></div>
-      <h4 class="font-semibold">Our History</h4>
-      <p class="text-sm text-gray-700">Founded in 1998, Wachemo School has grown from a small community school to a regional leader in education, serving over 2,500 students annually.</p>
-    </div>
-    <div class="border rounded shadow-sm p-6 text-center">
-      <div class="w-12 h-12 rounded-full bg-gray-900 text-white flex items-center justify-center mx-auto mb-3"><i class="fas fa-chalkboard-teacher"></i></div>
-      <h4 class="font-semibold">Teaching Philosophy</h4>
-      <p class="text-sm text-gray-700">We believe in holistic education that balances academic rigor with character development, creativity, and critical thinking skills.</p>
-    </div>
-    <div class="border rounded shadow-sm p-6 text-center">
-      <div class="w-12 h-12 rounded-full bg-gray-900 text-white flex items-center justify-center mx-auto mb-3"><i class="fas fa-trophy"></i></div>
-      <h4 class="font-semibold">Accreditation</h4>
-      <p class="text-sm text-gray-700">Fully accredited by the Ministry of Education with recognition for excellence in STEM education and extracurricular achievements.</p>
-    </div>
-  </div>
-
-  <!-- Mission and Vision Section -->
-  <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-    <div class="order-2 md:order-1">
-      <h2 class="text-2xl font-semibold">Our Mission & Vision</h2>
-      <div class="space-y-3 mt-4">
-        <div>
-          <h4 class="font-semibold"><i class="fas fa-bullseye text-blue-600 mr-2"></i> Mission</h4>
-          <p class="text-sm text-gray-700">To provide transformative education that empowers students to achieve their full potential, contribute to society, and thrive in a globalized world.</p>
-        </div>
-        <div>
-          <h4 class="font-semibold"><i class="fas fa-eye text-blue-600 mr-2"></i> Vision</h4>
-          <p class="text-sm text-gray-700">To be recognized as a center of excellence that nurtures innovative thinkers, ethical leaders, and compassionate citizens through progressive education.</p>
-        </div>
-        <div>
-          <h4 class="font-semibold"><i class="fas fa-flag-checkered text-blue-600 mr-2"></i> Goal</h4>
-          <p class="text-sm text-gray-700">To continuously improve our academic programs, ensuring every student receives the support and resources needed.</p>
+<!-- About Overview Section -->
+<section class="py-16 bg-navy-900">
+  <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <div class="relative group">
+      <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-300"></div>
+      <img src="{% static 'images/about-2.jpg' %}" alt="About Wachemo School" class="relative rounded-2xl shadow-2xl w-full object-cover h-80 md:h-96 border border-white/10">
+      <div class="absolute -bottom-6 -right-6 glass-card rounded-2xl p-5 shadow-2xl border border-white/15 hidden sm:block">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center font-black text-xl">
+            <i class="fas fa-award"></i>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-white">25+ Years</p>
+            <p class="text-xs text-gray-400 font-medium">Educational Leadership</p>
+          </div>
         </div>
       </div>
     </div>
-    <div class="order-1 md:order-2">
-      <img src="{% static 'images/about-1.jpg' %}" alt="Students learning" class="rounded shadow">
+    
+    <div class="space-y-6">
+      <div class="inline-block px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-bold uppercase tracking-widest border border-blue-500/20">
+        Who We Are
+      </div>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-white leading-tight">
+        Building Strong Foundations for Future Leaders
+      </h2>
+      <p class="text-gray-300 leading-relaxed font-light">
+        Wachemo SaPS is a premier educational institution committed to providing quality education through innovative teaching methods, state-of-the-art digital tools, and holistic student support.
+      </p>
+      <p class="text-gray-400 leading-relaxed text-sm">
+        Our mission is to nurture curious minds into ethical, responsible global citizens equipped with 21st-century skills and strong moral integrity.
+      </p>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+        <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+            <i class="fas fa-laptop-code text-xs"></i>
+          </div>
+          <span class="text-sm font-semibold text-white">Digital Learning</span>
+        </div>
+        <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5">
+          <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0">
+            <i class="fas fa-user-tie text-xs"></i>
+          </div>
+          <span class="text-sm font-semibold text-white">Expert Faculty</span>
+        </div>
+        <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5">
+          <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0">
+            <i class="fas fa-futbol text-xs"></i>
+          </div>
+          <span class="text-sm font-semibold text-white">Rich Activities</span>
+        </div>
+        <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0">
+            <i class="fas fa-shield-heart text-xs"></i>
+          </div>
+          <span class="text-sm font-semibold text-white">Safe Environment</span>
+        </div>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- Core Values Section -->
-  <div class="max-w-7xl mx-auto px-4 pb-12">
-    <div class="text-center mb-8">
-      <h2 class="text-2xl font-semibold">Our Core Values</h2>
+<!-- Additional Feature Cards -->
+<section class="py-12 bg-navy-900 border-t border-white/5">
+  <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="glass-card rounded-2xl p-8 text-center hover:border-blue-500/40 transition-all duration-300">
+      <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center mx-auto mb-5 shadow-lg shadow-blue-600/30 text-xl">
+        <i class="fas fa-landmark"></i>
+      </div>
+      <h3 class="text-lg font-bold text-white mb-2">Our History</h3>
+      <p class="text-sm text-gray-400 font-light leading-relaxed">
+        Founded in 1998, Wachemo School has grown from a community initiative into a regional educational benchmark, educating over 2,500 students annually.
+      </p>
     </div>
+
+    <div class="glass-card rounded-2xl p-8 text-center hover:border-blue-500/40 transition-all duration-300">
+      <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-600 to-pink-600 text-white flex items-center justify-center mx-auto mb-5 shadow-lg shadow-purple-600/30 text-xl">
+        <i class="fas fa-brain"></i>
+      </div>
+      <h3 class="text-lg font-bold text-white mb-2">Teaching Philosophy</h3>
+      <p class="text-sm text-gray-400 font-light leading-relaxed">
+        We champion holistic education, harmonizing academic rigor with creativity, critical analysis, character development, and practical knowledge.
+      </p>
+    </div>
+
+    <div class="glass-card rounded-2xl p-8 text-center hover:border-blue-500/40 transition-all duration-300">
+      <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-600 text-white flex items-center justify-center mx-auto mb-5 shadow-lg shadow-emerald-600/30 text-xl">
+        <i class="fas fa-certificate"></i>
+      </div>
+      <h3 class="text-lg font-bold text-white mb-2">Accreditation</h3>
+      <p class="text-sm text-gray-400 font-light leading-relaxed">
+        Fully accredited by the Ministry of Education with top honors for STEM achievements, athletic distinction, and extracurricular excellence.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Mission & Vision Section -->
+<section class="py-16 bg-navy-900 border-t border-white/5">
+  <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <div class="space-y-6">
+      <div>
+        <span class="inline-block px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-bold uppercase tracking-widest border border-indigo-500/20 mb-3">
+          Our Strategic Goals
+        </span>
+        <h2 class="text-3xl font-extrabold text-white">Mission, Vision & Principles</h2>
+      </div>
+
+      <div class="space-y-4">
+        <div class="p-5 rounded-2xl bg-white/5 border border-white/10 flex items-start gap-4">
+          <div class="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center shrink-0 text-base mt-0.5">
+            <i class="fas fa-bullseye"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-base mb-1">Our Mission</h4>
+            <p class="text-sm text-gray-300 font-light leading-relaxed">
+              To provide transformative, student-centered education that unlocks individual potential, fosters social responsibility, and prepares students for global success.
+            </p>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-white/5 border border-white/10 flex items-start gap-4">
+          <div class="w-10 h-10 rounded-xl bg-purple-600/20 text-purple-400 flex items-center justify-center shrink-0 text-base mt-0.5">
+            <i class="fas fa-eye"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-base mb-1">Our Vision</h4>
+            <p class="text-sm text-gray-300 font-light leading-relaxed">
+              To stand as an internationally recognized beacon of progressive education, cultivating innovative thinkers and ethical leaders of tomorrow.
+            </p>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-white/5 border border-white/10 flex items-start gap-4">
+          <div class="w-10 h-10 rounded-xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center shrink-0 text-base mt-0.5">
+            <i class="fas fa-flag-checkered"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-base mb-1">Core Goal</h4>
+            <p class="text-sm text-gray-300 font-light leading-relaxed">
+              To continuously elevate academic standards and digital learning tools, ensuring every student thrives with top-tier guidance and resources.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative group">
+      <div class="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-300"></div>
+      <img src="{% static 'images/about-1.jpg' %}" alt="Students learning" class="relative rounded-2xl shadow-2xl w-full object-cover h-80 md:h-[450px] border border-white/10">
+    </div>
+  </div>
+</section>
+
+<!-- Core Values Section -->
+<section class="py-16 bg-navy-900 border-t border-white/5">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <span class="inline-block px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-bold uppercase tracking-widest border border-emerald-500/20 mb-3">
+        Guiding Principles
+      </span>
+      <h2 class="text-3xl font-extrabold text-white mb-3">Our Core Values</h2>
+      <p class="text-gray-400 text-sm font-light">The fundamental beliefs that guide our daily actions, teaching standards, and campus community.</p>
+    </div>
+
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="border rounded shadow p-6 text-center">
-        <div class="w-12 h-12 rounded-full bg-gray-900 text-white flex items-center justify-center mx-auto mb-3"><i class="fas fa-hand-holding-heart"></i></div>
-        <h5 class="font-semibold">Integrity</h5>
-        <p class="text-sm text-gray-700">We uphold the highest standards of honesty, ethics, and moral principles in all our actions.</p>
+      <div class="glass-card p-6 rounded-2xl text-center hover:scale-105 transition-transform duration-300">
+        <div class="w-12 h-12 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center mx-auto mb-4 text-lg">
+          <i class="fas fa-hand-holding-heart"></i>
+        </div>
+        <h3 class="font-bold text-white text-base mb-2">Integrity</h3>
+        <p class="text-xs text-gray-400 font-light leading-relaxed">We uphold the highest ethical standards, honesty, and moral accountability in all aspects of school life.</p>
       </div>
-      <div class="border rounded shadow p-6 text-center">
-        <div class="w-12 h-12 rounded-full bg-gray-900 text-white flex items-center justify-center mx-auto mb-3"><i class="fas fa-lightbulb"></i></div>
-        <h5 class="font-semibold">Innovation</h5>
-        <p class="text-sm text-gray-700">We embrace creativity and forward-thinking approaches to teaching and learning.</p>
+
+      <div class="glass-card p-6 rounded-2xl text-center hover:scale-105 transition-transform duration-300">
+        <div class="w-12 h-12 rounded-xl bg-amber-600/20 text-amber-400 flex items-center justify-center mx-auto mb-4 text-lg">
+          <i class="fas fa-lightbulb"></i>
+        </div>
+        <h3 class="font-bold text-white text-base mb-2">Innovation</h3>
+        <p class="text-xs text-gray-400 font-light leading-relaxed">We foster creative thinking, technological integration, and progressive educational methodologies.</p>
       </div>
-      <div class="border rounded shadow p-6 text-center">
-        <div class="w-12 h-12 rounded-full bg-gray-900 text-white flex items-center justify-center mx-auto mb-3"><i class="fas fa-users"></i></div>
-        <h5 class="font-semibold">Community</h5>
-        <p class="text-sm text-gray-700">We foster a supportive environment that values diversity, collaboration, and mutual respect.</p>
+
+      <div class="glass-card p-6 rounded-2xl text-center hover:scale-105 transition-transform duration-300">
+        <div class="w-12 h-12 rounded-xl bg-purple-600/20 text-purple-400 flex items-center justify-center mx-auto mb-4 text-lg">
+          <i class="fas fa-users"></i>
+        </div>
+        <h3 class="font-bold text-white text-base mb-2">Community</h3>
+        <p class="text-xs text-gray-400 font-light leading-relaxed">We cultivate a collaborative environment that honors diversity, inclusion, and mutual respect.</p>
       </div>
-      <div class="border rounded shadow p-6 text-center">
-        <div class="w-12 h-12 rounded-full bg-gray-900 text-white flex items-center justify-center mx-auto mb-3"><i class="fas fa-chart-line"></i></div>
-        <h5 class="font-semibold">Excellence</h5>
-        <p class="text-sm text-gray-700">We strive for the highest quality in all aspects of education and personal development.</p>
+
+      <div class="glass-card p-6 rounded-2xl text-center hover:scale-105 transition-transform duration-300">
+        <div class="w-12 h-12 rounded-xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center mx-auto mb-4 text-lg">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3 class="font-bold text-white text-base mb-2">Excellence</h3>
+        <p class="text-xs text-gray-400 font-light leading-relaxed">We strive for academic mastery, personal growth, and continuous improvement in every endeavor.</p>
       </div>
     </div>
   </div>
