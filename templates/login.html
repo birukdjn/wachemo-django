@@ -238,15 +238,6 @@
                 icon.classList.replace('fa-eye-slash', 'fa-eye');
             }
         }
-        // Theme toggle
-        document.querySelectorAll('[data-theme-toggle]').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                var html = document.documentElement;
-                var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-                html.setAttribute('data-theme', next);
-                localStorage.setItem('wsaps-theme', next);
-            });
-        });
     </script>
 </body>
 </html>
