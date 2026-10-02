@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from wachemosaps.models import UserProfile
-from student.models import Department, Instructor, Student, Course, Enrollment, Assignment, AssignmentSubmission, Exam, ExamResult
+from student.models import Department, Instructor, Student, Course, Enrollment, Assignment, AssignmentSubmission, Exam, ExamResult, Message, Notification
 
 class RBACAndSecurityTestCase(TestCase):
     def setUp(self):
@@ -179,5 +179,20 @@ class RBACAndSecurityTestCase(TestCase):
         }, follow=True)
         self.assertContains(res, "You are not enrolled in course")
         self.assertFalse(AssignmentSubmission.objects.filter(assignment=assignment, student=self.student2).exists())
+
+    def test_student_cannot_read_another_users_private_message(self):
+        """Verify Student 1 cannot read a private message sent to Student 2."""
+        msg = Message.objects.create(sender=self.teacher1_user, recipient=self.student2_user, subject='Confidential', body='Secret content')
+        self.client.login(username='student1', password='password123')
+        res = self.client.get(reverse('read_message', args=[msg.id]))
+        self.assertEqual(res.status_code, 404) # Direct object-level 404 rejection!
+
+    def test_student_cannot_mark_another_users_notification_read(self):
+        """Verify Student 1 cannot mark Student 2's notification as read."""
+        notif = Notification.objects.create(user=self.student2_user, title='Alert', message='Personal notification')
+        self.client.login(username='student1', password='password123')
+        res = self.client.get(reverse('mark_notification_read', args=[notif.id]))
+        self.assertEqual(res.status_code, 404) # Direct object-level 404 rejection!
+
 
 
