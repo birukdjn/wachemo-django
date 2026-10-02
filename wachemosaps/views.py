@@ -4,7 +4,7 @@ from django.db.models import Q, Count, Avg
 from django.contrib import messages
 from django.contrib.auth.models import User, auth, Permission
 from django.contrib.auth import login as auth_login
-from .models import News, Gallery, Event, UserProfile, NewsletterSubscriber
+from .models import News, Gallery, Event, UserProfile, NewsletterSubscriber, ContactMessage
 from .decorators import admin_required, parent_required
 
 from student.models import (
@@ -1213,3 +1213,44 @@ def subscribe_newsletter(request):
         return redirect(request.META.get('HTTP_REFERER', 'index'))
 
     return redirect('index')
+
+
+def send_contact_message(request):
+    """
+    Handle public contact message submissions from Contact page & Homepage.
+    Supports standard POST redirect and AJAX inline toast responses.
+    """
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        email = request.POST.get('email', '').strip().lower()
+        subject = request.POST.get('subject', '').strip()
+        message = request.POST.get('message', '').strip()
+
+        if not name or not email or not message:
+            msg = 'Please fill out all required fields (Your Name, Email, and Message).'
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'status': 'error', 'message': msg})
+            messages.error(request, msg)
+            return redirect(request.META.get('HTTP_REFERER', 'contact'))
+
+        if '@' not in email or '.' not in email:
+            msg = 'Please enter a valid email address.'
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'status': 'error', 'message': msg})
+            messages.error(request, msg)
+            return redirect(request.META.get('HTTP_REFERER', 'contact'))
+
+        ContactMessage.objects.create(
+            name=name,
+            email=email,
+            subject=subject or 'General Inquiry',
+            message=message
+        )
+
+        msg = 'Thank you! Your message has been sent successfully. Our team will get back to you within 24 hours.'
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'status': 'success', 'message': msg})
+        messages.success(request, msg)
+        return redirect(request.META.get('HTTP_REFERER', 'contact'))
+
+    return redirect('contact')
