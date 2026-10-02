@@ -12,7 +12,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('DJANGO_SECRET_KEY', default='unsafe-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DJANGO_DEBUG', default='True').lower() == 'true'
+IS_PRODUCTION = os.environ.get('VERCEL') == '1' or 'VERCEL' in os.environ or os.environ.get('RENDER') == 'true' or os.environ.get('ENVIRONMENT') == 'production'
+default_debug = 'False' if IS_PRODUCTION else 'True'
+DEBUG = config('DJANGO_DEBUG', default=default_debug).lower() == 'true'
 
 
 
