@@ -1,6 +1,6 @@
 """
 Custom Django Management Command: seed_data
-Populates WSaPS with official initial data for Admin, Teachers, Students, Parents, Courses,
+Populates WSaPS with official initial data for Admin, 20 Teachers, 100 Students, 25 Parents, Courses,
 Departments, Enrollments, Grades, Exams, Attendance, Library, Announcements, Clubs, News, Gallery, Events, Subscribers, and Contact Messages.
 """
 
@@ -19,11 +19,31 @@ from student.models import (
     Message, StudentClub, ClubMembership
 )
 
+FIRST_NAMES = [
+    "Abebe", "Marta", "Dawit", "Bethlehem", "Ephrem", "Tigist", "Yared", "Hiwot", "Kaleb", "Selam",
+    "Solomon", "Meron", "Kebede", "Genet", "Tadesse", "Bekele", "Henok", "Rahel", "Daniel", "Eden",
+    "Samuel", "Helen", "Mikias", "Mahlet", "Biniam", "Tsion", "Abel", "Ruth", "Elias", "Saba",
+    "Robel", "Mekdes", "Fitsum", "Frehiwot", "Natan", "Aynalem", "Yonatan", "Liya", "Dagmawi", "Messay"
+]
+
+LAST_NAMES = [
+    "Kebede", "Tadesse", "Bekele", "Genet", "Assefa", "Haile", "Dejene", "Worku", "Tilahun", "Mengistu",
+    "Girma", "Alemu", "Tessema", "Befekadu", "Kassa", "Wolde", "Berhanu", "Abebe", "Desta", "Tekle"
+]
+
+SUBJECTS = {
+    'CS': ('Computer Science', 'Algorithms & Python'),
+    'NS': ('Physics', 'Quantum & Applied Physics'),
+    'SS': ('Social Sciences', 'Civics & History'),
+    'MATH': ('Mathematics', 'Calculus & Statistics'),
+    'LANG': ('Languages', 'English & Amharic Literature')
+}
+
 class Command(BaseCommand):
-    help = 'Seeds database with initial production and testing data.'
+    help = 'Seeds database with 100 students, 20 teachers, 25 parents, and complete domain data.'
 
     def handle(self, *args, **options):
-        self.stdout.write(self.style.WARNING('Starting WSaPS database seeding...'))
+        self.stdout.write(self.style.WARNING('Starting WSaPS database seeding (100 Students, 20 Teachers)...'))
         
         with transaction.atomic():
             # 1. Admin Superuser: Birukdjn / Birukdjn@8325 / birukedjn@gmail.com
@@ -54,69 +74,74 @@ class Command(BaseCommand):
             dept_cs = get_or_create_dept('CS', 'Computer Science', 'Software & Computing')
             dept_ns = get_or_create_dept('NS', 'Natural Sciences', 'Physics, Chemistry & Biology')
             dept_ss = get_or_create_dept('SS', 'Social Sciences', 'History, Civics & Geography')
-            self.stdout.write(self.style.SUCCESS('  ✓ Departments created: CS, NS, SS'))
+            dept_math = get_or_create_dept('MATH', 'Mathematics', 'Pure & Applied Mathematics')
+            dept_lang = get_or_create_dept('LANG', 'Languages', 'English, Amharic & Literature')
+            depts = [dept_cs, dept_ns, dept_ss, dept_math, dept_lang]
+            self.stdout.write(self.style.SUCCESS('  ✓ Departments created: CS, NS, SS, MATH, LANG'))
 
-            # 3. Teachers / Instructors
-            t1_user, _ = User.objects.get_or_create(username='teacher1')
-            t1_user.email = 'teacher1@wachemo.edu.et'
-            t1_user.first_name = 'Ato Solomon'
-            t1_user.last_name = 'Haile'
-            t1_user.set_password('Teacher1@123!')
-            t1_user.save()
-            UserProfile.objects.update_or_create(user=t1_user, defaults={'role': 'teacher', 'teacher_subject': 'Computer Science'})
-            
-            inst1 = Instructor.objects.filter(models.Q(user=t1_user) | models.Q(employee_id='EMP001')).first()
-            if inst1:
-                inst1.user = t1_user
-                inst1.employee_id = 'EMP001'
-                inst1.department = dept_cs
-                inst1.phone = '+251911111111'
-                inst1.specialization = 'Algorithms & Python'
-                inst1.save()
-            else:
-                inst1 = Instructor.objects.create(
-                    user=t1_user, employee_id='EMP001', department=dept_cs, phone='+251911111111', specialization='Algorithms & Python'
+            # 3. 20 Teachers / Instructors (teacher1..teacher20)
+            instructors = []
+            teacher_users = []
+            for i in range(1, 21):
+                t_username = f"teacher{i}"
+                t_email = f"teacher{i}@wachemo.edu.et"
+                t_first = FIRST_NAMES[(i - 1) % len(FIRST_NAMES)]
+                t_last = LAST_NAMES[(i - 1) % len(LAST_NAMES)]
+                t_password = f"Teacher{i}@123!"
+                emp_id = f"EMP{i:03d}"
+
+                t_user, _ = User.objects.get_or_create(username=t_username)
+                t_user.email = t_email
+                t_user.first_name = t_first
+                t_user.last_name = t_last
+                t_user.set_password(t_password)
+                t_user.save()
+                
+                target_dept = depts[(i - 1) % len(depts)]
+                subj_name, spec_name = SUBJECTS[target_dept.code]
+                
+                UserProfile.objects.update_or_create(
+                    user=t_user, defaults={'role': 'teacher', 'teacher_subject': subj_name}
                 )
+                
+                inst = Instructor.objects.filter(models.Q(user=t_user) | models.Q(employee_id=emp_id)).first()
+                if inst:
+                    inst.user = t_user
+                    inst.employee_id = emp_id
+                    inst.department = target_dept
+                    inst.phone = f"+251911{i:06d}"
+                    inst.specialization = spec_name
+                    inst.save()
+                else:
+                    inst = Instructor.objects.create(
+                        user=t_user, employee_id=emp_id, department=target_dept, phone=f"+251911{i:06d}", specialization=spec_name
+                    )
+                instructors.append(inst)
+                teacher_users.append(t_user)
 
-            t2_user, _ = User.objects.get_or_create(username='teacher2')
-            t2_user.email = 'teacher2@wachemo.edu.et'
-            t2_user.first_name = 'W/ro Meron'
-            t2_user.last_name = 'Assefa'
-            t2_user.set_password('Teacher2@123!')
-            t2_user.save()
-            UserProfile.objects.update_or_create(user=t2_user, defaults={'role': 'teacher', 'teacher_subject': 'Physics'})
-            
-            inst2 = Instructor.objects.filter(models.Q(user=t2_user) | models.Q(employee_id='EMP002')).first()
-            if inst2:
-                inst2.user = t2_user
-                inst2.employee_id = 'EMP002'
-                inst2.department = dept_ns
-                inst2.phone = '+251922222222'
-                inst2.specialization = 'Quantum & Applied Physics'
-                inst2.save()
-            else:
-                inst2 = Instructor.objects.create(
-                    user=t2_user, employee_id='EMP002', department=dept_ns, phone='+251922222222', specialization='Quantum & Applied Physics'
+            self.stdout.write(self.style.SUCCESS('  ✓ 20 Teachers created (teacher1 .. teacher20)'))
+
+            # 4. 25 Parents (parent1..parent25)
+            parents = []
+            for p in range(1, 26):
+                p_username = f"parent{p}"
+                p_email = f"parent{p}@gmail.com"
+                p_first = FIRST_NAMES[(p + 5) % len(FIRST_NAMES)]
+                p_last = LAST_NAMES[p % len(LAST_NAMES)]
+                p_password = f"Parent{p}@123!"
+                
+                p_user, _ = User.objects.get_or_create(username=p_username)
+                p_user.email = p_email
+                p_user.first_name = p_first
+                p_user.last_name = p_last
+                p_user.set_password(p_password)
+                p_user.save()
+                
+                UserProfile.objects.update_or_create(
+                    user=p_user, defaults={'role': 'parent', 'parent_phone': f"+251933{p:06d}"}
                 )
-            self.stdout.write(self.style.SUCCESS('  ✓ Teachers created: teacher1, teacher2'))
-
-            # 4. Parents
-            p1_user, _ = User.objects.get_or_create(username='parent1')
-            p1_user.email = 'parent1@gmail.com'
-            p1_user.first_name = 'Ato Kebede'
-            p1_user.last_name = 'Tadesse'
-            p1_user.set_password('Parent1@123!')
-            p1_user.save()
-            UserProfile.objects.update_or_create(user=p1_user, defaults={'role': 'parent', 'parent_phone': '+251933333333'})
-
-            p2_user, _ = User.objects.get_or_create(username='parent2')
-            p2_user.email = 'parent2@gmail.com'
-            p2_user.first_name = 'W/ro Genet'
-            p2_user.last_name = 'Bekele'
-            p2_user.set_password('Parent2@123!')
-            p2_user.save()
-            UserProfile.objects.update_or_create(user=p2_user, defaults={'role': 'parent', 'parent_phone': '+251944444444'})
-            self.stdout.write(self.style.SUCCESS('  ✓ Parents created: parent1, parent2'))
+                parents.append(p_user)
+            self.stdout.write(self.style.SUCCESS('  ✓ 25 Parents created (parent1 .. parent25)'))
 
             # Helper for Student safely
             def get_or_create_student(u_obj, s_id, parent_u, dept_obj, gpa_val):
@@ -135,34 +160,33 @@ class Command(BaseCommand):
                     )
                 return stu
 
-            # 5. Students
-            s1_user, _ = User.objects.get_or_create(username='student1')
-            s1_user.email = 'student1@wachemo.edu.et'
-            s1_user.first_name = 'Abebe'
-            s1_user.last_name = 'Kebede'
-            s1_user.set_password('Student1@123!')
-            s1_user.save()
-            UserProfile.objects.update_or_create(user=s1_user, defaults={'role': 'student', 'student_id': 'STU001'})
-            stu1 = get_or_create_student(s1_user, 'STU001', p1_user, dept_cs, 3.85)
+            # 5. 100 Students (student1..student100)
+            students = []
+            for s in range(1, 101):
+                s_username = f"student{s}"
+                s_email = f"student{s}@wachemo.edu.et"
+                s_first = FIRST_NAMES[(s - 1) % len(FIRST_NAMES)]
+                s_last = LAST_NAMES[(s + 3) % len(LAST_NAMES)]
+                s_password = f"Student{s}@123!"
+                stu_id = f"STU{s:03d}"
+                assigned_parent = parents[(s - 1) // 4]
+                assigned_dept = depts[(s - 1) % len(depts)]
+                calc_gpa = round(3.0 + ((s * 7) % 10) * 0.1, 2)
 
-            s2_user, _ = User.objects.get_or_create(username='student2')
-            s2_user.email = 'student2@wachemo.edu.et'
-            s2_user.first_name = 'Marta'
-            s2_user.last_name = 'Kebede'
-            s2_user.set_password('Student2@123!')
-            s2_user.save()
-            UserProfile.objects.update_or_create(user=s2_user, defaults={'role': 'student', 'student_id': 'STU002'})
-            stu2 = get_or_create_student(s2_user, 'STU002', p1_user, dept_ns, 3.70)
+                s_user, _ = User.objects.get_or_create(username=s_username)
+                s_user.email = s_email
+                s_user.first_name = s_first
+                s_user.last_name = s_last
+                s_user.set_password(s_password)
+                s_user.save()
+                
+                UserProfile.objects.update_or_create(
+                    user=s_user, defaults={'role': 'student', 'student_id': stu_id}
+                )
+                stu_obj = get_or_create_student(s_user, stu_id, assigned_parent, assigned_dept, calc_gpa)
+                students.append(stu_obj)
 
-            s3_user, _ = User.objects.get_or_create(username='student3')
-            s3_user.email = 'student3@wachemo.edu.et'
-            s3_user.first_name = 'Dawit'
-            s3_user.last_name = 'Genet'
-            s3_user.set_password('Student3@123!')
-            s3_user.save()
-            UserProfile.objects.update_or_create(user=s3_user, defaults={'role': 'student', 'student_id': 'STU003'})
-            stu3 = get_or_create_student(s3_user, 'STU003', p2_user, dept_ss, 3.90)
-            self.stdout.write(self.style.SUCCESS('  ✓ Students created: student1, student2, student3'))
+            self.stdout.write(self.style.SUCCESS('  ✓ 100 Students created (student1 .. student100)'))
 
             # Helper for Course
             def get_or_create_course(code, name, inst, dept, credits):
@@ -183,88 +207,116 @@ class Command(BaseCommand):
                 return c
 
             # 6. Courses
-            c1 = get_or_create_course('CS101', 'Introduction to Computer Science', inst1, dept_cs, 4)
-            c2 = get_or_create_course('NS102', 'General Physics & STEM Laboratory', inst2, dept_ns, 4)
-            c3 = get_or_create_course('SS103', 'Civics, Ethics & Global Citizenship', inst1, dept_ss, 3)
-            self.stdout.write(self.style.SUCCESS('  ✓ Courses created: CS101, NS102, SS103'))
+            c_cs1 = get_or_create_course('CS101', 'Introduction to Computer Science', instructors[0], dept_cs, 4)
+            c_cs2 = get_or_create_course('CS201', 'Data Structures & Algorithms', instructors[5], dept_cs, 4)
+            c_ns1 = get_or_create_course('NS102', 'General Physics & STEM Lab', instructors[1], dept_ns, 4)
+            c_ns2 = get_or_create_course('NS202', 'Organic Chemistry & Biology', instructors[6], dept_ns, 4)
+            c_ss1 = get_or_create_course('SS103', 'Civics, Ethics & Citizenship', instructors[2], dept_ss, 3)
+            c_ss2 = get_or_create_course('SS203', 'World History & Geography', instructors[7], dept_ss, 3)
+            c_m1 = get_or_create_course('MATH101', 'Calculus & Analytical Geometry', instructors[3], dept_math, 4)
+            c_m2 = get_or_create_course('MATH201', 'Probability & Statistics', instructors[8], dept_math, 3)
+            c_l1 = get_or_create_course('LANG101', 'English Communication & Literature', instructors[4], dept_lang, 3)
+            c_l2 = get_or_create_course('LANG201', 'Amharic Grammar & Composition', instructors[9], dept_lang, 3)
+            
+            all_courses = [c_cs1, c_cs2, c_ns1, c_ns2, c_ss1, c_ss2, c_m1, c_m2, c_l1, c_l2]
+            self.stdout.write(self.style.SUCCESS('  ✓ 10 Courses created across departments'))
 
-            # 7. Enrollments
-            Enrollment.objects.update_or_create(student=stu1, course=c1, defaults={'semester': 'Semester 1', 'academic_year': '2025/2026', 'grade': 'A'})
-            Enrollment.objects.update_or_create(student=stu2, course=c2, defaults={'semester': 'Semester 1', 'academic_year': '2025/2026', 'grade': 'B'})
-            Enrollment.objects.update_or_create(student=stu3, course=c3, defaults={'semester': 'Semester 1', 'academic_year': '2025/2026', 'grade': 'A'})
-            self.stdout.write(self.style.SUCCESS('  ✓ Enrollments created'))
+            # 7. Enrollments & Attendance & Grades for all 100 Students
+            grade_list = ['A', 'B', 'A-', 'B+', 'C+']
+            for s_idx, stu in enumerate(students):
+                # Each student enrolled in 2 courses matching their dept + general course
+                primary_course = all_courses[(s_idx * 2) % len(all_courses)]
+                secondary_course = all_courses[(s_idx * 2 + 1) % len(all_courses)]
+                
+                g1 = grade_list[s_idx % len(grade_list)]
+                g2 = grade_list[(s_idx + 2) % len(grade_list)]
+
+                Enrollment.objects.update_or_create(
+                    student=stu, course=primary_course,
+                    defaults={'semester': 'Semester 1', 'academic_year': '2025/2026', 'grade': g1}
+                )
+                Enrollment.objects.update_or_create(
+                    student=stu, course=secondary_course,
+                    defaults={'semester': 'Semester 1', 'academic_year': '2025/2026', 'grade': g2}
+                )
+                
+                # Attendance
+                Attendance.objects.update_or_create(
+                    student=stu, course=primary_course, date=date.today(),
+                    defaults={'status': 'present', 'marked_by': primary_course.instructor, 'notes': 'Attended lecture'}
+                )
+
+            self.stdout.write(self.style.SUCCESS('  ✓ Enrollments & Attendance created for 100 students'))
 
             # 8. Assignments & Submissions
             assign1, _ = Assignment.objects.update_or_create(
-                course=c1, title='Python Loops & Recursion',
+                course=c_cs1, title='Python Loops & Recursion',
                 defaults={'description': 'Complete all 5 Python programming challenges.', 'due_date': timezone.now() + timedelta(days=7), 'max_points': 100, 'is_published': True}
             )
-            AssignmentSubmission.objects.update_or_create(
-                assignment=assign1, student=stu1,
-                defaults={'submission_text': 'def factorial(n):\n    return 1 if n<=1 else n*factorial(n-1)', 'points_earned': 95, 'is_graded': True, 'feedback': 'Excellent implementation!'}
-            )
+            for stu in students[:15]:
+                AssignmentSubmission.objects.update_or_create(
+                    assignment=assign1, student=stu,
+                    defaults={'submission_text': '# Python Code Submission\ndef factorial(n):\n    return 1 if n<=1 else n*factorial(n-1)', 'points_earned': 95, 'is_graded': True, 'feedback': 'Excellent work!'}
+                )
 
             # 9. Exams & Exam Results
             exam1, _ = Exam.objects.update_or_create(
-                course=c1, title='Midterm Examination',
+                course=c_cs1, title='Midterm Examination',
                 defaults={'exam_type': 'midterm', 'exam_date': timezone.now() + timedelta(days=14), 'duration_minutes': 120, 'max_points': 100, 'is_published': True}
             )
-            ExamResult.objects.update_or_create(
-                exam=exam1, student=stu1,
-                defaults={'points_earned': 94, 'grade': 'A', 'is_published': True, 'feedback': 'Outstanding score.'}
-            )
+            for stu in students[:20]:
+                ExamResult.objects.update_or_create(
+                    exam=exam1, student=stu,
+                    defaults={'points_earned': 88 + (stu.id % 12), 'grade': 'A', 'is_published': True, 'feedback': 'Strong analytical performance.'}
+                )
 
-            # 10. Attendance
-            Attendance.objects.update_or_create(student=stu1, course=c1, date=date.today(), defaults={'status': 'present', 'marked_by': inst1, 'notes': 'On time.'})
-            Attendance.objects.update_or_create(student=stu2, course=c2, date=date.today(), defaults={'status': 'present', 'marked_by': inst2, 'notes': 'Active participation.'})
+            # 10. Timetable Schedules
+            for idx, crs in enumerate(all_courses):
+                days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+                TimetableSchedule.objects.update_or_create(
+                    course=crs, day_of_week=days[idx % 5], start_time=f"{8 + (idx % 4)*2:02d}:00:00", end_time=f"{10 + (idx % 4)*2:02d}:00:00",
+                    defaults={'room': f"Room {101 + idx}"}
+                )
 
-            # 11. Timetable Schedules
-            TimetableSchedule.objects.update_or_create(
-                course=c1, day_of_week='Monday', start_time='08:00:00', end_time='10:00:00',
-                defaults={'room': 'Lab 101'}
-            )
-            TimetableSchedule.objects.update_or_create(
-                course=c2, day_of_week='Tuesday', start_time='10:00:00', end_time='12:00:00',
-                defaults={'room': 'Physics Lab 2'}
-            )
-
-            # 12. Announcements & Messages
+            # 11. Announcements & Messages
             Announcement.objects.update_or_create(
                 title='Welcome to Academic Year 2025/2026',
                 defaults={'content': 'Classes for Semester 1 have officially commenced across all departments.', 'priority': 'high', 'target_audience': 'all', 'is_published': True, 'created_by': admin_user}
             )
             Message.objects.update_or_create(
-                sender=t1_user, recipient=s1_user, subject='Assignment Feedback',
+                sender=teacher_users[0], recipient=students[0].user, subject='Assignment Feedback',
                 defaults={'body': 'Great work on the Python recursion assignment!'}
             )
 
-            # 13. Library Books & Borrowings
+            # 12. Library Books & Borrowings
             book1 = Book.objects.filter(isbn='978-0134685991').first()
             if book1:
                 book1.title = 'Effective Java & Python Programming'
                 book1.author = 'Joshua Bloch'
                 book1.category = 'textbook'
-                book1.total_copies = 5
-                book1.available_copies = 4
+                book1.total_copies = 20
+                book1.available_copies = 15
                 book1.save()
             else:
                 book1 = Book.objects.create(
-                    isbn='978-0134685991', title='Effective Java & Python Programming', author='Joshua Bloch', category='textbook', total_copies=5, available_copies=4
+                    isbn='978-0134685991', title='Effective Java & Python Programming', author='Joshua Bloch', category='textbook', total_copies=20, available_copies=15
                 )
             
-            BookBorrowing.objects.update_or_create(
-                book=book1, student=stu1,
-                defaults={'due_date': timezone.now() + timedelta(days=14), 'status': 'borrowed'}
-            )
+            for stu in students[:5]:
+                BookBorrowing.objects.update_or_create(
+                    book=book1, student=stu,
+                    defaults={'due_date': timezone.now() + timedelta(days=14), 'status': 'borrowed'}
+                )
 
-            # 14. Student Clubs & Memberships
+            # 13. Student Clubs & Memberships
             club1, _ = StudentClub.objects.update_or_create(
                 name='STEM & Robotics Club',
-                defaults={'description': 'Hands-on coding, microcontrollers, and robotics competitions.', 'category': 'Academic', 'advisor': inst1}
+                defaults={'description': 'Hands-on coding, microcontrollers, and robotics competitions.', 'category': 'Academic', 'advisor': instructors[0]}
             )
-            ClubMembership.objects.update_or_create(club=club1, student=stu1, defaults={'role': 'President'})
+            for idx, stu in enumerate(students[:10]):
+                ClubMembership.objects.update_or_create(club=club1, student=stu, defaults={'role': 'President' if idx == 0 else 'Member'})
 
-            # 15. News, Gallery, Events, Newsletter, Contact Messages
+            # 14. News, Gallery, Events, Newsletter, Contact Messages
             News.objects.update_or_create(
                 title='WSaPS Wins Regional STEM Championship',
                 defaults={'content': 'Students from Wachemo Secondary and Preparatory School achieved 1st place in the national science fair.', 'reporter': 'Biruk Dejene', 'day': 15, 'month': 'Oct'}
@@ -281,4 +333,4 @@ class Command(BaseCommand):
                 defaults={'name': 'Biruk Dejene', 'message': 'Hello, I would like to inquire about the upcoming admission requirements.', 'is_read': False}
             )
             
-            self.stdout.write(self.style.SUCCESS('\n✓ Database Seeding Successfully Completed!'))
+            self.stdout.write(self.style.SUCCESS('\n✓ Database Seeding Successfully Completed (Admin, 100 Students, 20 Teachers, 25 Parents, 10 Courses)!'))
