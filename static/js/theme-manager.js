@@ -22,6 +22,13 @@
     function applyTheme(mode) {
         const theme = resolveTheme(mode);
         document.documentElement.setAttribute('data-theme', theme);
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+        } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+        }
         
         // Update active class on all 3-icon selector buttons
         document.querySelectorAll('[data-theme-set]').forEach(btn => {
