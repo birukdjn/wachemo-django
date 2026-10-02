@@ -1,5 +1,4 @@
-/* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap');
+@import url('../vendor/fonts/poppins.css');
 
 /* Global Styles */
 :root {
@@ -278,16 +277,16 @@ ul {
 } 
 
 .hero-slider .slide-1 {
-    background-image: url('https://1drv.ms/i/c/7389654435428074/IQQH_jtIzl9HQbHxAb8xlUHMAfWDVi7XZ20AhTbJHReztdk?width=10031&height=5643');
+    background-image: url('../images/hero-1.jpg');
 }
 
 .hero-slider .slide-2 {
-    background-image: url('https://1drv.ms/i/c/7389654435428074/IQQAe19rabmXTI0E_WwzTq-XATuYiwLIZrPvKyWS3zneFNI?width=5386&height=3591');
+    background-image: url('../images/hero-2.jpg');
 
 }
 
 .hero-slider .slide-3 {
-    background-image: url('https://1drv.ms/i/c/7389654435428074/IQSWFXpavRXPS7riPOZbNj9cAXuxJbTg02m8nqM8yzYBZzI?width=6912&height=3888');
+    background-image: url('../images/hero-3.jpg');
 }
 
 .hero-content {
