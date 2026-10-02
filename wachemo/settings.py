@@ -18,8 +18,11 @@ DEBUG = config('DJANGO_DEBUG', default='True').lower() == 'true'
 
 ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='wachemo-sps.vercel.app,wachemo-SPS.vercel.app,wachemo.onrender.com,localhost,127.0.0.1,.vercel.app,*').split(',')
 
+CSRF_TRUSTED_ORIGINS = config('DJANGO_CSRF_TRUSTED_ORIGINS', default='https://wachemo-sps.vercel.app,https://wachemo-SPS.vercel.app,https://*.vercel.app,https://wachemo.onrender.com,http://localhost,http://127.0.0.1').split(',')
+
 # Trust Vercel / reverse proxy HTTPS header
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 
 # Application definition
@@ -137,10 +140,14 @@ LOGIN_URL = 'login'
 # URL to redirect to for login
 
 
+import tempfile
+CACHE_DIR = os.path.join(tempfile.gettempdir(), 'django_cache')
+os.makedirs(CACHE_DIR, exist_ok=True)
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/var/tmp/django_cache',
+        'LOCATION': CACHE_DIR,
         'OPTIONS': {
             'COMPRESS': True,  # Enable compression
             'COMPRESS_LEVEL': 6,  # Medium compression
@@ -148,3 +155,21 @@ CACHES = {
         }
     }
 }
+
+# Safe last login update for read-only serverless databases (Vercel)
+try:
+    from django.contrib.auth.signals import user_logged_in
+    from django.contrib.auth.models import update_last_login
+
+    def safe_update_last_login(sender, user, request, **kwargs):
+        try:
+            from django.utils import timezone
+            user.last_login = timezone.now()
+            user.save(update_fields=['last_login'])
+        except Exception:
+            pass
+
+    user_logged_in.disconnect(update_last_login)
+    user_logged_in.connect(safe_update_last_login)
+except Exception:
+    pass
