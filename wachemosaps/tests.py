@@ -90,6 +90,31 @@ class RBACAndSecurityTestCase(TestCase):
         res = self.client.get(f"{reverse('parent_dashboard')}?child_id={self.student2.id}")
         self.assertContains(res, self.student1.student_id) # Falls back to Parent 1's authorized student!
 
+    def test_unlinked_parent_never_gets_arbitrary_student(self):
+        """Verify unlinked parent account never gets an arbitrary student assigned automatically."""
+        unlinked_parent = User.objects.create_user(username='unlinked_parent', password='password123', email='unlinked@test.com')
+        UserProfile.objects.create(user=unlinked_parent, role='parent')
+        
+        self.client.login(username='unlinked_parent', password='password123')
+        res = self.client.get(reverse('parent_dashboard'))
+        self.assertContains(res, "No Student Linked to Your Account")
+        
+        # Verify database was NOT modified
+        self.assertEqual(Student.objects.filter(parent=unlinked_parent).count(), 0)
+
+    def test_parent_multiple_children_context_switching(self):
+        """Verify parent with multiple children can switch context between linked children only."""
+        # Link student 2 to parent 1 as well
+        self.student2.parent = self.parent1_user
+        self.student2.save()
+
+        self.client.login(username='parent1', password='password123')
+        res1 = self.client.get(f"{reverse('parent_dashboard')}?child_id={self.student1.id}")
+        self.assertContains(res1, self.student1.student_id)
+
+        res2 = self.client.get(f"{reverse('parent_dashboard')}?child_id={self.student2.id}")
+        self.assertContains(res2, self.student2.student_id)
+
     def test_public_signup_cannot_escalate_to_teacher_or_admin(self):
         """Verify public signup cannot register teacher or admin role."""
         res = self.client.post(reverse('signup'), {
@@ -103,3 +128,17 @@ class RBACAndSecurityTestCase(TestCase):
         }, follow=True)
         self.assertContains(res, "Security Notice")
         self.assertFalse(User.objects.filter(username='eviluser').exists())
+
+    def test_teacher_cannot_self_assign_course(self):
+        """Verify teacher cannot create or assign courses to themselves via admin endpoints."""
+        self.client.login(username='teacher1', password='password123')
+        res = self.client.post(reverse('admin_courses'), {
+            'action': 'create_course',
+            'name': 'Hacked Course',
+            'code': 'HACK101',
+            'instructor_id': self.instructor1.id,
+            'department_id': self.dept.id
+        })
+        self.assertEqual(res.status_code, 302) # Redirected out of admin portal
+        self.assertFalse(Course.objects.filter(code='HACK101').exists())
+

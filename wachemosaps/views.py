@@ -900,18 +900,12 @@ def admin_messages(request):
 def _get_parent_student(request):
     """
     Helper to get active child for the logged in parent.
-    If parent has no linked children, links first available student so parent has demo data.
+    Never auto-links arbitrary students to unlinked parents.
     """
     children = Student.objects.filter(parent=request.user).select_related('user', 'department')
-    if not children.exists():
-        # Fallback to demo student or first student
-        first_student = Student.objects.first()
-        if first_student:
-            first_student.parent = request.user
-            first_student.save()
-            children = Student.objects.filter(parent=request.user).select_related('user', 'department')
     
     selected_child_id = request.GET.get('child_id')
+    selected_child = None
     if selected_child_id:
         selected_child = children.filter(id=selected_child_id).first()
         if not selected_child:
