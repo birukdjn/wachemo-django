@@ -5,30 +5,30 @@
 
 {% block content %}
 
-<!-- ===== HERO SECTION (Option C: Left-Aligned Sleek Glass Panel with Role Tabs) ===== -->
-<section id="hero" class="relative w-full overflow-hidden" style="height: 92vh; min-height: 580px;">
+<!-- ===== HERO SECTION (Option C: Widescreen Semi-Transparent Glass Panel with Role Tabs) ===== -->
+<section id="hero" class="relative w-full overflow-hidden flex items-center justify-center" style="height: 92vh; min-height: 580px;">
     
     <!-- Background Image Slider Canvas -->
     <div id="heroSlider" class="absolute inset-0 z-0">
-        <div class="hero-slide absolute inset-0 opacity-100 transition-opacity duration-700" style="background: linear-gradient(rgba(13,26,46,0.65), rgba(13,26,46,0.8)), url('{% static "images/hero-1.jpg" %}') center/cover no-repeat;"></div>
-        <div class="hero-slide absolute inset-0 opacity-0 transition-opacity duration-700" style="background: linear-gradient(rgba(13,26,46,0.65), rgba(13,26,46,0.8)), url('{% static "images/hero-2.jpg" %}') center/cover no-repeat;"></div>
-        <div class="hero-slide absolute inset-0 opacity-0 transition-opacity duration-700" style="background: linear-gradient(rgba(13,26,46,0.65), rgba(13,26,46,0.8)), url('{% static "images/hero-3.jpg" %}') center/cover no-repeat;"></div>
+        <div class="hero-slide absolute inset-0 opacity-100 transition-opacity duration-700" style="background: linear-gradient(rgba(13,26,46,0.55), rgba(13,26,46,0.75)), url('{% static "images/hero-1.jpg" %}') center/cover no-repeat;"></div>
+        <div class="hero-slide absolute inset-0 opacity-0 transition-opacity duration-700" style="background: linear-gradient(rgba(13,26,46,0.55), rgba(13,26,46,0.75)), url('{% static "images/hero-2.jpg" %}') center/cover no-repeat;"></div>
+        <div class="hero-slide absolute inset-0 opacity-0 transition-opacity duration-700" style="background: linear-gradient(rgba(13,26,46,0.55), rgba(13,26,46,0.75)), url('{% static "images/hero-3.jpg" %}') center/cover no-repeat;"></div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center relative z-10 py-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-10 w-full flex justify-center">
         
-        <!-- Left-Aligned Frosted Glass Panel -->
-        <div class="w-full max-w-2xl bg-navy-950/85 dark:bg-navy-950/90 backdrop-blur-2xl p-7 sm:p-10 rounded-3xl border border-white/20 shadow-2xl text-left transition-all">
+        <!-- Widescreen Semi-Transparent Frosted Glass Container -->
+        <div class="w-full max-w-4xl bg-navy-950/45 dark:bg-navy-950/50 backdrop-blur-xl p-8 sm:p-12 rounded-3xl border border-white/25 shadow-2xl shadow-navy-950/90 text-center transition-all">
             
             <!-- Quick Role Tabs -->
-            <div class="inline-flex items-center gap-1.5 p-1 bg-white/10 border border-white/15 rounded-2xl mb-6" role="tablist">
-                <button type="button" class="role-tab px-4 py-2 rounded-xl text-xs font-bold transition-all bg-blue-600 text-white shadow-md cursor-pointer" data-role="student">
+            <div class="inline-flex items-center justify-center gap-1.5 p-1.5 bg-white/10 border border-white/20 rounded-2xl mb-8 backdrop-blur-md" role="tablist">
+                <button type="button" class="role-tab px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-blue-600 text-white shadow-lg cursor-pointer" data-role="student">
                     <i class="fas fa-user-graduate mr-1.5"></i> Student Portal
                 </button>
-                <button type="button" class="role-tab px-4 py-2 rounded-xl text-xs font-bold transition-all text-gray-300 hover:text-white hover:bg-white/10 cursor-pointer" data-role="teacher">
+                <button type="button" class="role-tab px-5 py-2.5 rounded-xl text-xs font-bold transition-all text-gray-200 hover:text-white hover:bg-white/15 cursor-pointer" data-role="teacher">
                     <i class="fas fa-chalkboard-teacher mr-1.5"></i> Teacher Portal
                 </button>
-                <button type="button" class="role-tab px-4 py-2 rounded-xl text-xs font-bold transition-all text-gray-300 hover:text-white hover:bg-white/10 cursor-pointer" data-role="parent">
+                <button type="button" class="role-tab px-5 py-2.5 rounded-xl text-xs font-bold transition-all text-gray-200 hover:text-white hover:bg-white/15 cursor-pointer" data-role="parent">
                     <i class="fas fa-users mr-1.5"></i> Parent Access
                 </button>
             </div>
@@ -36,59 +36,59 @@
             <!-- Dynamic Headline Content per Role -->
             <div id="roleContent">
                 <div class="role-pane block space-y-4" id="pane-student">
-                    <span class="px-3.5 py-1 text-[11px] font-extrabold uppercase tracking-widest text-blue-400 bg-blue-500/20 border border-blue-400/30 rounded-full inline-block">
+                    <span class="px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-blue-400 bg-blue-500/20 border border-blue-400/30 rounded-full inline-block shadow-sm">
                         Digital Learning Platform
                     </span>
-                    <h1 class="text-3xl sm:text-5xl font-black text-white leading-tight">
+                    <h1 class="text-3xl sm:text-5xl md:text-6xl font-black text-white leading-tight drop-shadow-lg">
                         Empowering Students for Academic Excellence
                     </h1>
-                    <p class="text-sm sm:text-base text-gray-200 leading-relaxed font-normal">
+                    <p class="text-sm sm:text-base md:text-lg text-gray-100 max-w-2xl mx-auto leading-relaxed font-medium drop-shadow-sm">
                         Access e-learning modules, view exam results, check class timetables, and collaborate with your teachers seamlessly.
                     </p>
                 </div>
 
                 <div class="role-pane hidden space-y-4" id="pane-teacher">
-                    <span class="px-3.5 py-1 text-[11px] font-extrabold uppercase tracking-widest text-indigo-400 bg-indigo-500/20 border border-indigo-400/30 rounded-full inline-block">
+                    <span class="px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-indigo-400 bg-indigo-500/20 border border-indigo-400/30 rounded-full inline-block shadow-sm">
                         Faculty & Class Management
                     </span>
-                    <h1 class="text-3xl sm:text-5xl font-black text-white leading-tight">
+                    <h1 class="text-3xl sm:text-5xl md:text-6xl font-black text-white leading-tight drop-shadow-lg">
                         Streamlining Teaching & Student Assessment
                     </h1>
-                    <p class="text-sm sm:text-base text-gray-200 leading-relaxed font-normal">
+                    <p class="text-sm sm:text-base md:text-lg text-gray-100 max-w-2xl mx-auto leading-relaxed font-medium drop-shadow-sm">
                         Manage course content, record grades and attendance, schedule exams, and communicate with parents effortlessly.
                     </p>
                 </div>
 
                 <div class="role-pane hidden space-y-4" id="pane-parent">
-                    <span class="px-3.5 py-1 text-[11px] font-extrabold uppercase tracking-widest text-emerald-400 bg-emerald-500/20 border border-emerald-400/30 rounded-full inline-block">
+                    <span class="px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-emerald-400 bg-emerald-500/20 border border-emerald-400/30 rounded-full inline-block shadow-sm">
                         Parent Engagement Portal
                     </span>
-                    <h1 class="text-3xl sm:text-5xl font-black text-white leading-tight">
+                    <h1 class="text-3xl sm:text-5xl md:text-6xl font-black text-white leading-tight drop-shadow-lg">
                         Stay Connected to Your Child's Growth
                     </h1>
-                    <p class="text-sm sm:text-base text-gray-200 leading-relaxed font-normal">
+                    <p class="text-sm sm:text-base md:text-lg text-gray-100 max-w-2xl mx-auto leading-relaxed font-medium drop-shadow-sm">
                         Track academic reports, monitor attendance records, receive school announcements, and chat with teachers.
                     </p>
                 </div>
             </div>
 
             <!-- Action CTA Buttons -->
-            <div class="flex items-center gap-4 flex-wrap pt-6 mt-6 border-t border-white/10">
+            <div class="flex items-center justify-center gap-4 flex-wrap pt-8 mt-8 border-t border-white/15">
                 {% if not request.user.is_authenticated %}
-                    <a href="{% url 'login' %}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/30 text-sm hover:scale-105 flex items-center gap-2">
+                    <a href="{% url 'login' %}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/40 text-sm hover:scale-105 flex items-center gap-2">
                         <span>Sign In to Portal</span>
                         <i class="fas fa-arrow-right text-xs"></i>
                     </a>
-                    <a href="{% url 'signup' %}" class="bg-white/10 hover:bg-white hover:text-navy-950 text-white font-bold px-7 py-3.5 rounded-xl border border-white/30 transition-all text-sm hover:scale-105">
+                    <a href="{% url 'signup' %}" class="bg-white/15 hover:bg-white hover:text-navy-950 text-white font-bold px-8 py-3.5 rounded-xl border border-white/30 transition-all text-sm hover:scale-105 shadow-md">
                         Create Account
                     </a>
                 {% else %}
-                    <a href="{% if request.user.userprofile.role == 'teacher' %}{% url 'teacher_dashboard' %}{% else %}{% url 'dashboard' %}{% endif %}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/30 text-sm hover:scale-105 flex items-center gap-2">
+                    <a href="{% if request.user.userprofile.role == 'teacher' %}{% url 'teacher_dashboard' %}{% else %}{% url 'dashboard' %}{% endif %}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/40 text-sm hover:scale-105 flex items-center gap-2">
                         <span>Go to Dashboard</span>
                         <i class="fas fa-gauge text-xs"></i>
                     </a>
                 {% endif %}
-                <a href="{% url 'features' %}" class="text-gray-300 hover:text-white font-semibold text-sm transition-colors flex items-center gap-1.5 px-3 py-2">
+                <a href="{% url 'features' %}" class="text-gray-200 hover:text-white font-semibold text-sm transition-colors flex items-center gap-1.5 px-4 py-2">
                     <span>View All Features</span>
                     <i class="fas fa-chevron-right text-[10px]"></i>
                 </a>
@@ -98,13 +98,14 @@
     </div>
 
     <!-- Slider Dots -->
-    <div class="absolute bottom-6 right-6 flex items-center gap-2.5 z-20 bg-navy-950/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/15">
+    <div class="absolute bottom-6 flex items-center gap-2.5 z-20 bg-navy-950/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 shadow-lg">
         <span class="text-xs font-bold text-gray-300 mr-1">Campus Highlights</span>
         <button class="slider-dot w-2.5 h-2.5 rounded-full bg-white transition-all cursor-pointer" data-index="0" aria-label="Slide 1"></button>
         <button class="slider-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all cursor-pointer" data-index="1" aria-label="Slide 2"></button>
         <button class="slider-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all cursor-pointer" data-index="2" aria-label="Slide 3"></button>
     </div>
 </section>
+
 
 
 
