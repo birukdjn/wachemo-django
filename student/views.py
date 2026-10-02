@@ -14,8 +14,9 @@ from datetime import datetime, timedelta
 from django.http import JsonResponse
 from django.views.decorators.cache import cache_page
 from wachemosaps.models import UserProfile, Event
+from wachemosaps.decorators import student_required
 
-@login_required
+@student_required
 def dashboard(request):
     # Get student profile
     try:
@@ -102,7 +103,7 @@ def dashboard(request):
     return render(request, 'student/dashboard.html', context)
 
 
-@login_required
+@student_required
 def courses(request):
     # Get student profile
     try:
@@ -152,7 +153,7 @@ def courses(request):
     }
     return render(request, 'student/courses.html', context)
 
-@login_required
+@student_required
 def attendance(request):
     """
     Display the attendance page for students.
@@ -240,18 +241,18 @@ def attendance(request):
     }
     return render(request, 'student/attendance.html', context)
 
-@login_required
+@student_required
 def support(request):
     return render(request, 'student/support.html')
 
-@login_required
+@student_required
 def settings(request):
     """
     Display the settings page for students.
     """
     return render(request, 'student/settings.html', {'active_section': 'settings'})
 
-@login_required
+@student_required
 def library(request):
     """
     Display the library page for students.
@@ -304,7 +305,7 @@ def library(request):
     }
     return render(request, 'student/library.html', context)
 
-@login_required
+@student_required
 def assignments(request):
     """
     Display assignments for enrolled courses.
@@ -342,7 +343,7 @@ def assignments(request):
     }
     return render(request, 'student/assignments.html', context)
 
-@login_required
+@student_required
 def exams(request):
     """
     Display exams for enrolled courses.
@@ -381,7 +382,7 @@ def exams(request):
     }
     return render(request, 'student/exams.html', context)
 
-@login_required
+@student_required
 def grades(request):
     """
     Display grades and academic progress.
@@ -435,7 +436,7 @@ def grades(request):
     }
     return render(request, 'student/grades.html', context)
 
-@login_required
+@student_required
 def profile(request):
     """
     Display and update the current user's profile info.
@@ -489,7 +490,7 @@ def profile(request):
 
 
 
-@login_required
+@student_required
 def enroll_course(request, course_id):
     """
     Handle course enrollment for students.
@@ -517,7 +518,7 @@ def enroll_course(request, course_id):
     return redirect('courses')
 
 
-@login_required
+@student_required
 def submit_assignment(request, assignment_id):
     """
     Handle assignment submission for students.
@@ -551,7 +552,7 @@ def submit_assignment(request, assignment_id):
     return redirect('assignments')
 
 
-@login_required
+@student_required
 def borrow_book(request, book_id):
     """
     Handle library book borrowing for students.
@@ -578,7 +579,7 @@ def borrow_book(request, book_id):
         messages.success(request, f'Successfully borrowed "{book.title}". Return due date is in 14 days.')
     return redirect('library')
 
-@login_required
+@student_required
 def timetable(request):
     """Display the student's weekly timetable."""
     try:
@@ -610,7 +611,7 @@ def timetable(request):
     return render(request, 'student/timetable.html', context)
 
 
-@login_required
+@student_required
 def inbox(request):
     """Display the user's message inbox."""
     received = Message.objects.filter(recipient=request.user).select_related('sender')
@@ -628,7 +629,7 @@ def inbox(request):
     return render(request, 'student/inbox.html', context)
 
 
-@login_required
+@student_required
 def send_message_view(request):
     """Handle sending a new message."""
     if request.method == 'POST':
@@ -657,7 +658,7 @@ def send_message_view(request):
     return redirect('inbox')
 
 
-@login_required
+@student_required
 def read_message(request, message_id):
     """Mark message as read and view it."""
     msg = get_object_or_404(Message, id=message_id, recipient=request.user)
@@ -678,7 +679,7 @@ def read_message(request, message_id):
     return render(request, 'student/inbox.html', context)
 
 
-@login_required
+@student_required
 def clubs(request):
     """Display student clubs and activities."""
     try:
@@ -701,7 +702,7 @@ def clubs(request):
     return render(request, 'student/clubs.html', context)
 
 
-@login_required
+@student_required
 def join_club(request, club_id):
     """Join or leave a club."""
     if request.method == 'POST':
@@ -723,7 +724,7 @@ def join_club(request, club_id):
     return redirect('clubs')
 
 
-@login_required
+@student_required
 def mark_notification_read(request, notif_id):
     """Mark a notification as read."""
     notif = get_object_or_404(Notification, id=notif_id, user=request.user)

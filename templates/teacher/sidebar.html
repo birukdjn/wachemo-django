@@ -47,14 +47,14 @@
             <span>My Courses</span>
         </a>
 
-        <a href="{% url 'gradebook' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
-            {% if request.resolver_match.url_name == 'gradebook' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+        <a href="{% url 'teacher_courses' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+            {% if request.resolver_match.url_name == 'teacher_gradebook' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
             <i class="fas fa-chart-bar w-4 text-center"></i>
             <span>Gradebook</span>
         </a>
 
-        <a href="{% url 'attendance_management' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
-            {% if request.resolver_match.url_name == 'attendance_management' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+        <a href="{% url 'teacher_courses' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+            {% if request.resolver_match.url_name == 'teacher_attendance' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
             <i class="fas fa-calendar-check w-4 text-center"></i>
             <span>Attendance</span>
         </a>

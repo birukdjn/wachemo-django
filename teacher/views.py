@@ -9,8 +9,9 @@ from student.models import (
     Course, Student, Instructor, Department, Enrollment, Assignment, 
     AssignmentSubmission, Attendance, Exam, ExamResult, Announcement
 )
+from wachemosaps.decorators import teacher_required
 
-@login_required
+@teacher_required
 def dashboard(request):
     """
     Teacher dashboard with overview of courses and students.
@@ -63,7 +64,7 @@ def dashboard(request):
     }
     return render(request, 'teacher/dashboard.html', context)
 
-@login_required
+@teacher_required
 def courses(request):
     """
     Display instructor's courses with student lists.
@@ -85,7 +86,7 @@ def courses(request):
     }
     return render(request, 'teacher/courses.html', context)
 
-@login_required
+@teacher_required
 def course_detail(request, course_id):
     """
     Detailed view of a specific course with students and grades.
@@ -126,7 +127,7 @@ def course_detail(request, course_id):
     }
     return render(request, 'teacher/course_detail.html', context)
 
-@login_required
+@teacher_required
 def gradebook(request, course_id):
     """
     Gradebook view for a specific course.
@@ -168,7 +169,7 @@ def gradebook(request, course_id):
     }
     return render(request, 'teacher/gradebook.html', context)
 
-@login_required
+@teacher_required
 def attendance_management(request, course_id):
     """
     Attendance management for a specific course.
@@ -207,7 +208,7 @@ def attendance_management(request, course_id):
     return render(request, 'teacher/attendance_management.html', context)
 
 
-@login_required
+@teacher_required
 def grade_submission(request, submission_id):
     """
     Grade a student assignment submission.
@@ -233,7 +234,7 @@ def grade_submission(request, submission_id):
     return redirect('teacher_dashboard')
 
 
-@login_required
+@teacher_required
 def mark_attendance(request, course_id):
     """
     Mark student attendance for a course date.
@@ -270,7 +271,7 @@ def mark_attendance(request, course_id):
     return redirect('teacher_dashboard')
 
 
-@login_required
+@teacher_required
 def create_assignment(request, course_id):
     """
     Create a new assignment for a course.
@@ -301,7 +302,7 @@ def create_assignment(request, course_id):
     return redirect('teacher_course_detail', course_id=course_id)
 
 
-@login_required
+@teacher_required
 def create_exam(request, course_id):
     """
     Schedule a new exam for a course.
