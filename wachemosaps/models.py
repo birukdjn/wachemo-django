@@ -30,8 +30,16 @@ class News(models.Model):
     image = models.URLField(max_length=200, blank=True, null=True)
      
 class Gallery(models.Model):
-    image = models.URLField(max_length=200, blank=True, null=True)
+    image_file = models.ImageField(upload_to='gallery/', blank=True, null=True)
+    image_url = models.CharField(max_length=500, blank=True, null=True)
+    image = models.CharField(max_length=500, blank=True, null=True)
     description = models.CharField(max_length=255, blank=True, null=True)
+
+    @property
+    def display_image(self):
+        if self.image_file:
+            return self.image_file.url
+        return self.image_url or self.image or ""
 
     def __str__(self):
         return self.description if self.description else "Gallery Image"

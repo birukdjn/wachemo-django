@@ -71,22 +71,89 @@
             <h3 class="text-lg font-bold text-white">Add Gallery Media</h3>
             <button onclick="document.getElementById('addGalleryModal').classList.add('hidden')" class="text-gray-400 hover:text-white">&times;</button>
         </div>
-        <form method="post" class="space-y-4">
+        
+        <!-- Tab selector -->
+        <div class="flex bg-navy-900 p-1 rounded-xl border border-white/10 mb-4">
+            <button type="button" id="tabUploadBtn" onclick="switchTab('file')" class="flex-1 py-2 text-xs font-bold rounded-lg bg-amber-500 text-navy-950 transition-all flex items-center justify-center gap-1.5">
+                <i class="fas fa-upload"></i> Upload File
+            </button>
+            <button type="button" id="tabUrlBtn" onclick="switchTab('url')" class="flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all flex items-center justify-center gap-1.5">
+                <i class="fas fa-link"></i> Image Link
+            </button>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" class="space-y-4">
             {% csrf_token %}
             <input type="hidden" name="action" value="create">
-            <div>
-                <label class="block text-xs font-semibold text-gray-300 mb-1">Image URL</label>
-                <input type="url" name="image_url" required placeholder="https://images.unsplash.com/..." class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+            <input type="hidden" id="imageSourceInput" name="image_source" value="file">
+
+            <!-- File Upload Option -->
+            <div id="fileUploadContainer">
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Choose Image File from Local Storage</label>
+                <div class="relative border-2 border-dashed border-white/20 rounded-xl p-4 text-center bg-navy-900/50 hover:border-amber-500/50 transition-colors cursor-pointer">
+                    <input type="file" id="imageFileInput" name="image_file" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewSelectedFile(this)">
+                    <div id="uploadPlaceholder">
+                        <i class="fas fa-cloud-arrow-up text-2xl text-amber-400 mb-1"></i>
+                        <p class="text-xs font-semibold text-gray-200">Click or Drag & Drop image here</p>
+                        <p class="text-[10px] text-gray-400 mt-0.5">PNG, JPG, JPEG, WEBP or GIF</p>
+                    </div>
+                    <div id="fileSelectedInfo" class="hidden text-xs text-amber-300 font-medium truncate"></div>
+                </div>
             </div>
+
+            <!-- URL Link Option -->
+            <div id="urlLinkContainer" class="hidden">
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Image URL Link</label>
+                <input type="url" id="imageUrlInput" name="image_url" placeholder="https://images.unsplash.com/..." class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+            </div>
+
             <div>
                 <label class="block text-xs font-semibold text-gray-300 mb-1">Caption / Description</label>
                 <input type="text" name="description" placeholder="e.g. Modern Computer Science Laboratory" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
             </div>
+
             <div class="flex gap-3 pt-2">
                 <button type="button" onclick="document.getElementById('addGalleryModal').classList.add('hidden')" class="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-bold rounded-xl">Cancel</button>
-                <button type="submit" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-navy-950 text-xs font-black rounded-xl">Add Media</button>
+                <button type="submit" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-navy-950 text-xs font-black rounded-xl">Save Media</button>
             </div>
         </form>
     </div>
 </div>
+
+<script>
+function switchTab(type) {
+    const fileContainer = document.getElementById('fileUploadContainer');
+    const urlContainer = document.getElementById('urlLinkContainer');
+    const tabUploadBtn = document.getElementById('tabUploadBtn');
+    const tabUrlBtn = document.getElementById('tabUrlBtn');
+    const sourceInput = document.getElementById('imageSourceInput');
+    const fileInput = document.getElementById('imageFileInput');
+    const urlInput = document.getElementById('imageUrlInput');
+
+    sourceInput.value = type;
+    if (type === 'file') {
+        fileContainer.classList.remove('hidden');
+        urlContainer.classList.add('hidden');
+        tabUploadBtn.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-amber-500 text-navy-950 transition-all flex items-center justify-center gap-1.5";
+        tabUrlBtn.className = "flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all flex items-center justify-center gap-1.5";
+        urlInput.required = false;
+    } else {
+        fileContainer.classList.add('hidden');
+        urlContainer.classList.remove('hidden');
+        tabUrlBtn.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-amber-500 text-navy-950 transition-all flex items-center justify-center gap-1.5";
+        tabUploadBtn.className = "flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all flex items-center justify-center gap-1.5";
+        urlInput.required = true;
+    }
+}
+
+function previewSelectedFile(input) {
+    const placeholder = document.getElementById('uploadPlaceholder');
+    const info = document.getElementById('fileSelectedInfo');
+    if (input.files && input.files[0]) {
+        placeholder.classList.add('hidden');
+        info.classList.remove('hidden');
+        info.textContent = 'Selected: ' + input.files[0].name;
+    }
+}
+</script>
 {% endblock %}

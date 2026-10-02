@@ -752,17 +752,44 @@ def admin_events(request):
 @admin_required
 def admin_gallery(request):
     """
-    Manage gallery media uploads.
+    Manage gallery media uploads supporting local file uploads and image URLs.
     """
     if request.method == 'POST':
         action = request.POST.get('action')
         if action == 'create':
-            image_url = request.POST.get('image_url', '').strip()
             description = request.POST.get('description', '').strip()
+            image_source = request.POST.get('image_source', 'file')
+            image_file = request.FILES.get('image_file')
+            image_url = request.POST.get('image_url', '').strip()
 
-            if image_url:
-                Gallery.objects.create(image=image_url, description=description)
-                messages.success(request, 'Gallery image added successfully.')
+            if image_source == 'file' and image_file:
+                gallery = Gallery.objects.create(
+                    image_file=image_file,
+                    description=description
+                )
+                gallery.image = gallery.image_file.url
+                gallery.save(update_fields=['image'])
+                messages.success(request, 'Gallery image uploaded from local storage successfully.')
+                return redirect('admin_gallery')
+            elif image_url:
+                Gallery.objects.create(
+                    image_url=image_url,
+                    image=image_url,
+                    description=description
+                )
+                messages.success(request, 'Gallery image added from URL link successfully.')
+                return redirect('admin_gallery')
+            elif image_file:
+                gallery = Gallery.objects.create(
+                    image_file=image_file,
+                    description=description
+                )
+                gallery.image = gallery.image_file.url
+                gallery.save(update_fields=['image'])
+                messages.success(request, 'Gallery image uploaded from local storage successfully.')
+                return redirect('admin_gallery')
+            else:
+                messages.error(request, 'Please select an image file to upload or provide a valid image URL.')
                 return redirect('admin_gallery')
         elif action == 'delete':
             gallery_id = request.POST.get('gallery_id')
