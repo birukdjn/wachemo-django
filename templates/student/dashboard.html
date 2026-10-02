@@ -24,7 +24,11 @@
           <strong>Tip:</strong> Check your assignments regularly to stay on top of deadlines!
         </div>
         <div class="bg-green-50 border border-green-200 text-green-800 rounded p-4">
-          <strong>Upcoming Event:</strong> School Science Fair on <span class="font-semibold">June 15</span>. Don’t miss it!
+          {% if latest_event %}
+            <strong>Upcoming Event:</strong> {{ latest_event.title }} on <span class="font-semibold">{{ latest_event.month }} {{ latest_event.day }}</span>. Don’t miss it!
+          {% else %}
+            <strong>Upcoming Event:</strong> Stay tuned for upcoming campus events and science fairs!
+          {% endif %}
         </div>
       </div>
       <!-- Quick Stats Cards -->

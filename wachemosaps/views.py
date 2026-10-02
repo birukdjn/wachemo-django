@@ -9,11 +9,17 @@ from .models import UserProfile
 
 
 
+from student.models import Student, Instructor, Course, Announcement
+
 def index(request):
-    context= {
+    context = {
         'topnews': News.objects.all().order_by('-date')[:3],  # Get the latest 3 news items
         'topimages': Gallery.objects.all().order_by('-id')[:8],  # Get the latest 8 images
         'topevents': Event.objects.all().order_by('-day', '-month')[:4],  # Get the latest 4 events
+        'announcements': Announcement.objects.filter(is_published=True).order_by('-publish_date')[:3],
+        'student_count': Student.objects.count(),
+        'instructor_count': Instructor.objects.count(),
+        'course_count': Course.objects.count(),
     }
     return render(request, 'index.html', context)
 

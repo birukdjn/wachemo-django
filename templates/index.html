@@ -114,23 +114,23 @@
     <div class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
         <div class="p-4 bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-none transition-all">
             <div class="text-blue-600 dark:text-blue-400 text-3xl mb-2"><i class="fas fa-users"></i></div>
-            <h3 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">2,500+</h3>
+            <h3 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">{% if student_count %}{{ student_count }}{% else %}2,500+{% endif %}</h3>
             <p class="text-slate-600 dark:text-gray-400 text-xs sm:text-sm font-medium mt-1">Students Enrolled</p>
         </div>
         <div class="p-4 bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-none transition-all">
             <div class="text-blue-600 dark:text-blue-400 text-3xl mb-2"><i class="fas fa-chalkboard-teacher"></i></div>
-            <h3 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">120+</h3>
+            <h3 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">{% if instructor_count %}{{ instructor_count }}{% else %}120+{% endif %}</h3>
             <p class="text-slate-600 dark:text-gray-400 text-xs sm:text-sm font-medium mt-1">Qualified Teachers</p>
         </div>
         <div class="p-4 bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-none transition-all">
-            <div class="text-blue-600 dark:text-blue-400 text-3xl mb-2"><i class="fas fa-graduation-cap"></i></div>
-            <h3 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">98%</h3>
-            <p class="text-slate-600 dark:text-gray-400 text-xs sm:text-sm font-medium mt-1">Graduation Rate</p>
+            <div class="text-blue-600 dark:text-blue-400 text-3xl mb-2"><i class="fas fa-book font-black"></i></div>
+            <h3 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">{% if course_count %}{{ course_count }}{% else %}50+{% endif %}</h3>
+            <p class="text-slate-600 dark:text-gray-400 text-xs sm:text-sm font-medium mt-1">Active Courses</p>
         </div>
         <div class="p-4 bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-none transition-all">
-            <div class="text-blue-600 dark:text-blue-400 text-3xl mb-2"><i class="fas fa-trophy"></i></div>
-            <h3 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">50+</h3>
-            <p class="text-slate-600 dark:text-gray-400 text-xs sm:text-sm font-medium mt-1">Awards Won</p>
+            <div class="text-blue-600 dark:text-blue-400 text-3xl mb-2"><i class="fas fa-calendar-alt"></i></div>
+            <h3 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">{% if topevents %}{{ topevents|length }}{% else %}10+{% endif %}</h3>
+            <p class="text-slate-600 dark:text-gray-400 text-xs sm:text-sm font-medium mt-1">Upcoming Events</p>
         </div>
     </div>
 </section>

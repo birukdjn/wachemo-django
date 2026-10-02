@@ -13,8 +13,7 @@ from django.utils import timezone
 from datetime import datetime, timedelta
 from django.http import JsonResponse
 from django.views.decorators.cache import cache_page
-from wachemosaps.models import UserProfile
-# Create your views here.
+from wachemosaps.models import UserProfile, Event
 
 @login_required
 def dashboard(request):
@@ -98,6 +97,7 @@ def dashboard(request):
         'upcoming_exams': upcoming_exams,
         'attendance_summary': attendance_summary,
         'notifications': notifications,
+        'latest_event': Event.objects.first(),
     }
     return render(request, 'student/dashboard.html', context)
 
