@@ -1,0 +1,129 @@
+<!-- Global Toast Notification System -->
+<div id="toastContainer" class="fixed top-5 right-5 z-[9999] flex flex-col gap-3 max-w-md w-[calc(100vw-2.5rem)] pointer-events-none"></div>
+
+<!-- Server-Side Django Messages to Toast Injector -->
+{% if messages %}
+<script id="django-messages-data" type="application/json">
+[
+  {% for message in messages %}
+  {
+    "message": "{{ message|escapejs }}",
+    "tags": "{{ message.tags|escapejs }}"
+  }{% if not forloop.last %},{% endif %}
+  {% endfor %}
+]
+</script>
+{% endif %}
+
+<script>
+/**
+ * Global Toast Notification Engine
+ * Supports: 'success', 'error'/'danger', 'warning', 'info'
+ */
+function showToast(message, type = 'info', title = null, duration = 5000) {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    // Map message tags to unified types
+    let toastType = type.toLowerCase();
+    if (toastType === 'danger') toastType = 'error';
+
+    // Theme configurations for types
+    const themes = {
+        success: {
+            bg: 'bg-navy-900/95 dark:bg-navy-900/95 border-emerald-500/40 text-emerald-300',
+            icon: 'fa-circle-check text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+            bar: 'bg-emerald-500',
+            defaultTitle: 'Success'
+        },
+        error: {
+            bg: 'bg-navy-900/95 dark:bg-navy-900/95 border-red-500/40 text-red-300',
+            icon: 'fa-circle-exclamation text-red-400 bg-red-500/10 border-red-500/20',
+            bar: 'bg-red-500',
+            defaultTitle: 'Error'
+        },
+        warning: {
+            bg: 'bg-navy-900/95 dark:bg-navy-900/95 border-amber-500/40 text-amber-300',
+            icon: 'fa-triangle-exclamation text-amber-400 bg-amber-500/10 border-amber-500/20',
+            bar: 'bg-amber-500',
+            defaultTitle: 'Warning'
+        },
+        info: {
+            bg: 'bg-navy-900/95 dark:bg-navy-900/95 border-blue-500/40 text-blue-300',
+            icon: 'fa-circle-info text-blue-400 bg-blue-500/10 border-blue-500/20',
+            bar: 'bg-blue-500',
+            defaultTitle: 'Notification'
+        }
+    };
+
+    const theme = themes[toastType] || themes.info;
+    const toastTitle = title || theme.defaultTitle;
+
+    // Create Toast Element
+    const toast = document.createElement('div');
+    toast.className = `pointer-events-auto relative overflow-hidden rounded-2xl border p-4 shadow-2xl backdrop-blur-xl transition-all duration-300 transform translate-x-full opacity-0 flex items-start gap-3.5 ${theme.bg}`;
+
+    toast.innerHTML = `
+        <div class="w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 ${theme.icon}">
+            <i class="fas ${theme.icon.split(' ')[0]} text-base"></i>
+        </div>
+        <div class="flex-1 pr-3">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-0.5">${toastTitle}</h4>
+            <p class="text-xs font-medium text-gray-200 leading-snug">${message}</p>
+        </div>
+        <button onclick="dismissToast(this.parentElement)" class="text-gray-400 hover:text-white text-base font-bold shrink-0 transition-colors p-1">
+            <i class="fas fa-xmark"></i>
+        </button>
+        <div class="toast-bar absolute bottom-0 left-0 h-1 w-full ${theme.bar} transition-all duration-linear" style="transition-duration: ${duration}ms;"></div>
+    `;
+
+    container.appendChild(toast);
+
+    // Trigger Entrance Animation
+    requestAnimationFrame(() => {
+        toast.classList.remove('translate-x-full', 'opacity-0');
+        toast.classList.add('translate-x-0', 'opacity-100');
+        const bar = toast.querySelector('.toast-bar');
+        if (bar) bar.style.width = '0%';
+    });
+
+    // Auto Dismiss Timer
+    const timer = setTimeout(() => {
+        dismissToast(toast);
+    }, duration);
+
+    // Pause progress on hover
+    toast.addEventListener('mouseenter', () => {
+        clearTimeout(timer);
+        const bar = toast.querySelector('.toast-bar');
+        if (bar) bar.style.transitionPlayState = 'paused';
+    });
+}
+
+function dismissToast(toast) {
+    if (!toast || toast.dataset.dismissed) return;
+    toast.dataset.dismissed = 'true';
+    toast.classList.remove('translate-x-0', 'opacity-100');
+    toast.classList.add('translate-x-full', 'opacity-0');
+    setTimeout(() => {
+        if (toast.parentElement) toast.parentElement.removeChild(toast);
+    }, 300);
+}
+
+// Auto-Render Django Server Messages as Toasts on Page Load
+document.addEventListener('DOMContentLoaded', () => {
+    const msgScript = document.getElementById('django-messages-data');
+    if (msgScript) {
+        try {
+            const serverMsgs = JSON.parse(msgScript.textContent);
+            serverMsgs.forEach((item, index) => {
+                setTimeout(() => {
+                    showToast(item.message, item.tags);
+                }, index * 200);
+            });
+        } catch (e) {
+            console.error('Error parsing Django messages:', e);
+        }
+    }
+});
+</script>
