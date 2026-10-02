@@ -73,6 +73,15 @@ def signup(request):
         role = request.POST.get('role', 'student')
         confirm_password = request.POST.get('confirm_password', '')
         
+        # Cyber Security & Governance Policy: Faculty accounts cannot be self-created publicly
+        if role == 'teacher':
+            messages.error(request, 'Security Notice: Faculty and Teacher accounts are provisioned exclusively by School Administration & Registrar. Please contact the Academic Office.')
+            return redirect('signup')
+        
+        # Restrict public self-registration role to student or parent
+        if role not in ['student', 'parent']:
+            role = 'student'
+
         # Validation checks
         if password != confirm_password:
             messages.error(request, 'Passwords do not match.')
@@ -98,19 +107,15 @@ def signup(request):
             user_profile, _ = UserProfile.objects.get_or_create(user=user)
             user_profile.role = role
             user_profile.student_id = request.POST.get('student_id', '') if role == 'student' else None
-            user_profile.teacher_subject = request.POST.get('teacher_subject', '') if role == 'teacher' else None
             user_profile.parent_phone = request.POST.get('parent_phone', '') if role == 'parent' else None
             user_profile.save()
             
-            # Auto-create Student / Instructor records if applicable
+            # Auto-create Student record for self-registered student
             if role == 'student':
                 sid = user_profile.student_id or f"WCU/{user.id:04d}"
                 Student.objects.get_or_create(user=user, defaults={'student_id': sid})
-            elif role == 'teacher':
-                eid = f"EMP/{user.id:04d}"
-                Instructor.objects.get_or_create(user=user, defaults={'employee_id': eid, 'specialization': user_profile.teacher_subject or ''})
             
-            messages.success(request, 'Account created successfully! Please log in.')
+            messages.success(request, 'Student account registered successfully! Please log in.')
             return redirect('login')
             
         except Exception as e:
