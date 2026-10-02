@@ -18,18 +18,26 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS('Starting database seeding...'))
 
-        # 1. Ensure Superuser Admin
-        admin_user, created = User.objects.get_or_create(username='Birukdjn', defaults={'email': 'Birukedjn@gmail.com'})
+        # 1. Ensure Superuser Admin accounts
+        admin_user, _ = User.objects.get_or_create(username='admin', defaults={'email': 'admin@wsaps.edu'})
         admin_user.is_staff = True
         admin_user.is_superuser = True
-        admin_user.first_name = 'Biruk'
-        admin_user.last_name = 'Dejene'
-        admin_user.set_password('Birukdjn@8325')
+        admin_user.first_name = 'School'
+        admin_user.last_name = 'Administrator'
+        admin_user.set_password('Admin2026!')
         admin_user.save()
-        
-        # UserProfile for admin
         UserProfile.objects.get_or_create(user=admin_user, defaults={'role': 'teacher', 'teacher_subject': 'Administration'})
-        self.stdout.write(self.style.SUCCESS('Admin user ready (username: Birukdjn, password: Birukdjn@8325!)'))
+
+        b_admin, _ = User.objects.get_or_create(username='Birukdjn', defaults={'email': 'Birukedjn@gmail.com'})
+        b_admin.is_staff = True
+        b_admin.is_superuser = True
+        b_admin.first_name = 'Biruk'
+        b_admin.last_name = 'Dejene'
+        b_admin.set_password('Birukdjn@8325!')
+        b_admin.save()
+        UserProfile.objects.get_or_create(user=b_admin, defaults={'role': 'teacher', 'teacher_subject': 'Super Admin'})
+
+        self.stdout.write(self.style.SUCCESS('Admin superusers ready (admin: Admin2026! | Birukdjn: Birukdjn@8325!)'))
 
         # 2. Create Departments
         depts_data = [
