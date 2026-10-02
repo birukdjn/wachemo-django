@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}User Management | Admin Portal{% endblock %}
+
+{% block content %}
+<div class="flex h-[calc(100vh-100px)] overflow-hidden bg-navy-900 portal-main-bg">
+    {% include 'admin_portal/sidebar.html' %}
+
+    <div class="flex-1 h-full overflow-y-auto p-6 md:p-8">
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-xl border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-500/10 text-red-400 border-red-500/20{% elif message.tags == 'warning' %}bg-amber-500/10 text-amber-400 border-amber-500/20{% else %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% endif %}">
+                        <div class="flex items-center gap-2">
+                            <i class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Banner -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-amber-500/15 via-orange-600/10 to-transparent p-6 rounded-2xl border border-amber-500/20">
+            <div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wide">Account Governance</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">User Accounts & Role Control</h1>
+                <p class="text-gray-400 text-sm mt-1">Audit all registered system users and assign access roles.</p>
+            </div>
+            <span class="px-4 py-2 bg-navy-800 border border-white/10 rounded-xl text-white text-xs font-bold shrink-0">
+                Total Users: {{ users.count }}
+            </span>
+        </div>
+
+        <!-- Filter & Search Bar -->
+        <div class="bg-navy-800 p-4 rounded-2xl border border-white/10 shadow-lg mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <form method="get" class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+                <div class="relative w-full sm:w-64">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fas fa-search text-xs"></i></span>
+                    <input type="text" name="search" value="{{ search_query }}" placeholder="Search username, name, email..." class="w-full text-xs pl-9 pr-3 py-2.5 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+                </div>
+
+                <select name="role" onchange="this.form.submit()" class="text-xs p-2.5 bg-navy-900 border border-white/10 rounded-xl text-white font-bold focus:outline-none w-full sm:w-auto">
+                    <option value="">All Roles</option>
+                    <option value="student" {% if role_filter == 'student' %}selected{% endif %}>Student</option>
+                    <option value="teacher" {% if role_filter == 'teacher' %}selected{% endif %}>Teacher</option>
+                    <option value="parent" {% if role_filter == 'parent' %}selected{% endif %}>Parent</option>
+                    <option value="admin" {% if role_filter == 'admin' %}selected{% endif %}>Admin</option>
+                </select>
+
+                <button type="submit" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-navy-950 text-xs font-black rounded-xl transition-all shadow-md w-full sm:w-auto">
+                    Filter
+                </button>
+            </form>
+        </div>
+
+        <!-- Users Table Card -->
+        <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-users-gear text-amber-400"></i>
+                    <h2 class="font-bold text-white text-base">Registered System Users</h2>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-navy-950/60 text-gray-400 font-semibold uppercase text-[11px] tracking-wider border-b border-white/10">
+                        <tr>
+                            <th class="px-6 py-3.5">User</th>
+                            <th class="px-6 py-3.5">Email</th>
+                            <th class="px-6 py-3.5">Current Role</th>
+                            <th class="px-6 py-3.5">Joined Date</th>
+                            <th class="px-6 py-3.5 text-right">Change Role</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5 text-gray-300">
+                        {% for u in users %}
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="px-6 py-4 font-semibold text-white">
+                                    {{ u.get_full_name|default:u.username }}
+                                    <span class="block text-xs font-mono font-normal text-amber-300">{{ u.username }}</span>
+                                </td>
+                                <td class="px-6 py-4 text-xs text-gray-400">{{ u.email }}</td>
+                                <td class="px-6 py-4">
+                                    <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase border {% if u.userprofile.role == 'teacher' %}bg-blue-500/15 text-blue-400 border-blue-500/30{% elif u.userprofile.role == 'student' %}bg-emerald-500/15 text-emerald-400 border-emerald-500/30{% else %}bg-amber-500/15 text-amber-300 border-amber-500/30{% endif %}">
+                                        {{ u.userprofile.role|default:"User" }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-xs text-gray-400 font-mono">{{ u.date_joined|date:"M d, Y" }}</td>
+                                <td class="px-6 py-4 text-right">
+                                    <form method="post" class="inline-flex items-center gap-2">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="user_id" value="{{ u.id }}">
+                                        <select name="role" class="text-xs p-1.5 bg-navy-900 border border-white/10 rounded-lg text-white font-bold focus:outline-none">
+                                            <option value="student" {% if u.userprofile.role == 'student' %}selected{% endif %}>Student</option>
+                                            <option value="teacher" {% if u.userprofile.role == 'teacher' %}selected{% endif %}>Teacher</option>
+                                            <option value="parent" {% if u.userprofile.role == 'parent' %}selected{% endif %}>Parent</option>
+                                            <option value="admin" {% if u.userprofile.role == 'admin' %}selected{% endif %}>Admin</option>
+                                        </select>
+                                        <button type="submit" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-navy-950 font-black text-xs rounded-lg transition-all shadow-sm">
+                                            Save
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5" class="px-6 py-10 text-center text-gray-500 text-sm">
+                                    No matching users found.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

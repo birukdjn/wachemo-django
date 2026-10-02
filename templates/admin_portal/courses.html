@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Course Management | Admin Portal{% endblock %}
+
+{% block content %}
+<div class="flex h-[calc(100vh-100px)] overflow-hidden bg-navy-900 portal-main-bg">
+    {% include 'admin_portal/sidebar.html' %}
+
+    <div class="flex-1 h-full overflow-y-auto p-6 md:p-8">
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-xl border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-500/10 text-red-400 border-red-500/20{% elif message.tags == 'warning' %}bg-amber-500/10 text-amber-400 border-amber-500/20{% else %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% endif %}">
+                        <div class="flex items-center gap-2">
+                            <i class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Banner -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-amber-500/15 via-orange-600/10 to-transparent p-6 rounded-2xl border border-amber-500/20">
+            <div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wide">Academic Catalog</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">Course & Curriculum Management</h1>
+                <p class="text-gray-400 text-sm mt-1">Create academic subjects, set credit weights, and assign faculty instructors.</p>
+            </div>
+            <span class="px-4 py-2 bg-navy-800 border border-white/10 rounded-xl text-white text-xs font-bold shrink-0">
+                Total Courses: {{ courses.count }}
+            </span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Create Course Form -->
+            <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg h-fit">
+                <h2 class="font-bold text-white text-base mb-4 flex items-center gap-2 pb-3 border-b border-white/10">
+                    <i class="fas fa-plus-circle text-amber-400"></i> Create New Course
+                </h2>
+
+                <form method="post" class="space-y-4">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label class="text-xs font-semibold text-gray-300 block mb-1">Code</label>
+                            <input type="text" name="code" required placeholder="PHY101" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white font-bold focus:border-amber-500 focus:outline-none uppercase">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="text-xs font-semibold text-gray-300 block mb-1">Course Title</label>
+                            <input type="text" name="name" required placeholder="General Physics I" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold text-gray-300 block mb-1">Description / Overview</label>
+                        <textarea name="description" rows="3" placeholder="Course overview and objectives..." class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold text-gray-300 block mb-1">Lead Instructor</label>
+                        <select name="instructor_id" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white font-bold focus:border-amber-500 focus:outline-none">
+                            <option value="">-- Assign Instructor --</option>
+                            {% for inst in instructors %}
+                                <option value="{{ inst.id }}">{{ inst.employee_id }} - {{ inst.get_full_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs font-semibold text-gray-300 block mb-1">Department</label>
+                            <select name="department_id" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white font-bold focus:border-amber-500 focus:outline-none">
+                                <option value="">-- Dept --</option>
+                                {% for dept in departments %}
+                                    <option value="{{ dept.id }}">{{ dept.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold text-gray-300 block mb-1">Credit Hours</label>
+                            <input type="number" name="credits" value="3" min="1" max="10" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none font-bold">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-navy-950 font-black text-xs rounded-xl shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-plus"></i> Add Course
+                    </button>
+                </form>
+            </div>
+
+            <!-- Courses Table -->
+            <div class="lg:col-span-2 bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+                <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-book-open text-purple-400"></i>
+                        <h2 class="font-bold text-white text-base">Active Academic Subjects</h2>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-navy-950/60 text-gray-400 font-semibold uppercase text-[11px] tracking-wider border-b border-white/10">
+                            <tr>
+                                <th class="px-6 py-3.5">Code & Title</th>
+                                <th class="px-6 py-3.5">Lead Instructor</th>
+                                <th class="px-6 py-3.5">Department</th>
+                                <th class="px-6 py-3.5 text-right">Enrolled</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5 text-gray-300">
+                            {% for c in courses %}
+                                <tr class="hover:bg-white/5 transition-colors">
+                                    <td class="px-6 py-4 font-semibold text-white">
+                                        <span class="font-mono text-xs font-bold text-brand-light bg-brand-blue/15 px-2 py-0.5 rounded border border-brand-blue/30 mr-1.5">{{ c.code }}</span>
+                                        <span>{{ c.name }}</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-xs text-gray-300 font-medium">
+                                        {{ c.instructor.get_full_name|default:"Unassigned" }}
+                                    </td>
+                                    <td class="px-6 py-4 text-xs text-gray-400">{{ c.department.name|default:"General" }}</td>
+                                    <td class="px-6 py-4 text-right font-bold text-emerald-400 text-xs">
+                                        {{ c.enrollments.count }} Students
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4" class="px-6 py-8 text-center text-gray-500 text-sm">No active courses configured.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Control Dashboard | WSaPS{% endblock %}
+
+{% block content %}
+<div class="flex h-[calc(100vh-100px)] overflow-hidden bg-navy-900 portal-main-bg">
+    {% include 'admin_portal/sidebar.html' %}
+
+    <div class="flex-1 h-full overflow-y-auto p-6 md:p-8">
+        <!-- Messages Alerts -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-xl border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-500/10 text-red-400 border-red-500/20{% elif message.tags == 'warning' %}bg-amber-500/10 text-amber-400 border-amber-500/20{% else %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% endif %}">
+                        <div class="flex items-center gap-2">
+                            <i class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Header Banner -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-amber-500/15 via-orange-600/10 to-transparent p-6 rounded-2xl border border-amber-500/20">
+            <div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wide">System Governance</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">Admin Control Console 🛡️</h1>
+                <p class="text-gray-400 text-sm mt-1">Manage user accounts, faculty profiles, student registry, and academic structure.</p>
+            </div>
+            <div class="flex items-center gap-3 shrink-0">
+                <a href="/admin/" target="_blank" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-navy-950 text-xs font-black rounded-xl shadow-lg shadow-amber-500/20 transition-all flex items-center gap-2">
+                    <i class="fas fa-screwdriver-wrench"></i> Native Django Admin
+                </a>
+            </div>
+        </div>
+
+        <!-- Metrics Cards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg flex items-center justify-between group hover:border-amber-500/40 transition-all">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Total Users</p>
+                    <p class="text-3xl font-black text-white mt-1">{{ user_count }}</p>
+                    <p class="text-[11px] text-gray-500 mt-1"><i class="fas fa-users text-amber-400 mr-1"></i> Registered accounts</p>
+                </div>
+                <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+            </div>
+
+            <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg flex items-center justify-between group hover:border-blue-500/40 transition-all">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Instructors</p>
+                    <p class="text-3xl font-black text-white mt-1">{{ instructor_count }}</p>
+                    <p class="text-[11px] text-gray-500 mt-1"><i class="fas fa-chalkboard-teacher text-blue-400 mr-1"></i> Faculty members</p>
+                </div>
+                <div class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">
+                    <i class="fas fa-chalkboard-user"></i>
+                </div>
+            </div>
+
+            <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg flex items-center justify-between group hover:border-emerald-500/40 transition-all">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Students</p>
+                    <p class="text-3xl font-black text-white mt-1">{{ student_count }}</p>
+                    <p class="text-[11px] text-gray-500 mt-1"><i class="fas fa-user-graduate text-emerald-400 mr-1"></i> Active students</p>
+                </div>
+                <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+            </div>
+
+            <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg flex items-center justify-between group hover:border-purple-500/40 transition-all">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Active Courses</p>
+                    <p class="text-3xl font-black text-white mt-1">{{ course_count }}</p>
+                    <p class="text-[11px] text-gray-500 mt-1"><i class="fas fa-book-open text-purple-400 mr-1"></i> Active subjects</p>
+                </div>
+                <div class="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">
+                    <i class="fas fa-book"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Recent Users Card -->
+            <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+                <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-user-clock text-amber-400"></i>
+                        <h2 class="font-bold text-white text-base">Recent Registered Accounts</h2>
+                    </div>
+                    <a href="{% url 'admin_users' %}" class="text-xs font-bold text-amber-400 hover:text-white transition-colors">Manage Users &rarr;</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-navy-950/60 text-gray-400 font-semibold uppercase text-[11px] tracking-wider border-b border-white/10">
+                            <tr>
+                                <th class="px-6 py-3.5">User</th>
+                                <th class="px-6 py-3.5">Email</th>
+                                <th class="px-6 py-3.5">Role</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5 text-gray-300">
+                            {% for u in recent_users %}
+                                <tr class="hover:bg-white/5 transition-colors">
+                                    <td class="px-6 py-4 font-semibold text-white">
+                                        {{ u.get_full_name|default:u.username }}
+                                        <span class="block text-xs font-mono font-normal text-gray-400">{{ u.username }}</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-xs text-gray-400">{{ u.email }}</td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase border {% if u.userprofile.role == 'teacher' %}bg-blue-500/15 text-blue-400 border-blue-500/30{% elif u.userprofile.role == 'student' %}bg-emerald-500/15 text-emerald-400 border-emerald-500/30{% else %}bg-amber-500/15 text-amber-300 border-amber-500/30{% endif %}">
+                                            {{ u.userprofile.role|default:"User" }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="3" class="px-6 py-8 text-center text-gray-500 text-sm">No registered users found.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent Courses Card -->
+            <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+                <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-layer-group text-blue-400"></i>
+                        <h2 class="font-bold text-white text-base">Active Courses Summary</h2>
+                    </div>
+                    <a href="{% url 'admin_courses' %}" class="text-xs font-bold text-amber-400 hover:text-white transition-colors">Manage Courses &rarr;</a>
+                </div>
+                <div class="divide-y divide-white/5">
+                    {% for course in recent_courses %}
+                        <div class="p-4 flex items-center justify-between hover:bg-white/5 transition-colors">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="font-mono text-xs font-bold text-brand-light bg-brand-blue/15 px-2 py-0.5 rounded border border-brand-blue/30">{{ course.code }}</span>
+                                    <h4 class="font-bold text-white text-sm">{{ course.name }}</h4>
+                                </div>
+                                <p class="text-xs text-gray-400">Instructor: <strong class="text-gray-300">{{ course.instructor.get_full_name|default:"Unassigned" }}</strong></p>
+                            </div>
+                            <span class="text-xs font-bold text-gray-400 border border-white/10 px-2.5 py-1 rounded-lg">
+                                {{ course.credits|default:"3" }} Credits
+                            </span>
+                        </div>
+                    {% empty %}
+                        <div class="p-8 text-center text-gray-500 text-sm">No active courses registered.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

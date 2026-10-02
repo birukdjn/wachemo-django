@@ -17,6 +17,13 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page='index',
          extra_context={'no_cache': True}), name='logout'),
 
+    # Custom Admin Portal Routes
+    path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('admin-dashboard/users/', views.admin_users, name='admin_users'),
+    path('admin-dashboard/teachers/', views.admin_teachers, name='admin_teachers'),
+    path('admin-dashboard/students/', views.admin_students, name='admin_students'),
+    path('admin-dashboard/courses/', views.admin_courses, name='admin_courses'),
+
     # Fallback patterns without trailing slash
     path('signup', views.signup),
     path('login', views.login),
