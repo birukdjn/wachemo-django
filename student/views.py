@@ -530,6 +530,10 @@ def submit_assignment(request, assignment_id):
             student, _ = Student.objects.get_or_create(user=request.user, defaults={'student_id': f"WCU/{request.user.id:04d}"})
         
         assignment = get_object_or_404(Assignment, id=assignment_id)
+        if not Enrollment.objects.filter(student=student, course=assignment.course, is_active=True).exists():
+            messages.error(request, f'You are not enrolled in course {assignment.course.code}.')
+            return redirect('assignments')
+
         submission_text = request.POST.get('submission_text', '')
         submission_file = request.FILES.get('submission_file')
 

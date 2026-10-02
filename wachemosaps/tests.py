@@ -142,3 +142,42 @@ class RBACAndSecurityTestCase(TestCase):
         self.assertEqual(res.status_code, 302) # Redirected out of admin portal
         self.assertFalse(Course.objects.filter(code='HACK101').exists())
 
+    def test_admin_cannot_add_exam_result(self):
+        """Verify Admin cannot record exam results directly."""
+        self.client.login(username='admin_test', password='password123')
+        exam = Exam.objects.create(course=self.course1, title='Midterm', exam_type='midterm', exam_date='2026-12-01 10:00:00')
+        res = self.client.post(reverse('admin_exams'), {
+            'action': 'add_result',
+            'exam_id': exam.id,
+            'student_id': self.student1.id,
+            'points_earned': 100
+        }, follow=True)
+        self.assertContains(res, "Security Policy Violation")
+        self.assertFalse(ExamResult.objects.filter(exam=exam, student=self.student1).exists())
+
+    def test_teacher_cannot_grade_unenrolled_student_in_exam(self):
+        """Verify Teacher cannot record exam result for a student not enrolled in the course."""
+        self.client.login(username='teacher1', password='password123')
+        exam = Exam.objects.create(course=self.course1, title='Final', exam_type='final', exam_date='2026-12-15 10:00:00')
+        # Student 2 is NOT enrolled in course1
+        res = self.client.post(reverse('teacher_exams'), {
+            'action': 'record_grade',
+            'exam_id': exam.id,
+            'student_id': self.student2.id,
+            'points_earned': 90
+        }, follow=True)
+        self.assertContains(res, "is not enrolled in this course")
+        self.assertFalse(ExamResult.objects.filter(exam=exam, student=self.student2).exists())
+
+    def test_unenrolled_student_cannot_submit_assignment(self):
+        """Verify Student cannot submit assignment for a course they are not enrolled in."""
+        self.client.login(username='student2', password='password123')
+        assignment = Assignment.objects.create(course=self.course1, title='Homework', description='Solve', due_date='2026-12-31 23:59:00')
+        # Student 2 is NOT enrolled in course1
+        res = self.client.post(reverse('submit_assignment', args=[assignment.id]), {
+            'submission_text': 'Illegal Submission'
+        }, follow=True)
+        self.assertContains(res, "You are not enrolled in course")
+        self.assertFalse(AssignmentSubmission.objects.filter(assignment=assignment, student=self.student2).exists())
+
+

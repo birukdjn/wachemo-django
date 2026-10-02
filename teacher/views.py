@@ -297,15 +297,16 @@ def mark_attendance(request, course_id):
             status = request.POST.get(f'status_{sid}', 'present')
             try:
                 student = Student.objects.get(id=sid)
-                Attendance.objects.update_or_create(
-                    student=student,
-                    course=course,
-                    date=attendance_date,
-                    defaults={
-                        'status': status,
-                        'marked_by': instructor
-                    }
-                )
+                if Enrollment.objects.filter(student=student, course=course, is_active=True).exists():
+                    Attendance.objects.update_or_create(
+                        student=student,
+                        course=course,
+                        date=attendance_date,
+                        defaults={
+                            'status': status,
+                            'marked_by': instructor
+                        }
+                    )
             except Student.DoesNotExist:
                 continue
         
@@ -510,6 +511,10 @@ def teacher_exams(request):
             if exam_id and student_id and points is not None:
                 exam_obj = get_object_or_404(Exam, id=exam_id, course__instructor=instructor)
                 student_obj = get_object_or_404(Student, id=student_id)
+                if not Enrollment.objects.filter(student=student_obj, course=exam_obj.course, is_active=True).exists():
+                    messages.error(request, f'Student {student_obj.student_id} is not enrolled in this course.')
+                    return redirect('teacher_exams')
+
                 ExamResult.objects.update_or_create(
                     exam=exam_obj,
                     student=student_obj,
