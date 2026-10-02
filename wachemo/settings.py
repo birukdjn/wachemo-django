@@ -87,9 +87,18 @@ if os.environ.get('VERCEL') or not os.access(BASE_DIR, os.W_OK):
     if tmp_db.exists():
         DB_PATH = tmp_db
 
-db_url = os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL') or os.environ.get('POSTGRES_PRISMA_URL')
+db_url = os.environ.get('POSTGRES_URL_NON_POOLING') or os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL') or os.environ.get('POSTGRES_PRISMA_URL')
 
 if db_url:
+    from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
+    parsed = urlparse(db_url)
+    if parsed.query:
+        qs = parse_qs(parsed.query)
+        qs.pop('pgbouncer', None)
+        qs.pop('supa', None)
+        new_query = urlencode(qs, doseq=True)
+        db_url = urlunparse((parsed.scheme, parsed.netloc, parsed.path, parsed.params, new_query, parsed.fragment))
+
     DATABASES = {
         'default': dj_database_url.config(
             default=db_url,
