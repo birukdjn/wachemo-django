@@ -87,7 +87,7 @@ if os.environ.get('VERCEL') or not os.access(BASE_DIR, os.W_OK):
     if tmp_db.exists():
         DB_PATH = tmp_db
 
-db_url = os.environ.get('POSTGRES_URL_NON_POOLING') or os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL') or os.environ.get('POSTGRES_PRISMA_URL')
+db_url = os.environ.get('POSTGRES_PRISMA_URL') or os.environ.get('POSTGRES_URL') or os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL_NON_POOLING')
 
 if db_url:
     from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
