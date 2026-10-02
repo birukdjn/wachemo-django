@@ -1,7 +1,7 @@
 <!-- Teacher Portal Sidebar -->
 <aside id="teacherSidebar" class="w-64 shrink-0 bg-navy-800 border-r border-white/5 h-full overflow-y-auto flex flex-col hidden lg:flex">
     <!-- Brand Header -->
-    <div class="p-5 border-b border-white/5">
+    <div class="p-5 border-b border-white/5 shrink-0">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 bg-brand-blue rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20">
                 <i class="fas fa-chalkboard-teacher text-white text-sm"></i>
@@ -15,7 +15,7 @@
 
     <!-- Instructor Card -->
     {% if instructor %}
-    <div class="mx-3 mt-3 bg-brand-blue/5 border border-brand-blue/20 rounded-xl p-3.5">
+    <div class="mx-3 mt-3 bg-brand-blue/5 border border-brand-blue/20 rounded-xl p-3.5 shrink-0">
         <div class="flex items-center gap-2.5">
             <div class="w-9 h-9 bg-brand-blue rounded-lg flex items-center justify-center font-bold text-white text-sm shrink-0">
                 {{ instructor.user.username|first|upper }}
@@ -31,53 +31,85 @@
     </div>
     {% endif %}
 
-    <!-- Navigation -->
+    <!-- Navigation List -->
     <nav class="flex-1 p-3 space-y-0.5 overflow-y-auto mt-2">
-        <p class="text-gray-600 text-[10px] font-bold uppercase tracking-widest px-3 py-2">Main</p>
+        <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5">Academic</p>
 
-        <a href="{% url 'teacher_dashboard' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+        <a href="{% url 'teacher_dashboard' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
             {% if request.resolver_match.url_name == 'teacher_dashboard' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
             <i class="fas fa-gauge w-4 text-center"></i>
             <span>Dashboard</span>
         </a>
 
-        <a href="{% url 'teacher_courses' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
-            {% if request.resolver_match.url_name == 'teacher_courses' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+        <a href="{% url 'teacher_courses' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
+            {% if request.resolver_match.url_name == 'teacher_courses' or request.resolver_match.url_name == 'teacher_course_detail' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
             <i class="fas fa-book-open w-4 text-center"></i>
             <span>My Courses</span>
         </a>
 
-        <a href="{% url 'teacher_gradebook_overview' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+        <a href="{% url 'teacher_gradebook_overview' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
             {% if request.resolver_match.url_name == 'teacher_gradebook' or request.resolver_match.url_name == 'teacher_gradebook_overview' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
             <i class="fas fa-chart-bar w-4 text-center"></i>
             <span>Gradebook</span>
         </a>
 
-        <a href="{% url 'teacher_attendance_overview' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+        <a href="{% url 'teacher_attendance_overview' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
             {% if request.resolver_match.url_name == 'teacher_attendance' or request.resolver_match.url_name == 'teacher_attendance_overview' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
             <i class="fas fa-calendar-check w-4 text-center"></i>
             <span>Attendance</span>
         </a>
 
-        <p class="text-gray-600 text-[10px] font-bold uppercase tracking-widest px-3 py-2 mt-2">Other</p>
+        <a href="{% url 'teacher_timetable' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
+            {% if request.resolver_match.url_name == 'teacher_timetable' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-clock w-4 text-center"></i>
+            <span>Class Timetable</span>
+        </a>
 
-        <a href="{% url 'teacher_profile' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+        <a href="{% url 'teacher_students' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
+            {% if request.resolver_match.url_name == 'teacher_students' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-user-graduate w-4 text-center"></i>
+            <span>Student Directory</span>
+        </a>
+
+        <a href="{% url 'teacher_exams' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
+            {% if request.resolver_match.url_name == 'teacher_exams' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-file-alt w-4 text-center"></i>
+            <span>Exams & Assessment</span>
+        </a>
+
+        <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 mt-3">Communication</p>
+
+        <a href="{% url 'teacher_announcements' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
+            {% if request.resolver_match.url_name == 'teacher_announcements' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-bullhorn w-4 text-center"></i>
+            <span>Announcements</span>
+        </a>
+
+        <a href="{% url 'teacher_inbox' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
+            {% if request.resolver_match.url_name == 'teacher_inbox' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-envelope w-4 text-center"></i>
+            <span>Messages Inbox</span>
+        </a>
+
+        <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 mt-3">Settings</p>
+
+        <a href="{% url 'teacher_profile' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
             {% if request.resolver_match.url_name == 'teacher_profile' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
             <i class="fas fa-user-circle w-4 text-center"></i>
             <span>My Profile</span>
         </a>
 
-        <a href="{% url 'index' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:bg-white/5 hover:text-white">
+        <a href="{% url 'index' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-gray-400 hover:bg-white/5 hover:text-white">
             <i class="fas fa-globe w-4 text-center"></i>
             <span>Main Website</span>
         </a>
     </nav>
 
     <!-- Logout -->
-    <div class="p-3 border-t border-white/5">
+    <div class="p-3 border-t border-white/5 shrink-0">
         <form method="post" action="{% url 'logout' %}">
             {% csrf_token %}
-            <button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all">
+            <button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all">
                 <i class="fas fa-sign-out-alt w-4 text-center"></i>
                 <span>Logout</span>
             </button>

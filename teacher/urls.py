@@ -14,6 +14,11 @@ urlpatterns = [
     path('courses/<int:course_id>/assignment/create/', views.create_assignment, name='teacher_create_assignment'),
     path('courses/<int:course_id>/exam/create/', views.create_exam, name='teacher_create_exam'),
     path('profile/', views.teacher_profile, name='teacher_profile'),
+    path('timetable/', views.teacher_timetable, name='teacher_timetable'),
+    path('students/', views.teacher_students, name='teacher_students'),
+    path('exams/', views.teacher_exams, name='teacher_exams'),
+    path('announcements/', views.teacher_announcements, name='teacher_announcements'),
+    path('inbox/', views.teacher_inbox, name='teacher_inbox'),
 ]
 
 

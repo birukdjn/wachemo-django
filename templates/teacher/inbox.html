@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}Messages Inbox | Teacher Portal{% endblock %}
+
+{% block content %}
+<div class="flex h-[calc(100vh-100px)] overflow-hidden bg-navy-900 portal-main-bg">
+    {% include 'teacher/sidebar.html' %}
+
+    <div class="flex-1 h-full overflow-y-auto p-6 md:p-8">
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-xl border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-500/10 text-red-400 border-red-500/20{% elif message.tags == 'warning' %}bg-amber-500/10 text-amber-400 border-amber-500/20{% else %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% endif %}">
+                        <div class="flex items-center gap-2">
+                            <i class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Banner -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-brand-blue/15 via-indigo-600/10 to-transparent p-6 rounded-2xl border border-brand-blue/20">
+            <div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-blue/20 text-brand-light border border-brand-blue/30 uppercase tracking-wide">Direct Messages</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">Instructor Messaging Inbox</h1>
+                <p class="text-gray-400 text-sm mt-1">Communicate directly with your enrolled students, academic advisors, and administration.</p>
+            </div>
+            <span class="px-4 py-2 bg-navy-800 border border-white/10 rounded-xl text-white text-xs font-bold shrink-0">
+                Received: {{ received_messages.count }} Messages
+            </span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left: Compose Message Form -->
+            <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg h-fit">
+                <h2 class="font-bold text-white text-base mb-4 flex items-center gap-2 pb-3 border-b border-white/10">
+                    <i class="fas fa-paper-plane text-brand-blue"></i> Compose Message
+                </h2>
+
+                <form method="post" class="space-y-4">
+                    {% csrf_token %}
+                    <div>
+                        <label class="text-xs font-semibold text-gray-300 block mb-1">Select Student Recipient</label>
+                        <select onchange="document.getElementById('recipient_username_input').value=this.value" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white font-bold focus:border-brand-blue focus:outline-none mb-2">
+                            <option value="">-- Quick Select Enrolled Student --</option>
+                            {% for st in enrolled_students %}
+                                <option value="{{ st.user.username }}">{{ st.get_full_name }} ({{ st.student_id }})</option>
+                            {% endfor %}
+                        </select>
+                        <input type="text" id="recipient_username_input" name="recipient_username" value="{{ request.GET.to|default:'' }}" required placeholder="Or enter username..." class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-brand-blue focus:outline-none font-bold">
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold text-gray-300 block mb-1">Subject Title</label>
+                        <input type="text" name="subject" required placeholder="Subject title..." class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-brand-blue focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold text-gray-300 block mb-1">Message Body</label>
+                        <textarea name="body" rows="5" required placeholder="Type your message here..." class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-brand-blue focus:outline-none leading-relaxed"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 bg-brand-blue hover:bg-blue-600 text-white text-xs font-bold rounded-xl shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right: Received & Sent Messages Tabs -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Received Messages Card -->
+                <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+                    <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-inbox text-brand-blue"></i>
+                            <h2 class="font-bold text-white text-base">Received Messages</h2>
+                        </div>
+                    </div>
+                    <div class="divide-y divide-white/5">
+                        {% for msg in received_messages %}
+                            <div class="p-5 hover:bg-white/5 transition-colors">
+                                <div class="flex items-center justify-between gap-3 mb-1">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-7 h-7 bg-brand-blue/20 text-brand-light rounded-lg flex items-center justify-center font-bold text-xs">
+                                            {{ msg.sender.username|first|upper }}
+                                        </div>
+                                        <span class="font-bold text-white text-xs">{{ msg.sender.get_full_name|default:msg.sender.username }}</span>
+                                        <span class="text-[10px] text-gray-400 font-mono">({{ msg.sender.username }})</span>
+                                    </div>
+                                    <span class="text-[10px] text-gray-500 font-mono">{{ msg.sent_at|date:"M d, Y H:i" }}</span>
+                                </div>
+                                <h4 class="font-bold text-brand-light text-xs mt-2">{{ msg.subject }}</h4>
+                                <p class="text-xs text-gray-300 mt-1 leading-relaxed whitespace-pre-line">{{ msg.body }}</p>
+                            </div>
+                        {% empty %}
+                            <div class="p-8 text-center text-gray-500 text-xs">
+                                <i class="fas fa-envelope-open text-3xl mb-2 text-gray-600 block"></i>
+                                No received messages in your inbox.
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Sent Messages Card -->
+                <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+                    <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-paper-plane text-emerald-400"></i>
+                            <h2 class="font-bold text-white text-base">Sent Messages History</h2>
+                        </div>
+                    </div>
+                    <div class="divide-y divide-white/5">
+                        {% for msg in sent_messages %}
+                            <div class="p-5 hover:bg-white/5 transition-colors">
+                                <div class="flex items-center justify-between gap-3 mb-1">
+                                    <span class="text-xs text-gray-400">To: <strong class="text-white">{{ msg.recipient.get_full_name|default:msg.recipient.username }}</strong> ({{ msg.recipient.username }})</span>
+                                    <span class="text-[10px] text-gray-500 font-mono">{{ msg.sent_at|date:"M d, Y H:i" }}</span>
+                                </div>
+                                <h4 class="font-bold text-white text-xs mt-1">{{ msg.subject }}</h4>
+                                <p class="text-xs text-gray-400 mt-1 leading-relaxed truncate">{{ msg.body }}</p>
+                            </div>
+                        {% empty %}
+                            <div class="p-8 text-center text-gray-500 text-xs">
+                                No sent messages history.
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -5,9 +5,11 @@ from django.db.models import Q, Count, Avg
 from django.utils import timezone
 from datetime import datetime, timedelta
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 from student.models import (
     Course, Student, Instructor, Department, Enrollment, Assignment, 
-    AssignmentSubmission, Attendance, Exam, ExamResult, Announcement
+    AssignmentSubmission, Attendance, Exam, ExamResult, Announcement,
+    TimetableSchedule, Message
 )
 from wachemosaps.decorators import teacher_required
 
@@ -410,6 +412,212 @@ def teacher_profile(request):
         'instructor': instructor,
     }
     return render(request, 'teacher/profile.html', context)
+
+
+@teacher_required
+def teacher_timetable(request):
+    """
+    Weekly teaching timetable for the instructor.
+    """
+    try:
+        instructor = Instructor.objects.get(user=request.user)
+    except Instructor.DoesNotExist:
+        messages.warning(request, 'Instructor profile not found.')
+        return redirect('teacher_dashboard')
+
+    schedules = TimetableSchedule.objects.filter(
+        course__instructor=instructor
+    ).select_related('course').order_by('start_time')
+
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    timetable_by_day = {day: [] for day in days}
+    for item in schedules:
+        if item.day_of_week in timetable_by_day:
+            timetable_by_day[item.day_of_week].append(item)
+
+    context = {
+        'instructor': instructor,
+        'schedules': schedules,
+        'timetable_by_day': timetable_by_day,
+        'days': days,
+    }
+    return render(request, 'teacher/timetable.html', context)
+
+
+@teacher_required
+def teacher_students(request):
+    """
+    Comprehensive student directory for the instructor's courses.
+    """
+    try:
+        instructor = Instructor.objects.get(user=request.user)
+    except Instructor.DoesNotExist:
+        messages.warning(request, 'Instructor profile not found.')
+        return redirect('teacher_dashboard')
+
+    courses = Course.objects.filter(instructor=instructor, is_active=True)
+    enrollments = Enrollment.objects.filter(
+        course__instructor=instructor,
+        is_active=True
+    ).select_related('student__user', 'student__department', 'course')
+
+    course_filter = request.GET.get('course')
+    search_query = request.GET.get('search', '').strip()
+
+    if course_filter:
+        enrollments = enrollments.filter(course_id=course_filter)
+
+    if search_query:
+        enrollments = enrollments.filter(
+            Q(student__user__first_name__icontains=search_query) |
+            Q(student__user__last_name__icontains=search_query) |
+            Q(student__student_id__icontains=search_query) |
+            Q(student__user__email__icontains=search_query)
+        )
+
+    context = {
+        'instructor': instructor,
+        'courses': courses,
+        'enrollments': enrollments,
+        'course_filter': course_filter,
+        'search_query': search_query,
+    }
+    return render(request, 'teacher/students.html', context)
+
+
+@teacher_required
+def teacher_exams(request):
+    """
+    Exams and assessments management view for instructors.
+    """
+    try:
+        instructor = Instructor.objects.get(user=request.user)
+    except Instructor.DoesNotExist:
+        messages.warning(request, 'Instructor profile not found.')
+        return redirect('teacher_dashboard')
+
+    courses = Course.objects.filter(instructor=instructor, is_active=True)
+    exams = Exam.objects.filter(course__instructor=instructor).select_related('course').order_by('-exam_date')
+    exam_results = ExamResult.objects.filter(exam__course__instructor=instructor).select_related('student__user', 'exam')
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'record_grade':
+            exam_id = request.POST.get('exam_id')
+            student_id = request.POST.get('student_id')
+            points = request.POST.get('points_earned')
+            feedback = request.POST.get('feedback', '')
+            if exam_id and student_id and points is not None:
+                exam_obj = get_object_or_404(Exam, id=exam_id, course__instructor=instructor)
+                student_obj = get_object_or_404(Student, id=student_id)
+                ExamResult.objects.update_or_create(
+                    exam=exam_obj,
+                    student=student_obj,
+                    defaults={
+                        'points_earned': int(points),
+                        'feedback': feedback,
+                        'is_published': True
+                    }
+                )
+                messages.success(request, f'Recorded grade for {student_obj.get_full_name()}.')
+                return redirect('teacher_exams')
+
+    context = {
+        'instructor': instructor,
+        'courses': courses,
+        'exams': exams,
+        'exam_results': exam_results,
+    }
+    return render(request, 'teacher/exams.html', context)
+
+
+@teacher_required
+def teacher_announcements(request):
+    """
+    Create and manage instructor announcements.
+    """
+    try:
+        instructor = Instructor.objects.get(user=request.user)
+    except Instructor.DoesNotExist:
+        messages.warning(request, 'Instructor profile not found.')
+        return redirect('teacher_dashboard')
+
+    if request.method == 'POST':
+        title = request.POST.get('title', '').strip()
+        content = request.POST.get('content', '').strip()
+        priority = request.POST.get('priority', 'medium')
+        target_audience = request.POST.get('target_audience', 'all')
+
+        if title and content:
+            Announcement.objects.create(
+                title=title,
+                content=content,
+                priority=priority,
+                target_audience=target_audience,
+                department=instructor.department,
+                is_published=True,
+                created_by=request.user
+            )
+            messages.success(request, 'Announcement posted successfully!')
+            return redirect('teacher_announcements')
+
+    announcements = Announcement.objects.filter(
+        Q(created_by=request.user) | Q(target_audience='all') | Q(target_audience='instructors')
+    ).order_by('-publish_date')
+
+    context = {
+        'instructor': instructor,
+        'announcements': announcements,
+    }
+    return render(request, 'teacher/announcements.html', context)
+
+
+@teacher_required
+def teacher_inbox(request):
+    """
+    Messaging system between teachers, students, and administration.
+    """
+    try:
+        instructor = Instructor.objects.get(user=request.user)
+    except Instructor.DoesNotExist:
+        messages.warning(request, 'Instructor profile not found.')
+        return redirect('teacher_dashboard')
+
+    if request.method == 'POST':
+        recipient_username = request.POST.get('recipient_username', '').strip()
+        subject = request.POST.get('subject', '').strip()
+        body = request.POST.get('body', '').strip()
+
+        if recipient_username and subject and body:
+            try:
+                recipient_user = User.objects.get(username=recipient_username)
+                Message.objects.create(
+                    sender=request.user,
+                    recipient=recipient_user,
+                    subject=subject,
+                    body=body
+                )
+                messages.success(request, f'Message sent to {recipient_user.username}!')
+            except User.DoesNotExist:
+                messages.error(request, f'User "{recipient_username}" not found.')
+            return redirect('teacher_inbox')
+
+    received_messages = Message.objects.filter(recipient=request.user).select_related('sender').order_by('-sent_at')
+    sent_messages = Message.objects.filter(sender=request.user).select_related('recipient').order_by('-sent_at')
+
+    enrolled_students = Student.objects.filter(
+        enrollments__course__instructor=instructor,
+        enrollments__is_active=True
+    ).distinct().select_related('user')
+
+    context = {
+        'instructor': instructor,
+        'received_messages': received_messages,
+        'sent_messages': sent_messages,
+        'enrolled_students': enrolled_students,
+    }
+    return render(request, 'teacher/inbox.html', context)
+
 
 
 

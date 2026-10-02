@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Announcements | Teacher Portal{% endblock %}
+
+{% block content %}
+<div class="flex h-[calc(100vh-100px)] overflow-hidden bg-navy-900 portal-main-bg">
+    {% include 'teacher/sidebar.html' %}
+
+    <div class="flex-1 h-full overflow-y-auto p-6 md:p-8">
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-xl border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-500/10 text-red-400 border-red-500/20{% elif message.tags == 'warning' %}bg-amber-500/10 text-amber-400 border-amber-500/20{% else %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% endif %}">
+                        <div class="flex items-center gap-2">
+                            <i class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Banner -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-brand-blue/15 via-indigo-600/10 to-transparent p-6 rounded-2xl border border-brand-blue/20">
+            <div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-blue/20 text-brand-light border border-brand-blue/30 uppercase tracking-wide">Public Broadcasts</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">Course & School Announcements</h1>
+                <p class="text-gray-400 text-sm mt-1">Publish notices, assignment updates, or general advisories to your students.</p>
+            </div>
+            <span class="px-4 py-2 bg-navy-800 border border-white/10 rounded-xl text-white text-xs font-bold shrink-0">
+                Total: {{ announcements.count }} Posted
+            </span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left: Create Announcement Form -->
+            <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg h-fit">
+                <h2 class="font-bold text-white text-base mb-4 flex items-center gap-2 pb-3 border-b border-white/10">
+                    <i class="fas fa-bullhorn text-brand-blue"></i> Create Announcement
+                </h2>
+
+                <form method="post" class="space-y-4">
+                    {% csrf_token %}
+                    <div>
+                        <label class="text-xs font-semibold text-gray-300 block mb-1">Announcement Title</label>
+                        <input type="text" name="title" required placeholder="e.g., Midterm Exam Schedule Update" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-brand-blue focus:outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs font-semibold text-gray-300 block mb-1">Priority</label>
+                            <select name="priority" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-brand-blue focus:outline-none">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="text-xs font-semibold text-gray-300 block mb-1">Audience</label>
+                            <select name="target_audience" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-brand-blue focus:outline-none">
+                                <option value="all">All School</option>
+                                <option value="students">Students</option>
+                                <option value="instructors">Instructors</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold text-gray-300 block mb-1">Announcement Content</label>
+                        <textarea name="content" rows="5" required placeholder="Type notice details here..." class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-brand-blue focus:outline-none leading-relaxed"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 bg-brand-blue hover:bg-blue-600 text-white text-xs font-bold rounded-xl shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-paper-plane"></i> Publish Announcement
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right: Posted Announcements Stream -->
+            <div class="lg:col-span-2 space-y-4">
+                {% for item in announcements %}
+                    <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg hover:border-white/20 transition-all">
+                        <div class="flex items-center justify-between gap-3 mb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded uppercase border {% if item.priority == 'urgent' %}bg-red-500/20 text-red-400 border-red-500/30{% elif item.priority == 'high' %}bg-amber-500/20 text-amber-400 border-amber-500/30{% else %}bg-brand-blue/20 text-brand-light border-brand-blue/30{% endif %}">
+                                    {{ item.priority }}
+                                </span>
+                                <span class="text-xs text-gray-400">Target: <strong class="text-gray-300 uppercase text-[10px]">{{ item.target_audience }}</strong></span>
+                            </div>
+                            <span class="text-xs text-gray-500 font-mono"><i class="fas fa-clock text-gray-400 mr-1"></i> {{ item.publish_date|date:"M d, Y H:i" }}</span>
+                        </div>
+
+                        <h3 class="font-bold text-white text-base mb-2">{{ item.title }}</h3>
+                        <p class="text-xs text-gray-300 leading-relaxed whitespace-pre-line">{{ item.content }}</p>
+
+                        <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-gray-500">
+                            <span>Posted by: <strong class="text-gray-300">{{ item.created_by.username|default:"Faculty" }}</strong></span>
+                            {% if item.department %}
+                                <span class="text-brand-light font-semibold">{{ item.department.name }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="bg-navy-800 p-12 rounded-2xl border border-white/10 text-center text-gray-500">
+                        <i class="fas fa-bullhorn text-4xl mb-3 text-gray-600 block"></i>
+                        <p class="text-sm font-medium">No announcements posted yet.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
