@@ -73,11 +73,22 @@ WSGI_APPLICATION = 'wachemo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+DB_PATH = BASE_DIR / 'db.sqlite3'
+if os.environ.get('VERCEL') or not os.access(BASE_DIR, os.W_OK):
+    tmp_db = Path('/tmp/db.sqlite3')
+    if not tmp_db.exists() and DB_PATH.exists():
+        import shutil
+        try:
+            shutil.copy2(DB_PATH, tmp_db)
+        except Exception:
+            pass
+    if tmp_db.exists():
+        DB_PATH = tmp_db
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-         
+        'NAME': DB_PATH,
     }
 }
 
