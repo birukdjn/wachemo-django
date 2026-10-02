@@ -5,78 +5,107 @@
 
 {% block content %}
 
-<!-- ===== HERO SECTION (Option B: Centered Ambient Mesh Hero) ===== -->
-<section id="hero" class="relative bg-slate-100 dark:bg-navy-950 py-16 lg:py-24 overflow-hidden transition-colors duration-300">
-    <!-- Ambient Radial Mesh Glow Circle -->
-    <div class="w-[600px] h-[600px] bg-blue-600/15 dark:bg-blue-500/20 rounded-full blur-[140px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+<!-- ===== HERO SECTION (Option C: Left-Aligned Sleek Glass Panel with Role Tabs) ===== -->
+<section id="hero" class="relative w-full overflow-hidden" style="height: 92vh; min-height: 580px;">
+    
+    <!-- Background Image Slider Canvas -->
+    <div id="heroSlider" class="absolute inset-0 z-0">
+        <div class="hero-slide absolute inset-0 opacity-100 transition-opacity duration-700" style="background: linear-gradient(rgba(13,26,46,0.65), rgba(13,26,46,0.8)), url('{% static "images/hero-1.jpg" %}') center/cover no-repeat;"></div>
+        <div class="hero-slide absolute inset-0 opacity-0 transition-opacity duration-700" style="background: linear-gradient(rgba(13,26,46,0.65), rgba(13,26,46,0.8)), url('{% static "images/hero-2.jpg" %}') center/cover no-repeat;"></div>
+        <div class="hero-slide absolute inset-0 opacity-0 transition-opacity duration-700" style="background: linear-gradient(rgba(13,26,46,0.65), rgba(13,26,46,0.8)), url('{% static "images/hero-3.jpg" %}') center/cover no-repeat;"></div>
+    </div>
 
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center relative z-10 py-10">
         
-        <!-- Live Status Pill Badge -->
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 shadow-sm mb-6">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Wachemo Secondary & Preparatory School Digital Portal</span>
-        </div>
+        <!-- Left-Aligned Frosted Glass Panel -->
+        <div class="w-full max-w-2xl bg-navy-950/85 dark:bg-navy-950/90 backdrop-blur-2xl p-7 sm:p-10 rounded-3xl border border-white/20 shadow-2xl text-left transition-all">
+            
+            <!-- Quick Role Tabs -->
+            <div class="inline-flex items-center gap-1.5 p-1 bg-white/10 border border-white/15 rounded-2xl mb-6" role="tablist">
+                <button type="button" class="role-tab px-4 py-2 rounded-xl text-xs font-bold transition-all bg-blue-600 text-white shadow-md cursor-pointer" data-role="student">
+                    <i class="fas fa-user-graduate mr-1.5"></i> Student Portal
+                </button>
+                <button type="button" class="role-tab px-4 py-2 rounded-xl text-xs font-bold transition-all text-gray-300 hover:text-white hover:bg-white/10 cursor-pointer" data-role="teacher">
+                    <i class="fas fa-chalkboard-teacher mr-1.5"></i> Teacher Portal
+                </button>
+                <button type="button" class="role-tab px-4 py-2 rounded-xl text-xs font-bold transition-all text-gray-300 hover:text-white hover:bg-white/10 cursor-pointer" data-role="parent">
+                    <i class="fas fa-users mr-1.5"></i> Parent Access
+                </button>
+            </div>
 
-        <!-- Centered Glowing Gradient Headline -->
-        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black text-slate-900 dark:text-white leading-[1.12] tracking-tight mb-6">
-            Empowering Future Leaders with 
-            <span class="block mt-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-300 dark:to-purple-400 bg-clip-text text-transparent">Digital Innovation</span>
-        </h1>
+            <!-- Dynamic Headline Content per Role -->
+            <div id="roleContent">
+                <div class="role-pane block space-y-4" id="pane-student">
+                    <span class="px-3.5 py-1 text-[11px] font-extrabold uppercase tracking-widest text-blue-400 bg-blue-500/20 border border-blue-400/30 rounded-full inline-block">
+                        Digital Learning Platform
+                    </span>
+                    <h1 class="text-3xl sm:text-5xl font-black text-white leading-tight">
+                        Empowering Students for Academic Excellence
+                    </h1>
+                    <p class="text-sm sm:text-base text-gray-200 leading-relaxed font-normal">
+                        Access e-learning modules, view exam results, check class timetables, and collaborate with your teachers seamlessly.
+                    </p>
+                </div>
 
-        <!-- Subtitle -->
-        <p class="text-base sm:text-xl text-slate-600 dark:text-gray-300 font-normal leading-relaxed max-w-3xl mx-auto mb-10">
-            Providing quality education for the 21st century with interactive e-learning, real-time grade tracking, interactive timetables, and seamless communication.
-        </p>
+                <div class="role-pane hidden space-y-4" id="pane-teacher">
+                    <span class="px-3.5 py-1 text-[11px] font-extrabold uppercase tracking-widest text-indigo-400 bg-indigo-500/20 border border-indigo-400/30 rounded-full inline-block">
+                        Faculty & Class Management
+                    </span>
+                    <h1 class="text-3xl sm:text-5xl font-black text-white leading-tight">
+                        Streamlining Teaching & Student Assessment
+                    </h1>
+                    <p class="text-sm sm:text-base text-gray-200 leading-relaxed font-normal">
+                        Manage course content, record grades and attendance, schedule exams, and communicate with parents effortlessly.
+                    </p>
+                </div>
 
-        <!-- CTA Action Buttons -->
-        <div class="flex items-center justify-center gap-4 flex-wrap mb-14">
-            {% if not request.user.is_authenticated %}
-                <a href="{% url 'login' %}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-xl transition-all shadow-xl shadow-blue-600/30 text-sm hover:scale-105 flex items-center gap-2.5">
-                    <span>Login to Portal</span>
-                    <i class="fas fa-arrow-right text-xs"></i>
+                <div class="role-pane hidden space-y-4" id="pane-parent">
+                    <span class="px-3.5 py-1 text-[11px] font-extrabold uppercase tracking-widest text-emerald-400 bg-emerald-500/20 border border-emerald-400/30 rounded-full inline-block">
+                        Parent Engagement Portal
+                    </span>
+                    <h1 class="text-3xl sm:text-5xl font-black text-white leading-tight">
+                        Stay Connected to Your Child's Growth
+                    </h1>
+                    <p class="text-sm sm:text-base text-gray-200 leading-relaxed font-normal">
+                        Track academic reports, monitor attendance records, receive school announcements, and chat with teachers.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Action CTA Buttons -->
+            <div class="flex items-center gap-4 flex-wrap pt-6 mt-6 border-t border-white/10">
+                {% if not request.user.is_authenticated %}
+                    <a href="{% url 'login' %}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/30 text-sm hover:scale-105 flex items-center gap-2">
+                        <span>Sign In to Portal</span>
+                        <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                    <a href="{% url 'signup' %}" class="bg-white/10 hover:bg-white hover:text-navy-950 text-white font-bold px-7 py-3.5 rounded-xl border border-white/30 transition-all text-sm hover:scale-105">
+                        Create Account
+                    </a>
+                {% else %}
+                    <a href="{% if request.user.userprofile.role == 'teacher' %}{% url 'teacher_dashboard' %}{% else %}{% url 'dashboard' %}{% endif %}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/30 text-sm hover:scale-105 flex items-center gap-2">
+                        <span>Go to Dashboard</span>
+                        <i class="fas fa-gauge text-xs"></i>
+                    </a>
+                {% endif %}
+                <a href="{% url 'features' %}" class="text-gray-300 hover:text-white font-semibold text-sm transition-colors flex items-center gap-1.5 px-3 py-2">
+                    <span>View All Features</span>
+                    <i class="fas fa-chevron-right text-[10px]"></i>
                 </a>
-                <a href="{% url 'signup' %}" class="bg-white dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-900 dark:text-white font-bold px-8 py-4 rounded-xl border border-slate-300 dark:border-white/15 transition-all text-sm hover:scale-105 shadow-sm">
-                    Create Account
-                </a>
-            {% else %}
-                <a href="{% if request.user.userprofile.role == 'teacher' %}{% url 'teacher_dashboard' %}{% else %}{% url 'dashboard' %}{% endif %}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-xl transition-all shadow-xl shadow-blue-600/30 text-sm hover:scale-105 flex items-center gap-2.5">
-                    <span>Go to Dashboard</span>
-                    <i class="fas fa-gauge text-xs"></i>
-                </a>
-            {% endif %}
-            <a href="{% url 'features' %}" class="bg-slate-200/80 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/20 text-slate-900 dark:text-white font-semibold px-6 py-4 rounded-xl text-sm transition-all flex items-center gap-2">
-                <span>Explore Features</span>
-                <i class="fas fa-grid-2 text-xs opacity-70"></i>
-            </a>
-        </div>
+            </div>
 
-        <!-- Floating Stat Pills Ribbon -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto">
-            <div class="bg-white dark:bg-navy-900/90 border border-slate-200 dark:border-white/10 rounded-2xl p-4 shadow-md dark:shadow-none hover:border-blue-500/40 transition-all text-center">
-                <div class="text-2xl mb-1">🏆</div>
-                <h3 class="text-xl font-black text-slate-900 dark:text-white">25+ Years</h3>
-                <p class="text-xs text-slate-500 dark:text-gray-400 font-medium">Academic Excellence</p>
-            </div>
-            <div class="bg-white dark:bg-navy-900/90 border border-slate-200 dark:border-white/10 rounded-2xl p-4 shadow-md dark:shadow-none hover:border-blue-500/40 transition-all text-center">
-                <div class="text-2xl mb-1">🎓</div>
-                <h3 class="text-xl font-black text-slate-900 dark:text-white">2,500+</h3>
-                <p class="text-xs text-slate-500 dark:text-gray-400 font-medium">Enrolled Students</p>
-            </div>
-            <div class="bg-white dark:bg-navy-900/90 border border-slate-200 dark:border-white/10 rounded-2xl p-4 shadow-md dark:shadow-none hover:border-blue-500/40 transition-all text-center">
-                <div class="text-2xl mb-1">👨‍🏫</div>
-                <h3 class="text-xl font-black text-slate-900 dark:text-white">120+</h3>
-                <p class="text-xs text-slate-500 dark:text-gray-400 font-medium">Qualified Faculty</p>
-            </div>
-            <div class="bg-white dark:bg-navy-900/90 border border-slate-200 dark:border-white/10 rounded-2xl p-4 shadow-md dark:shadow-none hover:border-blue-500/40 transition-all text-center">
-                <div class="text-2xl mb-1">⭐</div>
-                <h3 class="text-xl font-black text-slate-900 dark:text-white">98%</h3>
-                <p class="text-xs text-slate-500 dark:text-gray-400 font-medium">Pass Rate</p>
-            </div>
         </div>
+    </div>
 
+    <!-- Slider Dots -->
+    <div class="absolute bottom-6 right-6 flex items-center gap-2.5 z-20 bg-navy-950/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/15">
+        <span class="text-xs font-bold text-gray-300 mr-1">Campus Highlights</span>
+        <button class="slider-dot w-2.5 h-2.5 rounded-full bg-white transition-all cursor-pointer" data-index="0" aria-label="Slide 1"></button>
+        <button class="slider-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all cursor-pointer" data-index="1" aria-label="Slide 2"></button>
+        <button class="slider-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all cursor-pointer" data-index="2" aria-label="Slide 3"></button>
     </div>
 </section>
+
 
 
 
@@ -409,6 +438,38 @@
 {% block extra_scripts %}
 <script>
 (function() {
+    // Role Tab Switcher
+    const roleTabs = document.querySelectorAll('.role-tab');
+    const rolePanes = document.querySelectorAll('.role-pane');
+
+    roleTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const role = tab.dataset.role;
+
+            // Reset tabs styling
+            roleTabs.forEach(t => {
+                t.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
+                t.classList.add('text-gray-300', 'hover:text-white', 'hover:bg-white/10');
+            });
+
+            // Active tab styling
+            tab.classList.add('bg-blue-600', 'text-white', 'shadow-md');
+            tab.classList.remove('text-gray-300', 'hover:text-white', 'hover:bg-white/10');
+
+            // Show selected pane
+            rolePanes.forEach(pane => {
+                if (pane.id === `pane-${role}`) {
+                    pane.classList.remove('hidden');
+                    pane.classList.add('block');
+                } else {
+                    pane.classList.add('hidden');
+                    pane.classList.remove('block');
+                }
+            });
+        });
+    });
+
+    // Hero Background Slider
     const slides = document.querySelectorAll('.hero-slide');
     const dots = document.querySelectorAll('.slider-dot');
     let current = 0;
