@@ -3,139 +3,167 @@
 {% block title %}Teacher Dashboard | WSaPS{% endblock %}
 
 {% block content %}
-<div class="flex min-h-screen bg-slate-50">
+<div class="flex min-h-screen bg-navy-900 portal-main-bg">
     {% include 'teacher/sidebar.html' %}
 
-    <div class="flex-1 p-8 overflow-y-auto">
+    <div class="flex-1 p-6 md:p-8 overflow-y-auto">
         <!-- Messages Alerts -->
         {% if messages %}
             <div class="mb-6 space-y-2">
                 {% for message in messages %}
-                    <div class="p-4 rounded-lg border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-50 text-red-700 border-red-200{% elif message.tags == 'warning' %}bg-amber-50 text-amber-700 border-amber-200{% else %}bg-emerald-50 text-emerald-700 border-emerald-200{% endif %}">
-                        <span>{{ message }}</span>
-                        <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-600">&times;</button>
+                    <div class="p-4 rounded-xl border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-500/10 text-red-400 border-red-500/20{% elif message.tags == 'warning' %}bg-amber-500/10 text-amber-400 border-amber-500/20{% else %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% endif %}">
+                        <div class="flex items-center gap-2">
+                            <i class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white">&times;</button>
                     </div>
                 {% endfor %}
             </div>
         {% endif %}
 
-        <!-- Header -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <!-- Top Header Banner -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-brand-blue/15 via-indigo-600/10 to-transparent p-6 rounded-2xl border border-brand-blue/20">
             <div>
-                <h1 class="text-3xl font-extrabold text-slate-900">Welcome back, {{ instructor.get_full_name|default:request.user.username }}! 👋</h1>
-                <p class="text-slate-500 mt-1">Manage your active courses, grading workload, and student progress.</p>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-blue/20 text-brand-light border border-brand-blue/30 uppercase tracking-wide">Instructor Workspace</span>
+                </div>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white">Welcome back, {{ instructor.get_full_name|default:request.user.username }}! 👋</h1>
+                <p class="text-gray-400 text-sm mt-1">Manage active courses, record student attendance, and evaluate assignment submissions.</p>
             </div>
-            <a href="{% url 'teacher_courses' %}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-5 py-2.5 rounded-lg shadow-sm transition-colors">
-                <i class="fas fa-plus"></i> View All Courses
-            </a>
+            <div class="flex items-center gap-3">
+                <a href="{% url 'teacher_courses' %}" class="inline-flex items-center gap-2 bg-brand-blue hover:bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-lg shadow-blue-600/25 transition-all shrink-0">
+                    <i class="fas fa-book-open"></i> View My Courses
+                </a>
+            </div>
         </div>
 
         <!-- Metrics Cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-bold">
+            <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg flex items-center justify-between group hover:border-brand-blue/40 transition-all">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Active Courses</p>
+                    <p class="text-3xl font-black text-white mt-1">{{ courses.count }}</p>
+                    <p class="text-[11px] text-gray-500 mt-1"><i class="fas fa-chalkboard text-brand-blue mr-1"></i> Under instruction</p>
+                </div>
+                <div class="w-14 h-14 rounded-2xl bg-brand-blue/10 border border-brand-blue/20 text-brand-light flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">
                     <i class="fas fa-book-open"></i>
                 </div>
-                <div>
-                    <p class="text-sm font-medium text-slate-500">Active Courses</p>
-                    <p class="text-2xl font-black text-slate-900">{{ courses.count }}</p>
-                </div>
             </div>
 
-            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">
+            <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg flex items-center justify-between group hover:border-emerald-500/40 transition-all">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Total Enrolled</p>
+                    <p class="text-3xl font-black text-white mt-1">{{ total_students }}</p>
+                    <p class="text-[11px] text-gray-500 mt-1"><i class="fas fa-user-check text-emerald-400 mr-1"></i> Active students</p>
+                </div>
+                <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">
                     <i class="fas fa-user-graduate"></i>
                 </div>
-                <div>
-                    <p class="text-sm font-medium text-slate-500">Total Enrolled Students</p>
-                    <p class="text-2xl font-black text-slate-900">{{ total_students }}</p>
-                </div>
             </div>
 
-            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold">
-                    <i class="fas fa-clock"></i>
-                </div>
+            <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg flex items-center justify-between group hover:border-amber-500/40 transition-all">
                 <div>
-                    <p class="text-sm font-medium text-slate-500">Pending Submissions</p>
-                    <p class="text-2xl font-black text-slate-900">{{ pending_assignments.count }}</p>
+                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Pending Grading</p>
+                    <p class="text-3xl font-black text-white mt-1">{{ pending_assignments.count }}</p>
+                    <p class="text-[11px] text-gray-500 mt-1"><i class="fas fa-clock text-amber-400 mr-1"></i> Submissions to review</p>
+                </div>
+                <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">
+                    <i class="fas fa-clipboard-check"></i>
                 </div>
             </div>
         </div>
 
         <!-- Main Content Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Left Column: Courses list -->
+            <!-- Left Column: Courses list & Grading table -->
             <div class="lg:col-span-2 space-y-8">
-                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
-                        <h2 class="font-bold text-slate-900 text-lg">My Active Courses</h2>
-                        <span class="text-xs font-semibold px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">{{ courses.count }} Active</span>
+                <!-- Active Courses Section -->
+                <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+                    <div class="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-white/5">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-graduation-cap text-brand-blue"></i>
+                            <h2 class="font-bold text-white text-base">My Active Courses</h2>
+                        </div>
+                        <span class="text-xs font-bold px-2.5 py-1 bg-brand-blue/20 text-brand-light rounded-full border border-brand-blue/30">{{ courses.count }} Assigned</span>
                     </div>
-                    <div class="divide-y divide-slate-100">
+                    <div class="divide-y divide-white/5">
                         {% for course in courses %}
-                            <div class="p-6 hover:bg-slate-50/60 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                <div>
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <span class="font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded text-xs border border-indigo-200">{{ course.code }}</span>
-                                        <h3 class="font-semibold text-slate-900">{{ course.name }}</h3>
+                            <div class="p-6 hover:bg-white/5 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                <div class="space-y-1">
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-mono text-xs font-bold text-brand-light bg-brand-blue/10 px-2 py-0.5 rounded border border-brand-blue/20">{{ course.code }}</span>
+                                        <h3 class="font-bold text-white text-base">{{ course.name }}</h3>
                                     </div>
-                                    <p class="text-sm text-slate-500 line-clamp-1">{{ course.description|default:"No description provided." }}</p>
-                                    <div class="flex items-center gap-4 mt-2 text-xs text-slate-400">
-                                        <span><i class="fas fa-building mr-1"></i> {{ course.department.name|default:"General" }}</span>
-                                        <span><i class="fas fa-users mr-1"></i> {{ course.enrollments.count }} Enrolled</span>
+                                    <p class="text-xs text-gray-400 line-clamp-1">{{ course.description|default:"No course overview provided." }}</p>
+                                    <div class="flex items-center gap-4 text-xs text-gray-500 pt-1">
+                                        <span><i class="fas fa-building text-gray-400 mr-1"></i> {{ course.department.name|default:"Faculty" }}</span>
+                                        <span><i class="fas fa-users text-gray-400 mr-1"></i> {{ course.enrollments.count }} Enrolled</span>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2 shrink-0">
-                                    <a href="{% url 'teacher_gradebook' course.id %}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-md transition-colors">
-                                        Gradebook
+                                    <a href="{% url 'teacher_gradebook' course.id %}" class="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white text-xs font-medium rounded-xl transition-all flex items-center gap-1.5">
+                                        <i class="fas fa-chart-bar text-brand-light"></i> Gradebook
                                     </a>
-                                    <a href="{% url 'teacher_attendance' course.id %}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-md transition-colors">
-                                        Attendance
+                                    <a href="{% url 'teacher_attendance' course.id %}" class="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white text-xs font-medium rounded-xl transition-all flex items-center gap-1.5">
+                                        <i class="fas fa-calendar-check text-emerald-400"></i> Attendance
                                     </a>
-                                    <a href="{% url 'teacher_course_detail' course.id %}" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-md transition-colors">
+                                    <a href="{% url 'teacher_course_detail' course.id %}" class="px-3.5 py-1.5 bg-brand-blue hover:bg-blue-600 text-white text-xs font-semibold rounded-xl shadow-md transition-all">
                                         Manage
                                     </a>
                                 </div>
                             </div>
                         {% empty %}
-                            <div class="p-8 text-center text-slate-400">
-                                <i class="fas fa-folder-open text-3xl mb-2"></i>
-                                <p class="text-sm">No courses currently assigned.</p>
+                            <div class="p-10 text-center text-gray-500">
+                                <i class="fas fa-folder-open text-4xl mb-3 text-gray-600"></i>
+                                <p class="text-sm font-medium">No courses currently assigned to your profile.</p>
                             </div>
                         {% endfor %}
                     </div>
                 </div>
 
-                <!-- Pending Submissions Table -->
-                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/50">
-                        <h2 class="font-bold text-slate-900 text-lg">Submissions Requiring Grading</h2>
+                <!-- Submissions Table -->
+                <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+                    <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-tasks text-amber-400"></i>
+                            <h2 class="font-bold text-white text-base">Submissions Requiring Grading</h2>
+                        </div>
+                        {% if pending_assignments %}
+                            <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">{{ pending_assignments.count }} Action Required</span>
+                        {% endif %}
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm text-slate-600">
-                            <thead class="bg-slate-50 text-slate-400 font-semibold uppercase text-xs">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-navy-950/60 text-gray-400 font-semibold uppercase text-[11px] tracking-wider border-b border-white/10">
                                 <tr>
-                                    <th class="px-6 py-3">Student</th>
-                                    <th class="px-6 py-3">Assignment</th>
-                                    <th class="px-6 py-3">Submitted At</th>
-                                    <th class="px-6 py-3 text-right">Action</th>
+                                    <th class="px-6 py-3.5">Student</th>
+                                    <th class="px-6 py-3.5">Assignment</th>
+                                    <th class="px-6 py-3.5">Submitted Date</th>
+                                    <th class="px-6 py-3.5 text-right">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100">
+                            <tbody class="divide-y divide-white/5 text-gray-300">
                                 {% for sub in pending_assignments %}
-                                    <tr class="hover:bg-slate-50/50">
-                                        <td class="px-6 py-4 font-medium text-slate-900">{{ sub.student.get_full_name }}</td>
-                                        <td class="px-6 py-4">{{ sub.assignment.title }}</td>
-                                        <td class="px-6 py-4 text-xs text-slate-400">{{ sub.submitted_at|date:"M d, Y H:i" }}</td>
+                                    <tr class="hover:bg-white/5 transition-colors">
+                                        <td class="px-6 py-4 font-semibold text-white">
+                                            {{ sub.student.get_full_name }}
+                                            <span class="block text-xs font-mono font-normal text-gray-400">{{ sub.student.student_id }}</span>
+                                        </td>
+                                        <td class="px-6 py-4 font-medium">{{ sub.assignment.title }}</td>
+                                        <td class="px-6 py-4 text-xs text-gray-400">{{ sub.submitted_at|date:"M d, Y H:i" }}</td>
                                         <td class="px-6 py-4 text-right">
-                                            <a href="{% url 'teacher_gradebook' sub.assignment.course.id %}" class="text-indigo-600 hover:underline font-semibold text-xs">Grade →</a>
+                                            <a href="{% url 'teacher_gradebook' sub.assignment.course.id %}" class="inline-flex items-center gap-1 text-brand-light hover:text-white font-semibold text-xs bg-brand-blue/15 hover:bg-brand-blue/30 px-3 py-1.5 rounded-lg border border-brand-blue/30 transition-all">
+                                                <span>Grade Now</span>
+                                                <i class="fas fa-arrow-right text-[10px]"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 {% empty %}
                                     <tr>
-                                        <td colspan="4" class="px-6 py-8 text-center text-slate-400 text-sm">
-                                            No pending submissions to grade!
+                                        <td colspan="4" class="px-6 py-10 text-center text-gray-500 text-sm">
+                                            <i class="fas fa-check-circle text-emerald-400 text-2xl mb-2 block"></i>
+                                            All submissions are up to date!
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -147,41 +175,50 @@
 
             <!-- Right Column: Announcements & Upcoming Exams -->
             <div class="space-y-8">
-                <!-- Announcements -->
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                    <h2 class="font-bold text-slate-900 text-lg mb-4 flex items-center gap-2">
-                        <i class="fas fa-bullhorn text-indigo-600"></i> Announcements
-                    </h2>
-                    <div class="space-y-4">
+                <!-- Announcements Card -->
+                <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
+                        <h2 class="font-bold text-white text-base flex items-center gap-2">
+                            <i class="fas fa-bullhorn text-brand-blue"></i> Announcements
+                        </h2>
+                        <span class="text-xs text-gray-400">System Notices</span>
+                    </div>
+                    <div class="space-y-3">
                         {% for announcement in announcements %}
-                            <div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
-                                <span class="text-xs font-semibold px-2 py-0.5 rounded bg-indigo-100 text-indigo-700 uppercase">{{ announcement.priority }}</span>
-                                <h4 class="font-semibold text-slate-900 text-sm mt-1">{{ announcement.title }}</h4>
-                                <p class="text-xs text-slate-500 mt-1 line-clamp-2">{{ announcement.content }}</p>
-                                <span class="text-[10px] text-slate-400 mt-2 block">{{ announcement.publish_date|date:"M d, Y" }}</span>
+                            <div class="p-3.5 bg-white/5 rounded-xl border border-white/5 hover:border-white/10 transition-all">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-brand-blue/20 text-brand-light uppercase tracking-wider">{{ announcement.priority }}</span>
+                                    <span class="text-[10px] text-gray-400">{{ announcement.publish_date|date:"M d" }}</span>
+                                </div>
+                                <h4 class="font-bold text-white text-xs mt-1">{{ announcement.title }}</h4>
+                                <p class="text-xs text-gray-400 mt-1 line-clamp-2">{{ announcement.content }}</p>
                             </div>
                         {% empty %}
-                            <p class="text-sm text-slate-400 text-center py-4">No recent announcements.</p>
+                            <p class="text-xs text-gray-500 text-center py-6">No active announcements.</p>
                         {% endfor %}
                     </div>
                 </div>
 
-                <!-- Upcoming Exams -->
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                    <h2 class="font-bold text-slate-900 text-lg mb-4 flex items-center gap-2">
-                        <i class="fas fa-file-alt text-indigo-600"></i> Upcoming Exams
-                    </h2>
+                <!-- Upcoming Exams Card -->
+                <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
+                        <h2 class="font-bold text-white text-base flex items-center gap-2">
+                            <i class="fas fa-calendar-alt text-emerald-400"></i> Upcoming Exams
+                        </h2>
+                    </div>
                     <div class="space-y-3">
                         {% for exam in upcoming_exams %}
-                            <div class="p-3 border border-slate-200 rounded-lg flex items-center justify-between">
+                            <div class="p-3.5 bg-white/5 rounded-xl border border-white/5 flex items-center justify-between">
                                 <div>
-                                    <h4 class="font-semibold text-slate-900 text-sm">{{ exam.title }}</h4>
-                                    <p class="text-xs text-slate-500">{{ exam.course.code }} • {{ exam.duration_minutes }} mins</p>
+                                    <h4 class="font-bold text-white text-xs">{{ exam.title }}</h4>
+                                    <p class="text-[11px] text-gray-400 mt-0.5">{{ exam.course.code }} • {{ exam.duration_minutes }} mins</p>
                                 </div>
-                                <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded">{{ exam.exam_date|date:"M d" }}</span>
+                                <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-lg">
+                                    {{ exam.exam_date|date:"M d" }}
+                                </span>
                             </div>
                         {% empty %}
-                            <p class="text-sm text-slate-400 text-center py-4">No upcoming exams scheduled.</p>
+                            <p class="text-xs text-gray-500 text-center py-6">No upcoming exams scheduled.</p>
                         {% endfor %}
                     </div>
                 </div>

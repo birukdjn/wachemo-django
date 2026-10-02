@@ -3,45 +3,69 @@
 {% block title %}My Courses | Teacher Portal{% endblock %}
 
 {% block content %}
-<div class="flex min-h-screen bg-slate-50">
+<div class="flex min-h-screen bg-navy-900 portal-main-bg">
     {% include 'teacher/sidebar.html' %}
 
-    <div class="flex-1 p-8 overflow-y-auto">
-        <div class="mb-8">
-            <h1 class="text-3xl font-extrabold text-slate-900">My Assigned Courses</h1>
-            <p class="text-slate-500 mt-1">Overview of all active courses assigned to your instruction profile.</p>
+    <div class="flex-1 p-6 md:p-8 overflow-y-auto">
+        <!-- Banner -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-brand-blue/15 via-indigo-600/10 to-transparent p-6 rounded-2xl border border-brand-blue/20">
+            <div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-blue/20 text-brand-light border border-brand-blue/30 uppercase tracking-wide">Course Catalog</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">My Assigned Courses</h1>
+                <p class="text-gray-400 text-sm mt-1">Overview of active academic courses assigned to your instructor profile.</p>
+            </div>
+            <span class="px-4 py-2 bg-navy-800 border border-white/10 rounded-xl text-white text-xs font-bold">
+                Total: {{ courses.count }} Courses
+            </span>
         </div>
 
+        <!-- Course Cards Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for course in courses %}
-                <div class="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between overflow-hidden hover:shadow-md transition-shadow">
+                <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg flex flex-col justify-between overflow-hidden hover:border-brand-blue/40 hover:shadow-xl transition-all group">
                     <div class="p-6">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="font-bold text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded border border-indigo-200 uppercase">{{ course.code }}</span>
-                            <span class="text-xs font-medium text-slate-400"><i class="fas fa-users mr-1"></i> {{ course.enrollments.count }} Students</span>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="font-mono font-bold text-xs bg-brand-blue/15 text-brand-light px-2.5 py-1 rounded-lg border border-brand-blue/30 uppercase tracking-wider">{{ course.code }}</span>
+                            <span class="text-xs font-semibold text-gray-400 flex items-center gap-1.5">
+                                <i class="fas fa-users text-brand-blue"></i> {{ course.enrollments.count }} Enrolled
+                            </span>
                         </div>
-                        <h3 class="font-bold text-lg text-slate-900 mb-2">{{ course.name }}</h3>
-                        <p class="text-sm text-slate-500 line-clamp-2 mb-4">{{ course.description|default:"No description provided." }}</p>
-                        <div class="text-xs text-slate-400 space-y-1 border-t border-slate-100 pt-3">
-                            <p><strong class="text-slate-600">Department:</strong> {{ course.department.name|default:"General" }}</p>
-                            <p><strong class="text-slate-600">Credits:</strong> {{ course.credits|default:"N/A" }}</p>
+                        <h3 class="font-bold text-lg text-white mb-2 group-hover:text-brand-light transition-colors">{{ course.name }}</h3>
+                        <p class="text-xs text-gray-400 line-clamp-2 mb-4 leading-relaxed">{{ course.description|default:"No course summary provided." }}</p>
+                        
+                        <div class="text-xs text-gray-400 space-y-1.5 border-t border-white/10 pt-4">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 font-medium">Department:</span>
+                                <span class="text-gray-300 font-semibold">{{ course.department.name|default:"Faculty" }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 font-medium">Credits:</span>
+                                <span class="text-gray-300 font-semibold">{{ course.credits|default:"N/A" }}</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="bg-slate-50 px-6 py-3 border-t border-slate-200 flex items-center justify-between">
-                        <a href="{% url 'teacher_gradebook' course.id %}" class="text-xs font-semibold text-slate-700 hover:text-indigo-600">
-                            <i class="fas fa-calculator mr-1"></i> Gradebook
-                        </a>
-                        <a href="{% url 'teacher_course_detail' course.id %}" class="text-xs font-bold text-indigo-600 hover:text-indigo-800">
-                            Details &rarr;
+                    <div class="bg-white/5 px-6 py-3.5 border-t border-white/10 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <a href="{% url 'teacher_gradebook' course.id %}" class="text-xs font-semibold text-gray-300 hover:text-white flex items-center gap-1">
+                                <i class="fas fa-chart-bar text-brand-light"></i> Gradebook
+                            </a>
+                            <span class="text-gray-600">•</span>
+                            <a href="{% url 'teacher_attendance' course.id %}" class="text-xs font-semibold text-gray-300 hover:text-white flex items-center gap-1">
+                                <i class="fas fa-calendar-check text-emerald-400"></i> Roll
+                            </a>
+                        </div>
+                        <a href="{% url 'teacher_course_detail' course.id %}" class="text-xs font-bold text-brand-light hover:text-white flex items-center gap-1">
+                            <span>Manage</span>
+                            <i class="fas fa-arrow-right text-[10px]"></i>
                         </a>
                     </div>
                 </div>
             {% empty %}
-                <div class="col-span-full bg-white p-12 rounded-xl border border-slate-200 text-center">
-                    <i class="fas fa-folder-open text-4xl text-slate-300 mb-3"></i>
-                    <h3 class="text-lg font-bold text-slate-700">No Assigned Courses</h3>
-                    <p class="text-slate-400 text-sm mt-1">You are currently not listed as an instructor for any active course.</p>
+                <div class="col-span-full bg-navy-800 p-12 rounded-2xl border border-white/10 text-center">
+                    <i class="fas fa-folder-open text-5xl text-gray-600 mb-3"></i>
+                    <h3 class="text-lg font-bold text-white">No Assigned Courses</h3>
+                    <p class="text-gray-400 text-sm mt-1">You are currently not assigned as the lead instructor for any active course.</p>
                 </div>
             {% endfor %}
         </div>

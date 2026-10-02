@@ -3,75 +3,81 @@
 {% block title %}{{ course.code }} Details | Teacher Portal{% endblock %}
 
 {% block content %}
-<div class="flex min-h-screen bg-slate-50">
+<div class="flex min-h-screen bg-navy-900 portal-main-bg">
     {% include 'teacher/sidebar.html' %}
 
-    <div class="flex-1 p-8 overflow-y-auto">
+    <div class="flex-1 p-6 md:p-8 overflow-y-auto">
         <!-- Messages -->
         {% if messages %}
             <div class="mb-6 space-y-2">
                 {% for message in messages %}
-                    <div class="p-4 rounded-lg border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-50 text-red-700 border-red-200{% elif message.tags == 'warning' %}bg-amber-50 text-amber-700 border-amber-200{% else %}bg-emerald-50 text-emerald-700 border-emerald-200{% endif %}">
-                        <span>{{ message }}</span>
-                        <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-600">&times;</button>
+                    <div class="p-4 rounded-xl border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-500/10 text-red-400 border-red-500/20{% elif message.tags == 'warning' %}bg-amber-500/10 text-amber-400 border-amber-500/20{% else %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% endif %}">
+                        <div class="flex items-center gap-2">
+                            <i class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white">&times;</button>
                     </div>
                 {% endfor %}
             </div>
         {% endif %}
 
         <!-- Header -->
-        <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-brand-blue/15 via-indigo-600/10 to-transparent p-6 rounded-2xl border border-brand-blue/20">
             <div>
-                <div class="flex items-center gap-2 mb-1">
-                    <a href="{% url 'teacher_courses' %}" class="text-xs font-semibold text-slate-400 hover:text-indigo-600">&larr; Back to Courses</a>
-                    <span class="text-slate-300">•</span>
-                    <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 uppercase">{{ course.code }}</span>
+                <div class="flex items-center gap-2 mb-2">
+                    <a href="{% url 'teacher_courses' %}" class="text-xs font-semibold text-gray-400 hover:text-white transition-colors">&larr; Back to My Courses</a>
+                    <span class="text-gray-600">•</span>
+                    <span class="font-mono text-xs font-bold text-brand-light bg-brand-blue/20 px-2.5 py-0.5 rounded-full border border-brand-blue/30 uppercase">{{ course.code }}</span>
                 </div>
-                <h1 class="text-3xl font-extrabold text-slate-900">{{ course.name }}</h1>
-                <p class="text-slate-500 mt-1">{{ course.description|default:"No description set." }}</p>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white">{{ course.name }}</h1>
+                <p class="text-gray-400 text-sm mt-1 leading-relaxed">{{ course.description|default:"No course overview provided." }}</p>
             </div>
-            <div class="flex items-center gap-3">
-                <a href="{% url 'teacher_attendance' course.id %}" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-lg transition-colors">
-                    <i class="fas fa-clipboard-user mr-1"></i> Attendance
+            <div class="flex items-center gap-3 shrink-0">
+                <a href="{% url 'teacher_attendance' course.id %}" class="px-4 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-semibold rounded-xl transition-all flex items-center gap-2">
+                    <i class="fas fa-clipboard-user text-emerald-400"></i> Attendance
                 </a>
-                <a href="{% url 'teacher_gradebook' course.id %}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg transition-colors">
-                    <i class="fas fa-calculator mr-1"></i> Gradebook
+                <a href="{% url 'teacher_gradebook' course.id %}" class="px-4 py-2.5 bg-brand-blue hover:bg-blue-600 text-white text-xs font-semibold rounded-xl shadow-lg shadow-blue-600/25 transition-all flex items-center gap-2">
+                    <i class="fas fa-calculator"></i> Gradebook
                 </a>
             </div>
         </div>
 
-        <!-- Enrolled Students Table -->
-        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-8">
-            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
-                <h2 class="font-bold text-slate-900 text-lg">Enrolled Students ({{ enrollments.count }})</h2>
+        <!-- Enrolled Students Table Card -->
+        <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden mb-8">
+            <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-users text-brand-blue"></i>
+                    <h2 class="font-bold text-white text-base">Enrolled Students ({{ enrollments.count }})</h2>
+                </div>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-slate-600">
-                    <thead class="bg-slate-50 text-slate-400 font-semibold uppercase text-xs">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-navy-950/60 text-gray-400 font-semibold uppercase text-[11px] tracking-wider border-b border-white/10">
                         <tr>
-                            <th class="px-6 py-3">Student ID</th>
-                            <th class="px-6 py-3">Name</th>
-                            <th class="px-6 py-3">Email</th>
-                            <th class="px-6 py-3">Enrolled Date</th>
-                            <th class="px-6 py-3">Grade</th>
+                            <th class="px-6 py-3.5">Student ID</th>
+                            <th class="px-6 py-3.5">Name</th>
+                            <th class="px-6 py-3.5">Email</th>
+                            <th class="px-6 py-3.5">Enrolled Date</th>
+                            <th class="px-6 py-3.5">Grade</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-white/5 text-gray-300">
                         {% for enrollment in enrollments %}
-                            <tr class="hover:bg-slate-50/50">
-                                <td class="px-6 py-4 font-mono text-xs font-semibold text-indigo-600">{{ enrollment.student.student_id }}</td>
-                                <td class="px-6 py-4 font-medium text-slate-900">{{ enrollment.student.get_full_name }}</td>
-                                <td class="px-6 py-4 text-xs text-slate-500">{{ enrollment.student.user.email }}</td>
-                                <td class="px-6 py-4 text-xs text-slate-400">{{ enrollment.enrollment_date|date:"M d, Y" }}</td>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="px-6 py-4 font-mono text-xs font-bold text-brand-light">{{ enrollment.student.student_id }}</td>
+                                <td class="px-6 py-4 font-semibold text-white">{{ enrollment.student.get_full_name }}</td>
+                                <td class="px-6 py-4 text-xs text-gray-400">{{ enrollment.student.user.email }}</td>
+                                <td class="px-6 py-4 text-xs text-gray-400">{{ enrollment.enrollment_date|date:"M d, Y" }}</td>
                                 <td class="px-6 py-4">
-                                    <span class="font-bold px-2 py-0.5 rounded text-xs {% if enrollment.grade %}bg-emerald-50 text-emerald-700 border border-emerald-200{% else %}bg-slate-100 text-slate-400{% endif %}">
+                                    <span class="font-bold px-2.5 py-1 rounded-lg text-xs {% if enrollment.grade %}bg-emerald-500/15 text-emerald-400 border border-emerald-500/30{% else %}bg-white/5 text-gray-400 border border-white/10{% endif %}">
                                         {{ enrollment.grade|default:"Pending" }}
                                     </span>
                                 </td>
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="5" class="px-6 py-8 text-center text-slate-400 text-sm">
+                                <td colspan="5" class="px-6 py-8 text-center text-gray-500 text-sm">
                                     No students are currently enrolled in this course.
                                 </td>
                             </tr>
@@ -85,55 +91,61 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Assignments Column -->
             <div class="space-y-6">
-                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
-                        <h2 class="font-bold text-slate-900 text-lg">Assignments</h2>
+                <!-- Assignments List -->
+                <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+                    <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-file-signature text-brand-blue"></i>
+                            <h2 class="font-bold text-white text-base">Course Assignments</h2>
+                        </div>
                     </div>
-                    <div class="divide-y divide-slate-100">
+                    <div class="divide-y divide-white/5">
                         {% for assignment in assignments %}
-                            <div class="p-4 flex items-center justify-between">
+                            <div class="p-4 flex items-center justify-between hover:bg-white/5 transition-colors">
                                 <div>
-                                    <h4 class="font-semibold text-slate-900 text-sm">{{ assignment.title }}</h4>
-                                    <p class="text-xs text-slate-400">Due: {{ assignment.due_date|date:"M d, Y H:i" }} • Max: {{ assignment.max_points }} pts</p>
+                                    <h4 class="font-bold text-white text-sm">{{ assignment.title }}</h4>
+                                    <p class="text-xs text-gray-400 mt-0.5">Due: {{ assignment.due_date|date:"M d, Y H:i" }} • Max: {{ assignment.max_points }} pts</p>
                                 </div>
-                                <span class="text-xs font-semibold px-2 py-0.5 rounded {% if assignment.is_published %}bg-emerald-50 text-emerald-700{% else %}bg-amber-50 text-amber-700{% endif %}">
+                                <span class="text-xs font-bold px-2.5 py-1 rounded-lg border {% if assignment.is_published %}bg-emerald-500/15 text-emerald-400 border-emerald-500/30{% else %}bg-amber-500/15 text-amber-400 border-amber-500/30{% endif %}">
                                     {% if assignment.is_published %}Published{% else %}Draft{% endif %}
                                 </span>
                             </div>
                         {% empty %}
-                            <div class="p-6 text-center text-slate-400 text-sm">No assignments posted yet.</div>
+                            <div class="p-6 text-center text-gray-500 text-sm">No assignments posted for this course.</div>
                         {% endfor %}
                     </div>
                 </div>
 
                 <!-- Create Assignment Form -->
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                    <h3 class="font-bold text-slate-900 text-base mb-4 flex items-center gap-2">
-                        <i class="fas fa-plus-circle text-indigo-600"></i> Create New Assignment
+                <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg">
+                    <h3 class="font-bold text-white text-base mb-4 flex items-center gap-2 pb-3 border-b border-white/10">
+                        <i class="fas fa-plus-circle text-brand-blue"></i> Create New Assignment
                     </h3>
-                    <form method="post" action="{% url 'teacher_create_assignment' course.id %}" class="space-y-3">
+                    <form method="post" action="{% url 'teacher_create_assignment' course.id %}" class="space-y-4">
                         {% csrf_token %}
                         <div>
-                            <input type="text" name="title" required placeholder="Assignment Title" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                            <label class="text-xs font-semibold text-gray-300 block mb-1">Assignment Title</label>
+                            <input type="text" name="title" required placeholder="e.g., Midterm Project Report" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-brand-blue focus:outline-none">
                         </div>
                         <div>
-                            <textarea name="description" rows="2" placeholder="Assignment Instructions..." class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none"></textarea>
+                            <label class="text-xs font-semibold text-gray-300 block mb-1">Instructions / Description</label>
+                            <textarea name="description" rows="2" placeholder="Assignment details..." class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-brand-blue focus:outline-none"></textarea>
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="text-[11px] font-semibold text-slate-500 block mb-1">Due Date & Time</label>
-                                <input type="datetime-local" name="due_date" required class="w-full text-xs p-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                                <label class="text-xs font-semibold text-gray-300 block mb-1">Due Date & Time</label>
+                                <input type="datetime-local" name="due_date" required class="w-full text-xs p-2.5 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-brand-blue focus:outline-none">
                             </div>
                             <div>
-                                <label class="text-[11px] font-semibold text-slate-500 block mb-1">Max Points</label>
-                                <input type="number" name="max_points" value="100" class="w-full text-xs p-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                                <label class="text-xs font-semibold text-gray-300 block mb-1">Max Points</label>
+                                <input type="number" name="max_points" value="100" class="w-full text-xs p-2.5 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-brand-blue focus:outline-none font-bold">
                             </div>
                         </div>
                         <div class="flex items-center justify-between pt-2">
-                            <label class="flex items-center gap-2 text-xs text-slate-600 font-medium">
-                                <input type="checkbox" name="is_published" checked class="text-indigo-600 rounded"> Publish immediately
+                            <label class="flex items-center gap-2 text-xs text-gray-300 font-medium cursor-pointer">
+                                <input type="checkbox" name="is_published" checked class="rounded text-brand-blue focus:ring-brand-blue"> Publish immediately to students
                             </label>
-                            <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-colors">
+                            <button type="submit" class="px-4 py-2.5 bg-brand-blue hover:bg-blue-600 text-white text-xs font-bold rounded-xl shadow-md transition-all">
                                 Create Assignment
                             </button>
                         </div>
@@ -143,38 +155,46 @@
 
             <!-- Exams Column -->
             <div class="space-y-6">
-                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
-                        <h2 class="font-bold text-slate-900 text-lg">Exams</h2>
+                <!-- Exams List -->
+                <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+                    <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-file-alt text-emerald-400"></i>
+                            <h2 class="font-bold text-white text-base">Course Exams</h2>
+                        </div>
                     </div>
-                    <div class="divide-y divide-slate-100">
+                    <div class="divide-y divide-white/5">
                         {% for exam in exams %}
-                            <div class="p-4 flex items-center justify-between">
+                            <div class="p-4 flex items-center justify-between hover:bg-white/5 transition-colors">
                                 <div>
-                                    <h4 class="font-semibold text-slate-900 text-sm">{{ exam.title }}</h4>
-                                    <p class="text-xs text-slate-400">Date: {{ exam.exam_date|date:"M d, Y H:i" }} • {{ exam.duration_minutes }} mins</p>
+                                    <h4 class="font-bold text-white text-sm">{{ exam.title }}</h4>
+                                    <p class="text-xs text-gray-400 mt-0.5">Date: {{ exam.exam_date|date:"M d, Y H:i" }} • {{ exam.duration_minutes }} mins</p>
                                 </div>
-                                <span class="text-xs font-semibold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 uppercase">{{ exam.exam_type }}</span>
+                                <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 uppercase">
+                                    {{ exam.exam_type }}
+                                </span>
                             </div>
                         {% empty %}
-                            <div class="p-6 text-center text-slate-400 text-sm">No exams scheduled yet.</div>
+                            <div class="p-6 text-center text-gray-500 text-sm">No exams scheduled for this course.</div>
                         {% endfor %}
                     </div>
                 </div>
 
                 <!-- Schedule Exam Form -->
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                    <h3 class="font-bold text-slate-900 text-base mb-4 flex items-center gap-2">
-                        <i class="fas fa-calendar-plus text-indigo-600"></i> Schedule New Exam
+                <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg">
+                    <h3 class="font-bold text-white text-base mb-4 flex items-center gap-2 pb-3 border-b border-white/10">
+                        <i class="fas fa-calendar-plus text-emerald-400"></i> Schedule New Exam
                     </h3>
-                    <form method="post" action="{% url 'teacher_create_exam' course.id %}" class="space-y-3">
+                    <form method="post" action="{% url 'teacher_create_exam' course.id %}" class="space-y-4">
                         {% csrf_token %}
                         <div class="grid grid-cols-3 gap-3">
                             <div class="col-span-2">
-                                <input type="text" name="title" required placeholder="Exam Title" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                                <label class="text-xs font-semibold text-gray-300 block mb-1">Exam Title</label>
+                                <input type="text" name="title" required placeholder="e.g., Final Comprehensive Exam" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-brand-blue focus:outline-none">
                             </div>
                             <div>
-                                <select name="exam_type" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                                <label class="text-xs font-semibold text-gray-300 block mb-1">Type</label>
+                                <select name="exam_type" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-brand-blue focus:outline-none">
                                     <option value="midterm">Midterm</option>
                                     <option value="final">Final</option>
                                     <option value="quiz">Quiz</option>
@@ -183,22 +203,23 @@
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="text-[11px] font-semibold text-slate-500 block mb-1">Exam Date & Time</label>
-                                <input type="datetime-local" name="exam_date" required class="w-full text-xs p-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                                <label class="text-xs font-semibold text-gray-300 block mb-1">Exam Date & Time</label>
+                                <input type="datetime-local" name="exam_date" required class="w-full text-xs p-2.5 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-brand-blue focus:outline-none">
                             </div>
                             <div>
-                                <label class="text-[11px] font-semibold text-slate-500 block mb-1">Duration (Mins)</label>
-                                <input type="number" name="duration_minutes" value="120" class="w-full text-xs p-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                                <label class="text-xs font-semibold text-gray-300 block mb-1">Duration (Minutes)</label>
+                                <input type="number" name="duration_minutes" value="120" class="w-full text-xs p-2.5 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-brand-blue focus:outline-none font-bold">
                             </div>
                         </div>
                         <div>
-                            <input type="text" name="location" placeholder="Location (Hall / Hall B)" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                            <label class="text-xs font-semibold text-gray-300 block mb-1">Location / Venue</label>
+                            <input type="text" name="location" placeholder="e.g., Main Hall B" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-brand-blue focus:outline-none">
                         </div>
                         <div class="flex items-center justify-between pt-2">
-                            <label class="flex items-center gap-2 text-xs text-slate-600 font-medium">
-                                <input type="checkbox" name="is_published" checked class="text-indigo-600 rounded"> Publish to students
+                            <label class="flex items-center gap-2 text-xs text-gray-300 font-medium cursor-pointer">
+                                <input type="checkbox" name="is_published" checked class="rounded text-brand-blue focus:ring-brand-blue"> Publish to student schedule
                             </label>
-                            <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-colors">
+                            <button type="submit" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md transition-all">
                                 Schedule Exam
                             </button>
                         </div>

@@ -4,6 +4,8 @@ from . import views
 urlpatterns = [
     path('', views.dashboard, name='teacher_dashboard'),
     path('courses/', views.courses, name='teacher_courses'),
+    path('gradebook/', views.gradebook_overview, name='teacher_gradebook_overview'),
+    path('attendance/', views.attendance_overview, name='teacher_attendance_overview'),
     path('courses/<int:course_id>/', views.course_detail, name='teacher_course_detail'),
     path('courses/<int:course_id>/gradebook/', views.gradebook, name='teacher_gradebook'),
     path('courses/<int:course_id>/attendance/', views.attendance_management, name='teacher_attendance'),

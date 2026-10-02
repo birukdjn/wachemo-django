@@ -128,6 +128,42 @@ def course_detail(request, course_id):
     return render(request, 'teacher/course_detail.html', context)
 
 @teacher_required
+def gradebook_overview(request):
+    """
+    Redirects to gradebook for the instructor's first course or courses list.
+    """
+    try:
+        instructor = Instructor.objects.get(user=request.user)
+    except Instructor.DoesNotExist:
+        messages.warning(request, 'Instructor profile not found.')
+        return redirect('teacher_dashboard')
+    
+    first_course = Course.objects.filter(instructor=instructor, is_active=True).first()
+    if first_course:
+        return redirect('teacher_gradebook', course_id=first_course.id)
+    
+    messages.info(request, 'No active courses assigned to view gradebook.')
+    return redirect('teacher_courses')
+
+@teacher_required
+def attendance_overview(request):
+    """
+    Redirects to attendance management for the instructor's first course.
+    """
+    try:
+        instructor = Instructor.objects.get(user=request.user)
+    except Instructor.DoesNotExist:
+        messages.warning(request, 'Instructor profile not found.')
+        return redirect('teacher_dashboard')
+    
+    first_course = Course.objects.filter(instructor=instructor, is_active=True).first()
+    if first_course:
+        return redirect('teacher_attendance', course_id=first_course.id)
+    
+    messages.info(request, 'No active courses assigned to view attendance.')
+    return redirect('teacher_courses')
+
+@teacher_required
 def gradebook(request, course_id):
     """
     Gradebook view for a specific course.
@@ -136,9 +172,11 @@ def gradebook(request, course_id):
         instructor = Instructor.objects.get(user=request.user)
     except Instructor.DoesNotExist:
         messages.warning(request, 'Instructor profile not found.')
-        return redirect('dashboard')
+        return redirect('teacher_dashboard')
     
     course = get_object_or_404(Course, id=course_id, instructor=instructor)
+    all_courses = Course.objects.filter(instructor=instructor, is_active=True)
+
     
     # Get enrolled students
     enrollments = Enrollment.objects.filter(
@@ -162,6 +200,7 @@ def gradebook(request, course_id):
     context = {
         'instructor': instructor,
         'course': course,
+        'all_courses': all_courses,
         'enrollments': enrollments,
         'assignments': assignments,
         'submissions': submissions,
@@ -178,9 +217,10 @@ def attendance_management(request, course_id):
         instructor = Instructor.objects.get(user=request.user)
     except Instructor.DoesNotExist:
         messages.warning(request, 'Instructor profile not found.')
-        return redirect('dashboard')
+        return redirect('teacher_dashboard')
     
     course = get_object_or_404(Course, id=course_id, instructor=instructor)
+    all_courses = Course.objects.filter(instructor=instructor, is_active=True)
     
     # Get enrolled students
     enrollments = Enrollment.objects.filter(
@@ -201,6 +241,7 @@ def attendance_management(request, course_id):
     context = {
         'instructor': instructor,
         'course': course,
+        'all_courses': all_courses,
         'enrollments': enrollments,
         'attendance_records': attendance_records,
         'date_filter': date_filter,
