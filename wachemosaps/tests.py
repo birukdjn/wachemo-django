@@ -1,3 +1,105 @@
-from django.test import TestCase
+from django.test import TestCase, Client
+from django.urls import reverse
+from django.contrib.auth.models import User
+from wachemosaps.models import UserProfile
+from student.models import Department, Instructor, Student, Course, Enrollment, Assignment, AssignmentSubmission, Exam, ExamResult
 
-# Create your tests here.
+class RBACAndSecurityTestCase(TestCase):
+    def setUp(self):
+        # 1. Setup Users & Roles
+        self.admin_user = User.objects.create_superuser(username='admin_test', password='password123', email='admin@test.com')
+        UserProfile.objects.create(user=self.admin_user, role='admin')
+
+        self.teacher1_user = User.objects.create_user(username='teacher1', password='password123', email='t1@test.com')
+        UserProfile.objects.create(user=self.teacher1_user, role='teacher')
+        self.dept = Department.objects.create(name='Computer Science', code='CS')
+        self.instructor1 = Instructor.objects.create(user=self.teacher1_user, employee_id='EMP001', department=self.dept)
+
+        self.teacher2_user = User.objects.create_user(username='teacher2', password='password123', email='t2@test.com')
+        UserProfile.objects.create(user=self.teacher2_user, role='teacher')
+        self.instructor2 = Instructor.objects.create(user=self.teacher2_user, employee_id='EMP002', department=self.dept)
+
+        self.student1_user = User.objects.create_user(username='student1', password='password123', email='s1@test.com')
+        UserProfile.objects.create(user=self.student1_user, role='student')
+        self.student1 = Student.objects.create(user=self.student1_user, student_id='STU001', department=self.dept)
+
+        self.student2_user = User.objects.create_user(username='student2', password='password123', email='s2@test.com')
+        UserProfile.objects.create(user=self.student2_user, role='student')
+        self.student2 = Student.objects.create(user=self.student2_user, student_id='STU002', department=self.dept)
+
+        self.parent1_user = User.objects.create_user(username='parent1', password='password123', email='p1@test.com')
+        UserProfile.objects.create(user=self.parent1_user, role='parent')
+        self.student1.parent = self.parent1_user
+        self.student1.save()
+
+        # 2. Setup Course & Enrollment
+        self.course1 = Course.objects.create(code='CS101', name='Intro to Programming', instructor=self.instructor1, department=self.dept)
+        self.enrollment1 = Enrollment.objects.create(student=self.student1, course=self.course1, semester='Fall 2026', academic_year='2025/2026')
+
+        self.client = Client()
+
+    def test_admin_cannot_edit_student_grade(self):
+        """Verify Admin receives rejection error when attempting to edit student grade directly."""
+        self.client.login(username='admin_test', password='password123')
+        response = self.client.post(reverse('admin_enrollments'), {
+            'action': 'update_grade',
+            'enrollment_id': self.enrollment1.id,
+            'grade': 'A'
+        }, follow=True)
+        
+        self.enrollment1.refresh_from_db()
+        self.assertNotEqual(self.enrollment1.grade, 'A')
+        self.assertContains(response, "Security Policy Violation")
+
+    def test_teacher_can_grade_assigned_course_only(self):
+        """Verify Teacher 1 can grade assigned course CS101, but Teacher 2 cannot grade CS101."""
+        # Teacher 1 grading CS101
+        self.client.login(username='teacher1', password='password123')
+        assignment = Assignment.objects.create(course=self.course1, title='HW1', description='Test', due_date='2026-12-31 23:59:00', max_points=100)
+        submission = AssignmentSubmission.objects.create(assignment=assignment, student=self.student1, submission_text='Code')
+        
+        res = self.client.post(reverse('teacher_grade_submission', args=[submission.id]), {
+            'points_earned': 95,
+            'feedback': 'Great job'
+        })
+        submission.refresh_from_db()
+        self.assertEqual(submission.points_earned, 95)
+
+        # Teacher 2 attempting to grade CS101 submission
+        self.client.logout()
+        self.client.login(username='teacher2', password='password123')
+        res2 = self.client.post(reverse('teacher_grade_submission', args=[submission.id]), {
+            'points_earned': 50,
+            'feedback': 'Hacked'
+        })
+        submission.refresh_from_db()
+        self.assertEqual(submission.points_earned, 95) # Unchanged!
+
+    def test_student_cannot_access_admin_or_teacher_portals(self):
+        """Verify Student cannot access Admin or Teacher portals."""
+        self.client.login(username='student1', password='password123')
+        res_admin = self.client.get(reverse('admin_dashboard'))
+        self.assertEqual(res_admin.status_code, 302) # Redirected
+
+        res_teacher = self.client.get(reverse('teacher_dashboard'))
+        self.assertEqual(res_teacher.status_code, 302) # Redirected
+
+    def test_parent_idor_isolation(self):
+        """Verify Parent 1 can view linked Student 1, but passing arbitrary unlinked Student 2 ID is isolated."""
+        self.client.login(username='parent1', password='password123')
+        res = self.client.get(f"{reverse('parent_dashboard')}?child_id={self.student2.id}")
+        self.assertContains(res, self.student1.student_id) # Falls back to Parent 1's authorized student!
+
+    def test_public_signup_cannot_escalate_to_teacher_or_admin(self):
+        """Verify public signup cannot register teacher or admin role."""
+        res = self.client.post(reverse('signup'), {
+            'firstname': 'Evil',
+            'lastname': 'User',
+            'email': 'evil@test.com',
+            'username': 'eviluser',
+            'password': 'password123',
+            'confirm_password': 'password123',
+            'role': 'teacher'
+        }, follow=True)
+        self.assertContains(res, "Security Notice")
+        self.assertFalse(User.objects.filter(username='eviluser').exists())

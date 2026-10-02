@@ -440,12 +440,7 @@ def admin_enrollments(request):
             return redirect('admin_enrollments')
 
         elif action == 'update_grade':
-            enrollment_id = request.POST.get('enrollment_id')
-            grade = request.POST.get('grade')
-            enrollment = get_object_or_404(Enrollment, id=enrollment_id)
-            enrollment.grade = grade
-            enrollment.save()
-            messages.success(request, f'Grade updated to {grade} for {enrollment.student.student_id}.')
+            messages.error(request, "Security Policy Violation: Administrators are restricted to read-only grade access. Only assigned faculty instructors can award or edit student grades.")
             return redirect('admin_enrollments')
 
     enrollments = Enrollment.objects.select_related('student__user', 'course').order_by('-enrollment_date')
@@ -488,16 +483,7 @@ def admin_assignments(request):
             return redirect('admin_assignments')
 
         elif action == 'grade_submission':
-            submission_id = request.POST.get('submission_id')
-            points_earned = request.POST.get('points_earned')
-            feedback = request.POST.get('feedback', '').strip()
-
-            sub = get_object_or_404(AssignmentSubmission, id=submission_id)
-            sub.points_earned = int(points_earned) if points_earned else None
-            sub.feedback = feedback
-            sub.is_graded = True
-            sub.save()
-            messages.success(request, f'Graded submission for {sub.student.student_id}.')
+            messages.error(request, "Security Policy Violation: Administrators are restricted to read-only submission access. Only assigned faculty instructors can grade student submissions.")
             return redirect('admin_assignments')
 
     assignments = Assignment.objects.select_related('course').order_by('-created_at')
@@ -577,26 +563,7 @@ def admin_exams(request):
             return redirect('admin_exams')
 
         elif action == 'add_result':
-            exam_id = request.POST.get('exam_id')
-            student_id = request.POST.get('student_id')
-            points_earned = request.POST.get('points_earned')
-            grade = request.POST.get('grade', '').strip().upper()
-            feedback = request.POST.get('feedback', '').strip()
-
-            exam = get_object_or_404(Exam, id=exam_id)
-            student = get_object_or_404(Student, id=student_id)
-
-            ExamResult.objects.update_or_create(
-                exam=exam,
-                student=student,
-                defaults={
-                    'points_earned': int(points_earned),
-                    'grade': grade,
-                    'feedback': feedback,
-                    'is_published': True
-                }
-            )
-            messages.success(request, f'Exam result recorded for {student.student_id}.')
+            messages.error(request, "Security Policy Violation: Administrators are restricted to read-only exam scorecard access. Only assigned faculty instructors can enter exam marks.")
             return redirect('admin_exams')
 
     exams = Exam.objects.select_related('course').order_by('-exam_date')
@@ -947,6 +914,8 @@ def _get_parent_student(request):
     selected_child_id = request.GET.get('child_id')
     if selected_child_id:
         selected_child = children.filter(id=selected_child_id).first()
+        if not selected_child:
+            selected_child = children.first()
     else:
         selected_child = children.first()
     return children, selected_child
