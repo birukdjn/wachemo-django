@@ -889,30 +889,58 @@ def admin_announcements(request):
 @admin_required
 def admin_messages(request):
     """
-    Manage system messaging and support communication.
+    Manage system messaging, contact inquiries, and newsletter subscribers.
     """
     if request.method == 'POST':
-        recipient_id = request.POST.get('recipient_id')
-        subject = request.POST.get('subject', '').strip()
-        body = request.POST.get('body', '').strip()
-
-        if recipient_id and subject and body:
-            recipient = get_object_or_404(User, id=recipient_id)
-            Message.objects.create(
-                sender=request.user,
-                recipient=recipient,
-                subject=subject,
-                body=body
-            )
-            messages.success(request, f'Message sent to {recipient.username}.')
+        action = request.POST.get('action')
+        
+        if action == 'delete_contact_msg':
+            msg_id = request.POST.get('contact_msg_id')
+            ContactMessage.objects.filter(id=msg_id).delete()
+            messages.success(request, 'Contact message deleted.')
             return redirect('admin_messages')
+
+        elif action == 'delete_subscriber':
+            sub_id = request.POST.get('subscriber_id')
+            NewsletterSubscriber.objects.filter(id=sub_id).delete()
+            messages.success(request, 'Newsletter subscriber removed.')
+            return redirect('admin_messages')
+
+        elif action == 'toggle_read_contact_msg':
+            msg_id = request.POST.get('contact_msg_id')
+            contact_msg = ContactMessage.objects.filter(id=msg_id).first()
+            if contact_msg:
+                contact_msg.is_read = not contact_msg.is_read
+                contact_msg.save()
+                messages.success(request, 'Message status updated.')
+            return redirect('admin_messages')
+
+        else:
+            recipient_id = request.POST.get('recipient_id')
+            subject = request.POST.get('subject', '').strip()
+            body = request.POST.get('body', '').strip()
+
+            if recipient_id and subject and body:
+                recipient = get_object_or_404(User, id=recipient_id)
+                Message.objects.create(
+                    sender=request.user,
+                    recipient=recipient,
+                    subject=subject,
+                    body=body
+                )
+                messages.success(request, f'Message sent to {recipient.username}.')
+                return redirect('admin_messages')
 
     user_messages = Message.objects.select_related('sender', 'recipient').order_by('-sent_at')[:30]
     users = User.objects.exclude(id=request.user.id).order_by('username')
+    contact_inquiries = ContactMessage.objects.all().order_by('-created_at')
+    newsletter_subscribers = NewsletterSubscriber.objects.all().order_by('-created_at')
 
     context = {
         'messages_list': user_messages,
         'users': users,
+        'contact_inquiries': contact_inquiries,
+        'newsletter_subscribers': newsletter_subscribers,
     }
     return render(request, 'admin_portal/messages.html', context)
 

@@ -1,11 +1,26 @@
 from django.contrib import admin
-from .models import News, Gallery ,Event,  UserProfile
+from .models import News, Gallery, Event, UserProfile, NewsletterSubscriber, ContactMessage
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
 
 # Register your models here.
- 
+
+@admin.register(NewsletterSubscriber)
+class NewsletterSubscriberAdmin(admin.ModelAdmin):
+    list_display = ('email', 'created_at', 'is_active')
+    search_fields = ('email',)
+    list_filter = ('is_active', 'created_at')
+    ordering = ('-created_at',)
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'subject', 'created_at', 'is_read')
+    search_fields = ('name', 'email', 'subject', 'message')
+    list_filter = ('is_read', 'created_at')
+    ordering = ('-created_at',)
+
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):

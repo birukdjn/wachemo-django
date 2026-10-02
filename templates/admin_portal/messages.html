@@ -25,9 +25,9 @@
         <!-- Header -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-amber-500/15 via-orange-600/10 to-transparent p-6 rounded-2xl border border-amber-500/20">
             <div>
-                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wide">System Communications</span>
-                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">Direct System Messages</h1>
-                <p class="text-gray-400 text-sm mt-1">Audit administrative communications and send direct messages to users.</p>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wide">Communications & Inquiries</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">Inquiries, Subscribers & Messages</h1>
+                <p class="text-gray-400 text-sm mt-1">Manage public contact submissions, newsletter subscriber list, and internal messages.</p>
             </div>
             <button onclick="document.getElementById('sendMsgModal').classList.remove('hidden')" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-navy-950 font-black text-xs rounded-xl transition-all shadow-lg flex items-center gap-2">
                 <i class="fas fa-paper-plane"></i>
@@ -35,12 +35,134 @@
             </button>
         </div>
 
-        <!-- Messages Audit Feed -->
-        <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+        <!-- Navigation Tabs -->
+        <div class="flex flex-wrap bg-navy-800 p-1.5 rounded-2xl border border-white/10 mb-6 gap-2">
+            <button type="button" onclick="switchAdminMsgTab('contact')" id="tabContactBtn" class="flex-1 min-w-[150px] py-2.5 px-4 text-xs font-bold rounded-xl bg-amber-500 text-navy-950 transition-all flex items-center justify-center gap-2">
+                <i class="fas fa-headset"></i> Contact Inquiries
+                <span class="px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-navy-950 text-amber-300">{{ contact_inquiries.count }}</span>
+            </button>
+            <button type="button" onclick="switchAdminMsgTab('subscribers')" id="tabSubBtn" class="flex-1 min-w-[150px] py-2.5 px-4 text-xs font-bold rounded-xl text-gray-400 hover:text-white transition-all flex items-center justify-center gap-2">
+                <i class="fas fa-paper-plane"></i> Newsletter Subscribers
+                <span class="px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-white/10 text-gray-300">{{ newsletter_subscribers.count }}</span>
+            </button>
+            <button type="button" onclick="switchAdminMsgTab('internal')" id="tabInternalBtn" class="flex-1 min-w-[150px] py-2.5 px-4 text-xs font-bold rounded-xl text-gray-400 hover:text-white transition-all flex items-center justify-center gap-2">
+                <i class="fas fa-envelope"></i> Internal Messages
+                <span class="px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-white/10 text-gray-300">{{ messages_list.count }}</span>
+            </button>
+        </div>
+
+        <!-- Section 1: Contact Inquiries -->
+        <div id="sectionContactInquiries" class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-headset text-amber-400"></i>
+                    <h2 class="font-bold text-white text-base">Public Contact Form Submissions</h2>
+                </div>
+                <span class="text-xs text-gray-400">Total: {{ contact_inquiries.count }}</span>
+            </div>
+            <div class="divide-y divide-white/5">
+                {% for inquiry in contact_inquiries %}
+                    <div class="p-6 hover:bg-white/5 transition-colors {% if not inquiry.is_read %}bg-amber-500/5 border-l-4 border-l-amber-500{% endif %}">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2">
+                            <div>
+                                <span class="text-xs font-bold text-white text-base">{{ inquiry.name }}</span>
+                                <span class="text-xs text-amber-400 ml-2">&lt;{{ inquiry.email }}&gt;</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-[11px] font-mono text-gray-400">{{ inquiry.created_at|date:"M d, Y H:i" }}</span>
+                                <form method="post" class="inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="toggle_read_contact_msg">
+                                    <input type="hidden" name="contact_msg_id" value="{{ inquiry.id }}">
+                                    <button type="submit" class="text-xs font-bold px-2.5 py-1 rounded-lg border {% if inquiry.is_read %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% else %}bg-amber-500/20 text-amber-300 border-amber-500/30{% endif %}">
+                                        {% if inquiry.is_read %}<i class="fas fa-check"></i> Read{% else %}<i class="fas fa-envelope"></i> Unread{% endif %}
+                                    </button>
+                                </form>
+                                <form method="post" class="inline" onsubmit="return confirm('Delete this contact message?')">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete_contact_msg">
+                                    <input type="hidden" name="contact_msg_id" value="{{ inquiry.id }}">
+                                    <button type="submit" class="text-red-400 hover:text-red-300 text-xs p-1">
+                                        <i class="fas fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <h4 class="text-xs font-bold text-gray-200 mb-1">Subject: {{ inquiry.subject|default:"General Inquiry" }}</h4>
+                        <p class="text-xs text-gray-300 leading-relaxed bg-navy-900/60 p-3 rounded-xl border border-white/5">{{ inquiry.message }}</p>
+                    </div>
+                {% empty %}
+                    <div class="p-12 text-center text-gray-400 text-sm">
+                        <i class="fas fa-inbox text-3xl text-gray-600 mb-2 block"></i>
+                        No contact messages received yet.
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Section 2: Newsletter Subscribers -->
+        <div id="sectionSubscribers" class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden hidden">
+            <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-users text-amber-400"></i>
+                    <h2 class="font-bold text-white text-base">Registered Newsletter Subscribers</h2>
+                </div>
+                <span class="text-xs text-gray-400">Total: {{ newsletter_subscribers.count }}</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs text-gray-300">
+                    <thead class="bg-navy-900 text-gray-400 uppercase font-bold border-b border-white/10">
+                        <tr>
+                            <th class="p-4">#</th>
+                            <th class="p-4">Subscriber Email</th>
+                            <th class="p-4">Subscribed Date</th>
+                            <th class="p-4">Status</th>
+                            <th class="p-4 text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        {% for sub in newsletter_subscribers %}
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 text-gray-500 font-mono">{{ forloop.counter }}</td>
+                                <td class="p-4 font-bold text-white">{{ sub.email }}</td>
+                                <td class="p-4 text-gray-400 font-mono">{{ sub.created_at|date:"M d, Y H:i" }}</td>
+                                <td class="p-4">
+                                    {% if sub.is_active %}
+                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Active</span>
+                                    {% else %}
+                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-gray-500/10 text-gray-400 border border-gray-500/20">Unsubscribed</span>
+                                    {% endif %}
+                                </td>
+                                <td class="p-4 text-right">
+                                    <form method="post" class="inline" onsubmit="return confirm('Remove subscriber {{ sub.email }}?')">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="delete_subscriber">
+                                        <input type="hidden" name="subscriber_id" value="{{ sub.id }}">
+                                        <button type="submit" class="text-red-400 hover:text-red-300 font-semibold text-xs">
+                                            <i class="fas fa-user-minus"></i> Remove
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5" class="p-12 text-center text-gray-400">
+                                    <i class="fas fa-paper-plane text-3xl text-gray-600 mb-2 block"></i>
+                                    No newsletter subscribers registered yet.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 3: Internal System Messages -->
+        <div id="sectionInternalMessages" class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden hidden">
             <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <i class="fas fa-envelope text-amber-400"></i>
-                    <h2 class="font-bold text-white text-base">Recent System Messages</h2>
+                    <h2 class="font-bold text-white text-base">Internal Direct Messages</h2>
                 </div>
             </div>
             <div class="divide-y divide-white/5">
@@ -76,6 +198,7 @@
         </div>
         <form method="post" class="space-y-4">
             {% csrf_token %}
+            <input type="hidden" name="action" value="send_internal">
             <div>
                 <label class="block text-xs font-semibold text-gray-300 mb-1">Select Recipient</label>
                 <select name="recipient_id" required class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
@@ -100,4 +223,35 @@
         </form>
     </div>
 </div>
+
+<script>
+function switchAdminMsgTab(tab) {
+    const secContact = document.getElementById('sectionContactInquiries');
+    const secSub = document.getElementById('sectionSubscribers');
+    const secInternal = document.getElementById('sectionInternalMessages');
+
+    const btnContact = document.getElementById('tabContactBtn');
+    const btnSub = document.getElementById('tabSubBtn');
+    const btnInternal = document.getElementById('tabInternalBtn');
+
+    secContact.classList.add('hidden');
+    secSub.classList.add('hidden');
+    secInternal.classList.add('hidden');
+
+    btnContact.className = "flex-1 min-w-[150px] py-2.5 px-4 text-xs font-bold rounded-xl text-gray-400 hover:text-white transition-all flex items-center justify-center gap-2";
+    btnSub.className = "flex-1 min-w-[150px] py-2.5 px-4 text-xs font-bold rounded-xl text-gray-400 hover:text-white transition-all flex items-center justify-center gap-2";
+    btnInternal.className = "flex-1 min-w-[150px] py-2.5 px-4 text-xs font-bold rounded-xl text-gray-400 hover:text-white transition-all flex items-center justify-center gap-2";
+
+    if (tab === 'contact') {
+        secContact.classList.remove('hidden');
+        btnContact.className = "flex-1 min-w-[150px] py-2.5 px-4 text-xs font-bold rounded-xl bg-amber-500 text-navy-950 transition-all flex items-center justify-center gap-2";
+    } else if (tab === 'subscribers') {
+        secSub.classList.remove('hidden');
+        btnSub.className = "flex-1 min-w-[150px] py-2.5 px-4 text-xs font-bold rounded-xl bg-amber-500 text-navy-950 transition-all flex items-center justify-center gap-2";
+    } else {
+        secInternal.classList.remove('hidden');
+        btnInternal.className = "flex-1 min-w-[150px] py-2.5 px-4 text-xs font-bold rounded-xl bg-amber-500 text-navy-950 transition-all flex items-center justify-center gap-2";
+    }
+}
+</script>
 {% endblock %}
