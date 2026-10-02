@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Gallery Media | Admin Portal{% endblock %}
+
+{% block content %}
+<div class="flex h-[calc(100vh-100px)] overflow-hidden bg-navy-900 portal-main-bg">
+    {% include 'admin_portal/sidebar.html' %}
+
+    <div class="flex-1 h-full overflow-y-auto p-6 md:p-8">
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-xl border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-500/10 text-red-400 border-red-500/20{% elif message.tags == 'warning' %}bg-amber-500/10 text-amber-400 border-amber-500/20{% else %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% endif %}">
+                        <div class="flex items-center gap-2">
+                            <i class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-amber-500/15 via-orange-600/10 to-transparent p-6 rounded-2xl border border-amber-500/20">
+            <div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wide">Campus Media</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">Photo Gallery & Media Vault</h1>
+                <p class="text-gray-400 text-sm mt-1">Manage campus showcases, laboratory imagery, and event photos.</p>
+            </div>
+            <button onclick="document.getElementById('addGalleryModal').classList.remove('hidden')" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-navy-950 font-black text-xs rounded-xl transition-all shadow-lg flex items-center gap-2">
+                <i class="fas fa-plus"></i>
+                <span>Add Gallery Image</span>
+            </button>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for img in gallery_items %}
+                <div class="bg-navy-800 rounded-2xl border border-white/10 overflow-hidden flex flex-col justify-between group hover:border-amber-500/30 transition-all">
+                    <div class="h-48 bg-navy-950 relative overflow-hidden">
+                        <img src="{{ img.image }}" alt="{{ img.description }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-4 flex items-center justify-between bg-white/5 border-t border-white/10">
+                        <p class="text-xs text-gray-300 truncate max-w-[150px]">{{ img.description|default:"Campus Photo" }}</p>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="gallery_id" value="{{ img.id }}">
+                            <button type="submit" onclick="return confirm('Remove image?')" class="text-red-400 hover:text-red-300 text-xs">
+                                <i class="fas fa-trash-can"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-span-full bg-navy-800 p-12 text-center rounded-2xl border border-white/10">
+                    <i class="fas fa-images text-4xl text-gray-600 mb-3"></i>
+                    <p class="text-gray-400 text-sm font-semibold">No media uploaded to gallery.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Add Gallery -->
+<div id="addGalleryModal" class="fixed inset-0 bg-navy-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-navy-800 border border-white/10 rounded-2xl p-6 md:p-8 max-w-md w-full shadow-2xl">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-bold text-white">Add Gallery Media</h3>
+            <button onclick="document.getElementById('addGalleryModal').classList.add('hidden')" class="text-gray-400 hover:text-white">&times;</button>
+        </div>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="create">
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Image URL</label>
+                <input type="url" name="image_url" required placeholder="https://images.unsplash.com/..." class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Caption / Description</label>
+                <input type="text" name="description" placeholder="e.g. Modern Computer Science Laboratory" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button type="button" onclick="document.getElementById('addGalleryModal').classList.add('hidden')" class="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-bold rounded-xl">Cancel</button>
+                <button type="submit" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-navy-950 text-xs font-black rounded-xl">Add Media</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

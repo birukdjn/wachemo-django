@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}News Management | Admin Portal{% endblock %}
+
+{% block content %}
+<div class="flex h-[calc(100vh-100px)] overflow-hidden bg-navy-900 portal-main-bg">
+    {% include 'admin_portal/sidebar.html' %}
+
+    <div class="flex-1 h-full overflow-y-auto p-6 md:p-8">
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-xl border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-500/10 text-red-400 border-red-500/20{% elif message.tags == 'warning' %}bg-amber-500/10 text-amber-400 border-amber-500/20{% else %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% endif %}">
+                        <div class="flex items-center gap-2">
+                            <i class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-amber-500/15 via-orange-600/10 to-transparent p-6 rounded-2xl border border-amber-500/20">
+            <div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wide">Campus Media</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">School News & Press Releases</h1>
+                <p class="text-gray-400 text-sm mt-1">Publish news articles displayed on the homepage and student portal.</p>
+            </div>
+            <button onclick="document.getElementById('addNewsModal').classList.remove('hidden')" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-navy-950 font-black text-xs rounded-xl transition-all shadow-lg flex items-center gap-2">
+                <i class="fas fa-plus"></i>
+                <span>Publish News Article</span>
+            </button>
+        </div>
+
+        <!-- News Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for item in news_items %}
+                <div class="bg-navy-800 rounded-2xl border border-white/10 overflow-hidden flex flex-col justify-between hover:border-amber-500/30 transition-all">
+                    <div>
+                        {% if item.image %}
+                            <div class="h-44 overflow-hidden bg-navy-950">
+                                <img src="{{ item.image }}" alt="{{ item.title }}" class="w-full h-full object-cover">
+                            </div>
+                        {% endif %}
+                        <div class="p-6">
+                            <div class="flex items-center justify-between text-[11px] text-amber-400 font-mono font-bold mb-2">
+                                <span><i class="fas fa-calendar-day mr-1"></i> {{ item.day }} {{ item.month }}</span>
+                                <span>By {{ item.reporter }}</span>
+                            </div>
+                            <h3 class="text-white font-bold text-base mb-2 line-clamp-2">{{ item.title }}</h3>
+                            <p class="text-gray-400 text-xs line-clamp-3 mb-4">{{ item.content }}</p>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4 bg-white/5 border-t border-white/10 flex justify-end">
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="news_id" value="{{ item.id }}">
+                            <button type="submit" onclick="return confirm('Delete this article?')" class="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 text-xs font-bold rounded-lg transition-all">
+                                <i class="fas fa-trash-can mr-1"></i> Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-span-full bg-navy-800 p-12 text-center rounded-2xl border border-white/10">
+                    <i class="fas fa-newspaper text-4xl text-gray-600 mb-3"></i>
+                    <p class="text-gray-400 text-sm font-semibold">No news articles published.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Add News -->
+<div id="addNewsModal" class="fixed inset-0 bg-navy-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-navy-800 border border-white/10 rounded-2xl p-6 md:p-8 max-w-md w-full shadow-2xl">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-bold text-white">Publish News Article</h3>
+            <button onclick="document.getElementById('addNewsModal').classList.add('hidden')" class="text-gray-400 hover:text-white">&times;</button>
+        </div>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="create">
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Headline Title</label>
+                <input type="text" name="title" required placeholder="e.g. Wachemo University Launches Innovation Center" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Article Content</label>
+                <textarea name="content" rows="4" required placeholder="Article body text..." class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none"></textarea>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Reporter Name</label>
+                    <input type="text" name="reporter" required placeholder="Office of Communications" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Image URL (Optional)</label>
+                    <input type="url" name="image" placeholder="https://..." class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Day (1-31)</label>
+                    <input type="number" name="day" min="1" max="31" value="15" required class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Month</label>
+                    <select name="month" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+                        <option value="Jan">January</option>
+                        <option value="Feb">February</option>
+                        <option value="Mar">March</option>
+                        <option value="Apr">April</option>
+                        <option value="May">May</option>
+                        <option value="Jun">June</option>
+                        <option value="Jul">July</option>
+                        <option value="Aug">August</option>
+                        <option value="Sep">September</option>
+                        <option value="Oct">October</option>
+                        <option value="Nov">November</option>
+                        <option value="Dec">December</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button type="button" onclick="document.getElementById('addNewsModal').classList.add('hidden')" class="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-bold rounded-xl">Cancel</button>
+                <button type="submit" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-navy-950 text-xs font-black rounded-xl">Publish News</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

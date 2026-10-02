@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block title %}Assignments & Submissions | Admin Portal{% endblock %}
+
+{% block content %}
+<div class="flex h-[calc(100vh-100px)] overflow-hidden bg-navy-900 portal-main-bg">
+    {% include 'admin_portal/sidebar.html' %}
+
+    <div class="flex-1 h-full overflow-y-auto p-6 md:p-8">
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-xl border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-500/10 text-red-400 border-red-500/20{% elif message.tags == 'warning' %}bg-amber-500/10 text-amber-400 border-amber-500/20{% else %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% endif %}">
+                        <div class="flex items-center gap-2">
+                            <i class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-amber-500/15 via-orange-600/10 to-transparent p-6 rounded-2xl border border-amber-500/20">
+            <div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wide">Academic Assessment</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">Course Assignments & Submissions</h1>
+                <p class="text-gray-400 text-sm mt-1">Audit assignment deadlines, view student submissions, and manage grades.</p>
+            </div>
+            <button onclick="document.getElementById('createAssignmentModal').classList.remove('hidden')" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-navy-950 font-black text-xs rounded-xl transition-all shadow-lg flex items-center gap-2">
+                <i class="fas fa-plus"></i>
+                <span>Create Assignment</span>
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Assignments List Card -->
+            <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden flex flex-col">
+                <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-tasks text-amber-400"></i>
+                        <h2 class="font-bold text-white text-base">Published Course Assignments</h2>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4 overflow-y-auto max-h-[600px]">
+                    {% for a in assignments %}
+                        <div class="p-4 bg-navy-900/60 border border-white/5 rounded-xl hover:border-amber-500/30 transition-all">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="px-2.5 py-0.5 rounded-lg text-xs font-bold bg-blue-500/15 text-blue-400 border border-blue-500/30 font-mono">{{ a.course.code }}</span>
+                                <span class="text-xs text-gray-400 font-mono"><i class="fas fa-clock text-amber-400 mr-1"></i> Due: {{ a.due_date|date:"M d, Y H:i" }}</span>
+                            </div>
+                            <h3 class="text-white font-bold text-sm mb-1">{{ a.title }}</h3>
+                            <p class="text-gray-400 text-xs line-clamp-2 mb-3">{{ a.description }}</p>
+                            <div class="flex items-center justify-between text-[11px] text-gray-400 pt-2 border-t border-white/5">
+                                <span>Max Points: <strong class="text-white">{{ a.max_points }}</strong></span>
+                                <span class="{% if a.is_published %}text-emerald-400{% else %}text-amber-400{% endif %} font-bold">
+                                    {% if a.is_published %}<i class="fas fa-eye mr-1"></i> Published{% else %}<i class="fas fa-eye-slash mr-1"></i> Draft{% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="text-gray-400 text-xs text-center py-8">No assignments created yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Student Submissions Card -->
+            <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden flex flex-col">
+                <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-file-arrow-up text-amber-400"></i>
+                        <h2 class="font-bold text-white text-base">Recent Student Submissions</h2>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4 overflow-y-auto max-h-[600px]">
+                    {% for sub in submissions %}
+                        <div class="p-4 bg-navy-900/60 border border-white/5 rounded-xl">
+                            <div class="flex items-center justify-between mb-2">
+                                <div>
+                                    <span class="font-bold text-white text-xs block">{{ sub.student.get_full_name|default:sub.student.user.username }}</span>
+                                    <span class="text-[10px] text-amber-300 font-mono">{{ sub.student.student_id }} &bull; {{ sub.assignment.course.code }}</span>
+                                </div>
+                                <span class="text-[10px] font-mono text-gray-400">{{ sub.submitted_at|date:"M d, H:i" }}</span>
+                            </div>
+                            <div class="p-2.5 bg-navy-950/80 rounded-lg text-xs text-gray-300 mb-3 border border-white/5 font-mono break-all">
+                                {{ sub.submission_text|default:"[File Uploaded or Blank Text]" }}
+                            </div>
+                            <form method="post" class="flex items-center gap-2">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="grade_submission">
+                                <input type="hidden" name="submission_id" value="{{ sub.id }}">
+                                <input type="number" name="points_earned" value="{{ sub.points_earned|default:'' }}" placeholder="Points (Max {{ sub.assignment.max_points }})" class="w-32 text-xs p-2 bg-navy-900 border border-white/10 rounded-lg text-white font-mono focus:outline-none">
+                                <input type="text" name="feedback" value="{{ sub.feedback|default:'' }}" placeholder="Optional feedback..." class="flex-1 text-xs p-2 bg-navy-900 border border-white/10 rounded-lg text-white focus:outline-none">
+                                <button type="submit" class="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-navy-950 font-bold text-xs rounded-lg transition-all">Grade</button>
+                            </form>
+                        </div>
+                    {% empty %}
+                        <p class="text-gray-400 text-xs text-center py-8">No student submissions recorded.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Create Assignment -->
+<div id="createAssignmentModal" class="fixed inset-0 bg-navy-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-navy-800 border border-white/10 rounded-2xl p-6 md:p-8 max-w-md w-full shadow-2xl">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-bold text-white">Create New Course Assignment</h3>
+            <button onclick="document.getElementById('createAssignmentModal').classList.add('hidden')" class="text-gray-400 hover:text-white">&times;</button>
+        </div>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="create_assignment">
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Course</label>
+                <select name="course_id" required class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+                    <option value="">-- Select Course --</option>
+                    {% for c in courses %}
+                        <option value="{{ c.id }}">{{ c.code }} - {{ c.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Assignment Title</label>
+                <input type="text" name="title" required placeholder="e.g. Midterm Project Setup" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Description</label>
+                <textarea name="description" rows="3" required placeholder="Instructions for students..." class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none"></textarea>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Due Date</label>
+                    <input type="datetime-local" name="due_date" required class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Max Points</label>
+                    <input type="number" name="max_points" value="100" required class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+                </div>
+            </div>
+            <div class="flex items-center gap-2 pt-1">
+                <input type="checkbox" name="is_published" id="is_published" checked class="accent-amber-500 rounded">
+                <label for="is_published" class="text-xs font-semibold text-gray-300">Publish immediately to students</label>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button type="button" onclick="document.getElementById('createAssignmentModal').classList.add('hidden')" class="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-bold rounded-xl">Cancel</button>
+                <button type="submit" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-navy-950 text-xs font-black rounded-xl">Create Assignment</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

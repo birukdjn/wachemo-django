@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}Events Management | Admin Portal{% endblock %}
+
+{% block content %}
+<div class="flex h-[calc(100vh-100px)] overflow-hidden bg-navy-900 portal-main-bg">
+    {% include 'admin_portal/sidebar.html' %}
+
+    <div class="flex-1 h-full overflow-y-auto p-6 md:p-8">
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-xl border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-500/10 text-red-400 border-red-500/20{% elif message.tags == 'warning' %}bg-amber-500/10 text-amber-400 border-amber-500/20{% else %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% endif %}">
+                        <div class="flex items-center gap-2">
+                            <i class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-amber-500/15 via-orange-600/10 to-transparent p-6 rounded-2xl border border-amber-500/20">
+            <div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wide">Campus Calendar</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">Campus Events & Seminars</h1>
+                <p class="text-gray-400 text-sm mt-1">Schedule public events, graduation ceremonies, and academic symposiums.</p>
+            </div>
+            <button onclick="document.getElementById('addEventModal').classList.remove('hidden')" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-navy-950 font-black text-xs rounded-xl transition-all shadow-lg flex items-center gap-2">
+                <i class="fas fa-plus"></i>
+                <span>Schedule Event</span>
+            </button>
+        </div>
+
+        <!-- Events Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for ev in events %}
+                <div class="bg-navy-800 rounded-2xl border border-white/10 p-6 flex flex-col justify-between hover:border-amber-500/30 transition-all">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex flex-col items-center justify-center text-amber-300 font-bold text-xs">
+                                    <span class="leading-none text-sm">{{ ev.day }}</span>
+                                    <span class="text-[9px] uppercase font-mono">{{ ev.month }}</span>
+                                </div>
+                            </div>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="event_id" value="{{ ev.id }}">
+                                <button type="submit" onclick="return confirm('Delete event?')" class="text-red-400 hover:text-red-300 text-xs p-1">
+                                    <i class="fas fa-trash-can"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <h3 class="text-white font-bold text-base mb-2">{{ ev.title }}</h3>
+                        <p class="text-gray-400 text-xs line-clamp-3 mb-4">{{ ev.description }}</p>
+                    </div>
+                    <div class="pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-gray-400">
+                        <span><i class="fas fa-location-dot text-amber-400 mr-1"></i> {{ ev.location|default:"Main Campus" }}</span>
+                        <span><i class="fas fa-clock text-blue-400 mr-1"></i> {{ ev.duration|default:"All Day" }}</span>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-span-full bg-navy-800 p-12 text-center rounded-2xl border border-white/10">
+                    <i class="fas fa-calendar-xmark text-4xl text-gray-600 mb-3"></i>
+                    <p class="text-gray-400 text-sm font-semibold">No campus events scheduled.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Add Event -->
+<div id="addEventModal" class="fixed inset-0 bg-navy-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-navy-800 border border-white/10 rounded-2xl p-6 md:p-8 max-w-md w-full shadow-2xl">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-bold text-white">Schedule Campus Event</h3>
+            <button onclick="document.getElementById('addEventModal').classList.add('hidden')" class="text-gray-400 hover:text-white">&times;</button>
+        </div>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="create">
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Event Title</label>
+                <input type="text" name="title" required placeholder="e.g. Annual Technology Symposium" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Event Description</label>
+                <textarea name="description" rows="3" required placeholder="Details about speaker, theme..." class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none"></textarea>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Location / Venue</label>
+                    <input type="text" name="location" placeholder="Main Auditorium" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Duration (e.g. 09:00 - 12:00)</label>
+                    <input type="text" name="duration" placeholder="09:00 AM - 12:00 PM" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Day (1-31)</label>
+                    <input type="number" name="day" min="1" max="31" value="20" required class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Month</label>
+                    <select name="month" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-amber-500 focus:outline-none">
+                        <option value="Jan">January</option>
+                        <option value="Feb">February</option>
+                        <option value="Mar">March</option>
+                        <option value="Apr">April</option>
+                        <option value="May">May</option>
+                        <option value="Jun">June</option>
+                        <option value="Jul">July</option>
+                        <option value="Aug">August</option>
+                        <option value="Sep">September</option>
+                        <option value="Oct">October</option>
+                        <option value="Nov">November</option>
+                        <option value="Dec">December</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button type="button" onclick="document.getElementById('addEventModal').classList.add('hidden')" class="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-bold rounded-xl">Cancel</button>
+                <button type="submit" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-navy-950 text-xs font-black rounded-xl">Schedule Event</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
