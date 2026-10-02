@@ -1,76 +1,117 @@
-<nav class="w-full md:w-64 bg-gray-900 text-gray-100 p-3 md:sticky md:top-20 md:max-h-[80vh] md:overflow-y-auto">
-  <ul class="space-y-1" id="sidebarMenu">
-    <li>
-      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'dashboard' %}">
-        <i class="fas fa-house"></i>
-        <span>Dashboard Home</span>
-      </a>
-    </li>
-    <li>
-      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'courses' %}">
-        <i class="fas fa-book"></i>
-        <span>My Courses</span>
-      </a>
-    </li>
-    <li>
-      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'assignments' %}">
-        <i class="fas fa-tasks"></i>
-        <span>Assignments</span>
-      </a>
-    </li>
-    <li>
-      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'exams' %}">
-        <i class="fas fa-clipboard-list"></i>
-        <span>Exams</span>
-      </a>
-    </li>
-    <li>
-      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'grades' %}">
-        <i class="fas fa-chart-line"></i>
-        <span>My Grades</span>
-      </a>
-    </li>
-    <li>
-      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'attendance' %}">
-        <i class="fas fa-calendar-check"></i>
-        <span>Attendance</span>
-      </a>
-    </li>
-    <li>
-      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="#" data-section="timetable">
-        <i class="fas fa-clock"></i>
-        <span>Timetable</span>
-      </a>
-    </li>
-    <li>
-      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="#" data-section="messages">
-        <i class="fas fa-comments"></i>
-        <span>Messages</span>
-      </a>
-    </li>
-    <li>
-      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'library' %}">
-        <i class="fas fa-book-open"></i>
-        <span>Library</span>
-      </a>
-    </li>
-    <li>
-      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="#" data-section="clubs">
-        <i class="fas fa-people-group"></i>
-        <span>Clubs & Activities</span>
-      </a>
-    </li>
-    <li>
-      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'support' %}">
-        <i class="fas fa-life-ring"></i>
-        <span>Support</span>
-      </a>
-    </li>
-    <li>
-      <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800" href="{% url 'settings' %}">
-        <i class="fas fa-gear"></i>
-        <span>Settings</span>
-      </a>
-    </li>
-  </ul>
-</nav>
+{% load static %}
+<!-- Student Portal Sidebar -->
+<aside id="studentSidebar" class="w-64 shrink-0 bg-navy-800 border-r border-white/5 min-h-screen flex flex-col hidden lg:flex">
+    <!-- User Card -->
+    <div class="p-5 border-b border-white/5">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-brand-blue rounded-xl flex items-center justify-center font-black text-white text-sm shadow-lg shadow-blue-600/20">
+                {{ request.user.username|first|upper }}
+            </div>
+            <div class="min-w-0">
+                <p class="font-bold text-white text-sm truncate">{{ request.user.get_full_name|default:request.user.username }}</p>
+                <p class="text-gray-500 text-xs truncate">
+                    {% if student %}{{ student.student_id }}{% else %}Student{% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nav Items -->
+    <nav class="flex-1 p-3 space-y-0.5 overflow-y-auto">
+        <p class="text-gray-600 text-[10px] font-bold uppercase tracking-widest px-3 py-2">Main</p>
+
+        <a href="{% url 'dashboard' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+            {% if request.resolver_match.url_name == 'dashboard' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-gauge w-4 text-center"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="{% url 'courses' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+            {% if request.resolver_match.url_name == 'courses' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-book-open w-4 text-center"></i>
+            <span>My Courses</span>
+        </a>
+
+        <a href="{% url 'assignments' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+            {% if request.resolver_match.url_name == 'assignments' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-file-pen w-4 text-center"></i>
+            <span>Assignments</span>
+        </a>
+
+        <a href="{% url 'exams' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+            {% if request.resolver_match.url_name == 'exams' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-clipboard-list w-4 text-center"></i>
+            <span>Exams</span>
+        </a>
+
+        <a href="{% url 'grades' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+            {% if request.resolver_match.url_name == 'grades' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-chart-line w-4 text-center"></i>
+            <span>My Grades</span>
+        </a>
+
+        <a href="{% url 'attendance' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+            {% if request.resolver_match.url_name == 'attendance' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-calendar-check w-4 text-center"></i>
+            <span>Attendance</span>
+        </a>
+
+        <p class="text-gray-600 text-[10px] font-bold uppercase tracking-widest px-3 py-2 mt-2">Tools</p>
+
+        <a href="{% url 'timetable' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+            {% if request.resolver_match.url_name == 'timetable' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-clock w-4 text-center"></i>
+            <span>Timetable</span>
+        </a>
+
+        <a href="{% url 'inbox' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+            {% if request.resolver_match.url_name == 'inbox' or request.resolver_match.url_name == 'read_message' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-comments w-4 text-center"></i>
+            <span>Messages</span>
+            {% if unread_count %}<span class="ml-auto bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">{{ unread_count }}</span>{% endif %}
+        </a>
+
+        <a href="{% url 'library' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+            {% if request.resolver_match.url_name == 'library' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-book w-4 text-center"></i>
+            <span>Library</span>
+        </a>
+
+        <a href="{% url 'clubs' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+            {% if request.resolver_match.url_name == 'clubs' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-people-group w-4 text-center"></i>
+            <span>Clubs & Activities</span>
+        </a>
+
+        <p class="text-gray-600 text-[10px] font-bold uppercase tracking-widest px-3 py-2 mt-2">Account</p>
+
+        <a href="{% url 'student_profile' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+            {% if request.resolver_match.url_name == 'student_profile' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-user-circle w-4 text-center"></i>
+            <span>My Profile</span>
+        </a>
+
+        <a href="{% url 'settings' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+            {% if request.resolver_match.url_name == 'settings' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-gear w-4 text-center"></i>
+            <span>Settings</span>
+        </a>
+
+        <a href="{% url 'support' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+            {% if request.resolver_match.url_name == 'support' %}bg-brand-blue text-white shadow-lg shadow-blue-600/20{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-life-ring w-4 text-center"></i>
+            <span>Help & Support</span>
+        </a>
+    </nav>
+
+    <!-- Logout -->
+    <div class="p-3 border-t border-white/5">
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all">
+                <i class="fas fa-sign-out-alt w-4 text-center"></i>
+                <span>Logout</span>
+            </button>
+        </form>
+    </div>
+</aside>

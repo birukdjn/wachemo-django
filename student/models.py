@@ -261,3 +261,65 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.title}"
+
+
+class TimetableSchedule(models.Model):
+    DAY_CHOICES = [
+        ('Monday', 'Monday'),
+        ('Tuesday', 'Tuesday'),
+        ('Wednesday', 'Wednesday'),
+        ('Thursday', 'Thursday'),
+        ('Friday', 'Friday'),
+        ('Saturday', 'Saturday'),
+    ]
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='schedules')
+    day_of_week = models.CharField(max_length=15, choices=DAY_CHOICES)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    room = models.CharField(max_length=50, default='Hall A')
+
+    class Meta:
+        ordering = ['start_time']
+
+    def __str__(self):
+        return f"{self.course.code} ({self.day_of_week} {self.start_time}-{self.end_time})"
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
+    subject = models.CharField(max_length=200)
+    body = models.TextField()
+    sent_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-sent_at']
+
+    def __str__(self):
+        return f"From {self.sender.username} to {self.recipient.username}: {self.subject}"
+
+
+class StudentClub(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    category = models.CharField(max_length=50, default='Academic')
+    advisor = models.ForeignKey(Instructor, on_delete=models.SET_NULL, null=True, blank=True)
+    logo_icon = models.CharField(max_length=50, default='fa-users')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class ClubMembership(models.Model):
+    club = models.ForeignKey(StudentClub, on_delete=models.CASCADE, related_name='memberships')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='club_memberships')
+    role = models.CharField(max_length=50, default='Member') # Member, President, Secretary
+    joined_date = models.DateField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['club', 'student']
+
+    def __str__(self):
+        return f"{self.student.student_id} in {self.club.name}"

@@ -162,3 +162,34 @@ class NotificationAdmin(admin.ModelAdmin):
     list_select_related = ('user',)
     ordering = ('-created_at',)
     
+@admin.register(models.TimetableSchedule)
+class TimetableScheduleAdmin(admin.ModelAdmin):
+    list_display = ('course', 'day_of_week', 'start_time', 'end_time', 'room')
+    search_fields = ('course__code', 'course__name', 'room')
+    list_filter = ('day_of_week', 'course__department')
+    list_select_related = ('course',)
+    ordering = ('day_of_week', 'start_time')
+
+@admin.register(models.Message)
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('sender', 'recipient', 'subject', 'sent_at', 'is_read')
+    search_fields = ('sender__username', 'recipient__username', 'subject')
+    list_filter = ('is_read', 'sent_at')
+    list_select_related = ('sender', 'recipient')
+    ordering = ('-sent_at',)
+
+@admin.register(models.StudentClub)
+class StudentClubAdmin(admin.ModelAdmin):
+    list_display = ('name', 'category', 'advisor', 'created_at')
+    search_fields = ('name', 'category', 'description')
+    list_filter = ('category', 'created_at')
+    list_select_related = ('advisor__user',)
+    ordering = ('name',)
+
+@admin.register(models.ClubMembership)
+class ClubMembershipAdmin(admin.ModelAdmin):
+    list_display = ('student', 'club', 'role', 'joined_date')
+    search_fields = ('student__student_id', 'student__user__username', 'club__name')
+    list_filter = ('club', 'role', 'joined_date')
+    list_select_related = ('student__user', 'club')
+    ordering = ('-joined_date',)

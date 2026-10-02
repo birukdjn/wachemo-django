@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import (
     Course, Student, Instructor, Department, Enrollment, Assignment, 
     AssignmentSubmission, Attendance, Exam, ExamResult, Book, 
-    BookBorrowing, Announcement, Notification
+    BookBorrowing, Announcement, Notification,
+    TimetableSchedule, Message, StudentClub, ClubMembership
 )
 from django.contrib.auth.decorators import login_required 
 from django.contrib.auth.models import User
@@ -576,3 +577,158 @@ def borrow_book(request, book_id):
         book.save()
         messages.success(request, f'Successfully borrowed "{book.title}". Return due date is in 14 days.')
     return redirect('library')
+
+@login_required
+def timetable(request):
+    """Display the student's weekly timetable."""
+    try:
+        student = Student.objects.get(user=request.user)
+    except Student.DoesNotExist:
+        student = None
+
+    enrolled_courses = Course.objects.none()
+    schedules_by_day = {}
+
+    if student:
+        enrolled_courses = Course.objects.filter(
+            enrollments__student=student,
+            enrollments__is_active=True
+        )
+        all_schedules = TimetableSchedule.objects.filter(
+            course__in=enrolled_courses
+        ).select_related('course', 'course__instructor')
+
+        days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+        for day in days:
+            schedules_by_day[day] = list(all_schedules.filter(day_of_week=day))
+
+    context = {
+        'student': student,
+        'enrolled_courses': enrolled_courses,
+        'schedules_by_day': schedules_by_day,
+    }
+    return render(request, 'student/timetable.html', context)
+
+
+@login_required
+def inbox(request):
+    """Display the user's message inbox."""
+    received = Message.objects.filter(recipient=request.user).select_related('sender')
+    sent = Message.objects.filter(sender=request.user).select_related('recipient')
+    unread_count = received.filter(is_read=False).count()
+    all_users = User.objects.exclude(id=request.user.id).order_by('username')
+
+    context = {
+        'received': received,
+        'sent': sent,
+        'unread_count': unread_count,
+        'all_users': all_users,
+        'open_message': None,
+    }
+    return render(request, 'student/inbox.html', context)
+
+
+@login_required
+def send_message_view(request):
+    """Handle sending a new message."""
+    if request.method == 'POST':
+        recipient_id = request.POST.get('recipient_id')
+        subject = request.POST.get('subject', '').strip()
+        body = request.POST.get('body', '').strip()
+
+        if not recipient_id or not subject or not body:
+            messages.error(request, 'Please fill in all message fields.')
+            return redirect('inbox')
+
+        recipient = get_object_or_404(User, id=recipient_id)
+        Message.objects.create(
+            sender=request.user,
+            recipient=recipient,
+            subject=subject,
+            body=body,
+        )
+        Notification.objects.create(
+            user=recipient,
+            title=f"New message from {request.user.username}",
+            message=f"Subject: {subject}",
+            notification_type='info',
+        )
+        messages.success(request, f'Message sent to {recipient.username}!')
+    return redirect('inbox')
+
+
+@login_required
+def read_message(request, message_id):
+    """Mark message as read and view it."""
+    msg = get_object_or_404(Message, id=message_id, recipient=request.user)
+    msg.is_read = True
+    msg.save()
+    received = Message.objects.filter(recipient=request.user).select_related('sender')
+    sent = Message.objects.filter(sender=request.user).select_related('recipient')
+    all_users = User.objects.exclude(id=request.user.id).order_by('username')
+    unread_count = received.filter(is_read=False).count()
+
+    context = {
+        'received': received,
+        'sent': sent,
+        'open_message': msg,
+        'unread_count': unread_count,
+        'all_users': all_users,
+    }
+    return render(request, 'student/inbox.html', context)
+
+
+@login_required
+def clubs(request):
+    """Display student clubs and activities."""
+    try:
+        student = Student.objects.get(user=request.user)
+    except Student.DoesNotExist:
+        student = None
+
+    all_clubs = StudentClub.objects.annotate(member_count=Count('memberships')).select_related('advisor__user')
+    my_membership_ids = []
+    if student:
+        my_membership_ids = list(
+            ClubMembership.objects.filter(student=student).values_list('club_id', flat=True)
+        )
+
+    context = {
+        'student': student,
+        'all_clubs': all_clubs,
+        'my_membership_ids': my_membership_ids,
+    }
+    return render(request, 'student/clubs.html', context)
+
+
+@login_required
+def join_club(request, club_id):
+    """Join or leave a club."""
+    if request.method == 'POST':
+        try:
+            student = Student.objects.get(user=request.user)
+        except Student.DoesNotExist:
+            messages.error(request, 'Student profile not found.')
+            return redirect('clubs')
+
+        club = get_object_or_404(StudentClub, id=club_id)
+        membership, created = ClubMembership.objects.get_or_create(
+            club=club, student=student
+        )
+        if created:
+            messages.success(request, f'You joined "{club.name}"!')
+        else:
+            membership.delete()
+            messages.info(request, f'You left "{club.name}".')
+    return redirect('clubs')
+
+
+@login_required
+def mark_notification_read(request, notif_id):
+    """Mark a notification as read."""
+    notif = get_object_or_404(Notification, id=notif_id, user=request.user)
+    notif.is_read = True
+    notif.save()
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'status': 'ok'})
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))

@@ -2,8 +2,6 @@ from django.urls import path
 from . import views
 
 
-
-
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
     path('courses/', views.courses, name='courses'),
@@ -18,6 +16,12 @@ urlpatterns = [
     path('library/', views.library, name='library'),
     path('library/borrow/<int:book_id>/', views.borrow_book, name='borrow_book'),
     path('profile/', views.profile, name='student_profile'),
+    # New Features
+    path('timetable/', views.timetable, name='timetable'),
+    path('inbox/', views.inbox, name='inbox'),
+    path('inbox/send/', views.send_message_view, name='send_message'),
+    path('inbox/read/<int:message_id>/', views.read_message, name='read_message'),
+    path('clubs/', views.clubs, name='clubs'),
+    path('clubs/join/<int:club_id>/', views.join_club, name='join_club'),
+    path('notifications/read/<int:notif_id>/', views.mark_notification_read, name='mark_notification_read'),
 ]
-
-

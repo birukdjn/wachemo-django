@@ -1,27 +1,109 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Student Portal - WSaPS{% endblock %}
 
+{% block extra_head %}
+<style>
+    .portal-main { background: #0a1020; }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-[16rem_1fr] gap-6 min-h-screen bg-slate-50">
-  <div>
+<div class="flex min-h-screen bg-[#0a1020]">
+    <!-- Sidebar -->
     {% include 'student/sidebar.html' %}
-  </div>
 
-  <main class="space-y-6">
-    <!-- Messages Alerts -->
-    {% if messages %}
-      <div class="space-y-2">
-        {% for message in messages %}
-          <div class="p-4 rounded-lg border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-50 text-red-700 border-red-200{% elif message.tags == 'warning' %}bg-amber-50 text-amber-700 border-amber-200{% else %}bg-emerald-50 text-emerald-700 border-emerald-200{% endif %}">
-            <span>{{ message }}</span>
-            <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-600">&times;</button>
-          </div>
-        {% endfor %}
-      </div>
-    {% endif %}
+    <!-- Mobile Sidebar Toggle -->
+    <button id="sidebarToggle" class="lg:hidden fixed bottom-6 right-6 z-50 w-14 h-14 bg-brand-blue rounded-full flex items-center justify-center shadow-xl shadow-blue-600/30 text-white text-xl">
+        <i class="fas fa-bars"></i>
+    </button>
 
-    {% block student_content %}{% endblock %}
-  </main>
+    <!-- Main Content -->
+    <main class="flex-1 min-w-0 flex flex-col">
+        <!-- Portal Top Bar -->
+        <div class="bg-navy-800 border-b border-white/5 px-6 py-3 flex items-center justify-between sticky top-0 z-40">
+            <div class="flex items-center gap-3">
+                <button id="sidebarToggleDesktop" class="lg:hidden text-gray-400 hover:text-white p-1">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div>
+                    <h1 class="text-white font-bold text-sm">{% block page_title %}Student Portal{% endblock %}</h1>
+                    <p class="text-gray-500 text-xs">{% block page_subtitle %}Wachemo School Academic Portal System{% endblock %}</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <!-- Notifications Bell -->
+                <div class="relative group">
+                    <button class="w-8 h-8 bg-white/5 hover:bg-white/10 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-all relative">
+                        <i class="fas fa-bell text-sm"></i>
+                        {% if notifications %}
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] font-bold text-white flex items-center justify-center">{{ notifications.count }}</span>
+                        {% endif %}
+                    </button>
+                    <!-- Notifications Dropdown -->
+                    <div class="absolute right-0 top-full mt-1 w-72 bg-navy-700 border border-white/10 rounded-xl shadow-2xl overflow-hidden hidden group-hover:block z-50">
+                        <div class="p-3 border-b border-white/5">
+                            <p class="font-bold text-white text-sm">Notifications</p>
+                        </div>
+                        <div class="max-h-64 overflow-y-auto">
+                            {% for notif in notifications %}
+                            <a href="{% url 'mark_notification_read' notif.id %}" class="flex items-start gap-3 p-3 hover:bg-white/5 transition-colors border-b border-white/5 last:border-0">
+                                <div class="w-7 h-7 rounded-full flex items-center justify-center shrink-0 {% if notif.notification_type == 'success' %}bg-green-500/20 text-green-400{% elif notif.notification_type == 'warning' %}bg-yellow-500/20 text-yellow-400{% elif notif.notification_type == 'error' %}bg-red-500/20 text-red-400{% else %}bg-blue-500/20 text-blue-400{% endif %}">
+                                    <i class="fas {% if notif.notification_type == 'success' %}fa-check{% elif notif.notification_type == 'warning' %}fa-exclamation{% elif notif.notification_type == 'error' %}fa-times{% else %}fa-info{% endif %} text-xs"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="text-white text-xs font-semibold truncate">{{ notif.title }}</p>
+                                    <p class="text-gray-500 text-xs truncate">{{ notif.message }}</p>
+                                    <p class="text-gray-600 text-[10px] mt-0.5">{{ notif.created_at|timesince }} ago</p>
+                                </div>
+                            </a>
+                            {% empty %}
+                            <div class="p-4 text-center text-gray-500 text-xs">No new notifications</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <!-- User avatar -->
+                <a href="{% url 'student_profile' %}" class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-brand-blue rounded-lg flex items-center justify-center font-bold text-white text-xs shadow">
+                        {{ request.user.username|first|upper }}
+                    </div>
+                    <span class="text-sm font-medium text-gray-300 hidden md:block">{{ request.user.username }}</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="flex-1 p-6">
+            <!-- Flash Messages -->
+            {% if messages %}
+            <div class="space-y-2 mb-5">
+                {% for message in messages %}
+                <div data-auto-dismiss class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium border
+                    {% if message.tags == 'error' %}bg-red-500/10 border-red-500/20 text-red-300{% elif message.tags == 'warning' %}bg-yellow-500/10 border-yellow-500/20 text-yellow-300{% elif message.tags == 'success' %}bg-green-500/10 border-green-500/20 text-green-300{% else %}bg-blue-500/10 border-blue-500/20 text-blue-300{% endif %}">
+                    <i class="fas {% if message.tags == 'error' %}fa-circle-xmark{% elif message.tags == 'warning' %}fa-triangle-exclamation{% elif message.tags == 'success' %}fa-circle-check{% else %}fa-circle-info{% endif %} shrink-0"></i>
+                    <span>{{ message }}</span>
+                    <button onclick="this.parentElement.remove()" class="ml-auto text-current opacity-60 hover:opacity-100">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% block student_content %}{% endblock %}
+        </div>
+    </main>
 </div>
+
+<script>
+// Mobile sidebar toggle
+const sidebarToggle = document.getElementById('sidebarToggle');
+const sidebar = document.getElementById('studentSidebar');
+if (sidebarToggle && sidebar) {
+    sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('hidden');
+        sidebar.classList.toggle('lg:flex');
+    });
+}
+</script>
 {% endblock %}

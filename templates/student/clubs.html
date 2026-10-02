@@ -1,0 +1,124 @@
+{% extends 'student/base.html' %}
+{% block page_title %}Clubs & Activities{% endblock %}
+{% block page_subtitle %}Join clubs and extracurricular activities{% endblock %}
+
+{% block student_content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h2 class="text-2xl font-black text-white">Clubs & Activities</h2>
+            <p class="text-gray-400 text-sm mt-1">Explore clubs, join activities, and connect with peers</p>
+        </div>
+        <div class="flex items-center gap-2 text-sm text-gray-400 bg-white/5 border border-white/10 rounded-xl px-4 py-2">
+            <i class="fas fa-people-group text-brand-blue"></i>
+            <span>{{ my_membership_ids|length }} joined</span>
+        </div>
+    </div>
+
+    <!-- My Clubs Summary -->
+    {% if my_membership_ids %}
+    <div class="bg-brand-blue/5 border border-brand-blue/20 rounded-2xl p-5">
+        <h3 class="text-sm font-bold text-brand-blue mb-3 flex items-center gap-2">
+            <i class="fas fa-star"></i> My Clubs
+        </h3>
+        <div class="flex flex-wrap gap-2">
+            {% for club in all_clubs %}
+                {% if club.id in my_membership_ids %}
+                <span class="flex items-center gap-2 bg-brand-blue/10 border border-brand-blue/30 text-blue-300 text-xs font-semibold px-3 py-1.5 rounded-full">
+                    <i class="fas {{ club.logo_icon }} text-brand-blue"></i> {{ club.name }}
+                </span>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- All Clubs Grid -->
+    {% if all_clubs %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {% for club in all_clubs %}
+        <div class="bg-white/3 border border-white/5 rounded-2xl p-6 hover:border-brand-blue/30 transition-all group flex flex-col">
+            <!-- Club Icon & Badge -->
+            <div class="flex items-start justify-between mb-4">
+                <div class="w-12 h-12 bg-brand-blue/10 text-brand-blue rounded-xl flex items-center justify-center text-2xl group-hover:bg-brand-blue group-hover:text-white transition-all">
+                    <i class="fas {{ club.logo_icon }}"></i>
+                </div>
+                <span class="text-xs font-bold bg-white/5 text-gray-400 border border-white/10 px-2 py-1 rounded-full">
+                    {{ club.category }}
+                </span>
+            </div>
+
+            <!-- Club Info -->
+            <h3 class="font-bold text-white text-base mb-2">{{ club.name }}</h3>
+            <p class="text-gray-400 text-sm leading-relaxed flex-1 mb-4">{{ club.description|truncatewords:25 }}</p>
+
+            <!-- Club Stats -->
+            <div class="flex items-center gap-4 text-xs text-gray-500 mb-4">
+                <span class="flex items-center gap-1.5">
+                    <i class="fas fa-users text-brand-blue"></i>
+                    {{ club.member_count }} member{{ club.member_count|pluralize }}
+                </span>
+                {% if club.advisor %}
+                <span class="flex items-center gap-1.5">
+                    <i class="fas fa-user-tie text-brand-blue"></i>
+                    {{ club.advisor.user.first_name|default:club.advisor.user.username }}
+                </span>
+                {% endif %}
+            </div>
+
+            <!-- Join/Leave Button -->
+            {% if student %}
+            <form method="post" action="{% url 'join_club' club.id %}">
+                {% csrf_token %}
+                {% if club.id in my_membership_ids %}
+                <button type="submit" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 transition-all">
+                    <i class="fas fa-user-minus"></i> Leave Club
+                </button>
+                {% else %}
+                <button type="submit" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold bg-brand-blue/10 border border-brand-blue/20 text-blue-300 hover:bg-brand-blue hover:text-white transition-all">
+                    <i class="fas fa-user-plus"></i> Join Club
+                </button>
+                {% endif %}
+            </form>
+            {% else %}
+            <p class="text-xs text-gray-600 text-center py-2">
+                <a href="{% url 'login' %}" class="text-brand-blue hover:underline">Login</a> to join clubs
+            </p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="text-center py-20 bg-white/2 border border-white/5 rounded-2xl">
+        <div class="w-20 h-20 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-5">
+            <i class="fas fa-people-group text-3xl text-gray-600"></i>
+        </div>
+        <h3 class="text-white font-bold text-lg mb-2">No Clubs Yet</h3>
+        <p class="text-gray-500 text-sm max-w-sm mx-auto">
+            No clubs have been created yet. Check back soon or contact your school admin.
+        </p>
+    </div>
+    {% endif %}
+
+    <!-- Benefits Banner -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white/3 border border-white/5 rounded-2xl p-5 text-center">
+            <div class="w-10 h-10 bg-purple-500/10 text-purple-400 rounded-xl flex items-center justify-center mx-auto mb-3 text-xl"><i class="fas fa-handshake"></i></div>
+            <h4 class="font-bold text-white text-sm mb-1">Networking</h4>
+            <p class="text-gray-500 text-xs">Connect with students sharing your interests</p>
+        </div>
+        <div class="bg-white/3 border border-white/5 rounded-2xl p-5 text-center">
+            <div class="w-10 h-10 bg-green-500/10 text-green-400 rounded-xl flex items-center justify-center mx-auto mb-3 text-xl"><i class="fas fa-seedling"></i></div>
+            <h4 class="font-bold text-white text-sm mb-1">Growth</h4>
+            <p class="text-gray-500 text-xs">Develop leadership and teamwork skills</p>
+        </div>
+        <div class="bg-white/3 border border-white/5 rounded-2xl p-5 text-center">
+            <div class="w-10 h-10 bg-yellow-500/10 text-yellow-400 rounded-xl flex items-center justify-center mx-auto mb-3 text-xl"><i class="fas fa-medal"></i></div>
+            <h4 class="font-bold text-white text-sm mb-1">Recognition</h4>
+            <p class="text-gray-500 text-xs">Earn certificates and recognition for achievements</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
