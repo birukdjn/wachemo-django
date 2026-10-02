@@ -102,8 +102,8 @@ if db_url:
     conn_max_age = 0 if (os.environ.get('VERCEL') or not os.access(BASE_DIR, os.W_OK)) else 60
 
     DATABASES = {
-        'default': dj_database_url.config(
-            default=db_url,
+        'default': dj_database_url.parse(
+            db_url,
             conn_max_age=conn_max_age,
             conn_health_checks=True,
         )
