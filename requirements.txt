@@ -8,6 +8,7 @@ djangorestframework==3.18.1
 gunicorn==26.2.0
 packaging==26.3
 Pillow==12.3.0
+psycopg2-binary==2.9.13
 pymysql==1.2.3
 python-decouple==3.8
 python-dotenv==1.2.4
