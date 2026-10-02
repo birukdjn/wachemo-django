@@ -235,14 +235,8 @@
 
     {% block extra_head %}{% endblock %}
 
-    <!-- Apply saved theme BEFORE paint (prevents flash) -->
-    <script>
-        (function() {
-            var saved = localStorage.getItem('wsaps-theme') ||
-                (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-            document.documentElement.setAttribute('data-theme', saved);
-        })();
-    </script>
+    <!-- Centralized Theme Manager (Light, Dark, System) -->
+    <script src="{% static 'js/theme-manager.js' %}"></script>
 </head>
 <body class="antialiased">
 
@@ -255,29 +249,6 @@
     {% include 'includes/footer.html' %}
 
     <script>
-        // ===== Theme Toggle Logic =====
-        function initTheme() {
-            var html = document.documentElement;
-            var saved = localStorage.getItem('wsaps-theme') ||
-                (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-            html.setAttribute('data-theme', saved);
-        }
-
-        function toggleTheme() {
-            var html = document.documentElement;
-            var current = html.getAttribute('data-theme');
-            var next = current === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', next);
-            localStorage.setItem('wsaps-theme', next);
-        }
-
-        initTheme();
-
-        // Attach to all toggle buttons
-        document.querySelectorAll('[data-theme-toggle]').forEach(function(btn) {
-            btn.addEventListener('click', toggleTheme);
-        });
-
         // ===== Mobile Nav Toggle =====
         var navToggle = document.getElementById('navToggle');
         var navMenu   = document.getElementById('navbarNav');

@@ -126,11 +126,21 @@
             </a>
             {% endif %}
 
-            <!-- Theme Toggle Button -->
-            <button data-theme-toggle aria-label="Toggle theme" class="theme-toggle ml-2" title="Toggle light/dark mode">
-                <i class="fas fa-sun icon-sun text-sm"></i>
-                <i class="fas fa-moon icon-moon text-sm"></i>
-            </button>
+            <!-- 3-Icon Theme Selector (Light, Dark, System) -->
+            <div class="inline-flex items-center bg-navy-900/80 p-1 rounded-xl border border-white/10 shrink-0 ml-3 shadow-inner" role="group" aria-label="Theme selection">
+                <button type="button" data-theme-set="light" class="theme-btn text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 text-gray-400 hover:text-white opacity-60" title="Light Mode">
+                    <i class="fas fa-sun text-amber-400 text-xs"></i>
+                    <span class="hidden xl:inline text-[11px] font-medium">Light</span>
+                </button>
+                <button type="button" data-theme-set="dark" class="theme-btn text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 text-gray-400 hover:text-white opacity-60" title="Dark Mode">
+                    <i class="fas fa-moon text-blue-400 text-xs"></i>
+                    <span class="hidden xl:inline text-[11px] font-medium">Dark</span>
+                </button>
+                <button type="button" data-theme-set="system" class="theme-btn text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 text-gray-400 hover:text-white opacity-60" title="System Mode">
+                    <i class="fas fa-desktop text-gray-300 text-xs"></i>
+                    <span class="hidden xl:inline text-[11px] font-medium">System</span>
+                </button>
+            </div>
         </div>
     </div>
 </nav>

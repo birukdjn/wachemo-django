@@ -80,13 +80,7 @@
         [data-theme="light"] .theme-toggle .icon-sun  { display: block; }
         [data-theme="light"] .theme-toggle .icon-moon { display: none; }
     </style>
-    <script>
-        (function() {
-            var saved = localStorage.getItem('wsaps-theme') ||
-                (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-            document.documentElement.setAttribute('data-theme', saved);
-        })();
-    </script>
+    <script src="{% static 'js/theme-manager.js' %}"></script>
 </head>
 <body class="auth-bg min-h-screen flex items-center justify-center relative overflow-hidden py-8">
 
@@ -96,11 +90,21 @@
         <div class="orb-2 absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-3xl"></div>
         <div class="orb absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full blur-3xl"></div>
     </div>
-    <!-- Theme Toggle -->
-    <button data-theme-toggle aria-label="Toggle theme" class="theme-toggle">
-        <i class="fas fa-sun icon-sun text-sm"></i>
-        <i class="fas fa-moon icon-moon text-sm"></i>
-    </button>
+    <!-- 3-Icon Theme Selector -->
+    <div class="fixed top-5 right-5 z-50 inline-flex items-center bg-navy-900/80 p-1.5 rounded-xl border border-white/10 shadow-2xl backdrop-blur-md" role="group" aria-label="Theme selection">
+        <button type="button" data-theme-set="light" class="theme-btn text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 text-gray-400 hover:text-white opacity-60" title="Light Mode">
+            <i class="fas fa-sun text-amber-400 text-xs"></i>
+            <span class="text-[11px] font-medium">Light</span>
+        </button>
+        <button type="button" data-theme-set="dark" class="theme-btn text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 text-gray-400 hover:text-white opacity-60" title="Dark Mode">
+            <i class="fas fa-moon text-blue-400 text-xs"></i>
+            <span class="text-[11px] font-medium">Dark</span>
+        </button>
+        <button type="button" data-theme-set="system" class="theme-btn text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 text-gray-400 hover:text-white opacity-60" title="System Mode">
+            <i class="fas fa-desktop text-gray-300 text-xs"></i>
+            <span class="text-[11px] font-medium">System</span>
+        </button>
+    </div>
 
         <div class="absolute -top-40 -right-40 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl"></div>
         <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-800/10 rounded-full blur-3xl"></div>
