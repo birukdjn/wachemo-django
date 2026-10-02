@@ -10,26 +10,29 @@
     <!-- Slides -->
     <div id="heroSlider" class="absolute inset-0">
         <!-- Slide 1 -->
-        <div class="hero-slide absolute inset-0 opacity-100" style="background: linear-gradient(rgba(13,26,46,0.55), rgba(13,26,46,0.7)), url('{% static "images/hero-1.jpg" %}') center/cover no-repeat;">
+        <div class="hero-slide absolute inset-0 opacity-100 transition-opacity duration-700" style="background: linear-gradient(rgba(13,26,46,0.6), rgba(13,26,46,0.75)), url('{% static "images/hero-1.jpg" %}') center/cover no-repeat;">
             <div class="absolute inset-0 flex items-center justify-center text-center px-6">
                 <div class="max-w-3xl">
-                    <h1 class="text-4xl md:text-6xl font-black text-white leading-tight drop-shadow-lg mb-4">
+                    <span class="px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-400 bg-blue-500/20 border border-blue-400/30 rounded-full inline-block mb-4 shadow-lg backdrop-blur-md">
+                        Welcome to Wachemo SaPS
+                    </span>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight drop-shadow-lg mb-4">
                         Empowering Future Leaders
                     </h1>
-                    <p class="text-base md:text-xl text-gray-200 mb-8 font-light max-w-2xl mx-auto">
-                        Quality education for the 21st century with modern digital learning tools
+                    <p class="text-base sm:text-lg md:text-xl text-gray-200 mb-8 font-light max-w-2xl mx-auto leading-relaxed">
+                        Quality education for the 21st century with modern digital learning tools and academic excellence.
                     </p>
                     <div class="flex items-center justify-center gap-4 flex-wrap">
                         {% if not request.user.is_authenticated %}
-                            <a href="{% url 'login' %}" class="bg-brand-blue hover:bg-brand-light text-white font-bold px-8 py-3 rounded-lg transition-all shadow-lg shadow-brand-blue/30 text-sm">
-                                Login
+                            <a href="{% url 'login' %}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/30 text-sm hover:scale-105">
+                                Login to Portal
                             </a>
-                            <a href="{% url 'signup' %}" class="border-2 border-white hover:bg-white hover:text-navy-900 text-white font-bold px-8 py-3 rounded-lg transition-all text-sm">
-                                Signup
+                            <a href="{% url 'signup' %}" class="border-2 border-white/80 hover:bg-white hover:text-slate-900 text-white font-bold px-8 py-3.5 rounded-xl transition-all text-sm backdrop-blur-xs hover:scale-105">
+                                Create Account
                             </a>
                         {% else %}
-                            <a href="{% if request.user.userprofile.role == 'teacher' %}{% url 'teacher_dashboard' %}{% else %}{% url 'dashboard' %}{% endif %}" class="bg-brand-blue hover:bg-brand-light text-white font-bold px-8 py-3 rounded-lg transition-all shadow-lg text-sm">
-                                Go to Dashboard
+                            <a href="{% if request.user.userprofile.role == 'teacher' %}{% url 'teacher_dashboard' %}{% else %}{% url 'dashboard' %}{% endif %}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/30 text-sm hover:scale-105">
+                                Go to Dashboard <i class="fas fa-arrow-right ml-2 text-xs"></i>
                             </a>
                         {% endif %}
                     </div>
@@ -38,21 +41,24 @@
         </div>
 
         <!-- Slide 2 -->
-        <div class="hero-slide absolute inset-0 opacity-0" style="background: linear-gradient(rgba(13,26,46,0.5), rgba(13,26,46,0.7)), url('{% static "images/hero-2.jpg" %}') center/cover no-repeat;">
+        <div class="hero-slide absolute inset-0 opacity-0 transition-opacity duration-700" style="background: linear-gradient(rgba(13,26,46,0.6), rgba(13,26,46,0.75)), url('{% static "images/hero-2.jpg" %}') center/cover no-repeat;">
             <div class="absolute inset-0 flex items-center justify-center text-center px-6">
                 <div class="max-w-3xl">
-                    <h1 class="text-4xl md:text-6xl font-black text-white leading-tight drop-shadow-lg mb-4">
+                    <span class="px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-400 bg-blue-500/20 border border-blue-400/30 rounded-full inline-block mb-4 shadow-lg backdrop-blur-md">
+                        Digital Ecosystem
+                    </span>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight drop-shadow-lg mb-4">
                         Innovative Learning
                     </h1>
-                    <p class="text-base md:text-xl text-gray-200 mb-8 font-light max-w-2xl mx-auto">
-                        Discover our cutting-edge digital learning platform
+                    <p class="text-base sm:text-lg md:text-xl text-gray-200 mb-8 font-light max-w-2xl mx-auto leading-relaxed">
+                        Discover our cutting-edge digital learning platform and seamless academic management.
                     </p>
                     <div class="flex items-center justify-center gap-4 flex-wrap">
-                        <a href="{% url 'features' %}" class="bg-brand-blue hover:bg-brand-light text-white font-bold px-8 py-3 rounded-lg transition-all shadow-lg text-sm">
+                        <a href="{% url 'features' %}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/30 text-sm hover:scale-105">
                             Explore Features
                         </a>
-                        <a href="{% url 'about' %}" class="border-2 border-white hover:bg-white hover:text-navy-900 text-white font-bold px-8 py-3 rounded-lg transition-all text-sm">
-                            Virtual Tour
+                        <a href="{% url 'about' %}" class="border-2 border-white/80 hover:bg-white hover:text-slate-900 text-white font-bold px-8 py-3.5 rounded-xl transition-all text-sm backdrop-blur-xs hover:scale-105">
+                            About WSaPS
                         </a>
                     </div>
                 </div>
@@ -60,20 +66,23 @@
         </div>
 
         <!-- Slide 3 -->
-        <div class="hero-slide absolute inset-0 opacity-0" style="background: linear-gradient(rgba(13,26,46,0.5), rgba(13,26,46,0.75)), url('{% static "images/hero-3.jpg" %}') center/cover no-repeat;">
+        <div class="hero-slide absolute inset-0 opacity-0 transition-opacity duration-700" style="background: linear-gradient(rgba(13,26,46,0.6), rgba(13,26,46,0.75)), url('{% static "images/hero-3.jpg" %}') center/cover no-repeat;">
             <div class="absolute inset-0 flex items-center justify-center text-center px-6">
                 <div class="max-w-3xl">
-                    <h1 class="text-4xl md:text-6xl font-black text-white leading-tight drop-shadow-lg mb-4">
+                    <span class="px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-400 bg-blue-500/20 border border-blue-400/30 rounded-full inline-block mb-4 shadow-lg backdrop-blur-md">
+                        Standard of Excellence
+                    </span>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight drop-shadow-lg mb-4">
                         Academic Excellence
                     </h1>
-                    <p class="text-base md:text-xl text-gray-200 mb-8 font-light max-w-2xl mx-auto">
-                        Bridging tradition and technology to shape tomorrow's leaders
+                    <p class="text-base sm:text-lg md:text-xl text-gray-200 mb-8 font-light max-w-2xl mx-auto leading-relaxed">
+                        Bridging tradition and modern technology to shape tomorrow's leaders and innovators.
                     </p>
                     <div class="flex items-center justify-center gap-4 flex-wrap">
-                        <a href="{% url 'signup' %}" class="bg-brand-blue hover:bg-brand-light text-white font-bold px-8 py-3 rounded-lg transition-all shadow-lg text-sm">
+                        <a href="{% url 'signup' %}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/30 text-sm hover:scale-105">
                             Get Started
                         </a>
-                        <a href="{% url 'contact' %}" class="border-2 border-white hover:bg-white hover:text-navy-900 text-white font-bold px-8 py-3 rounded-lg transition-all text-sm">
+                        <a href="{% url 'contact' %}" class="border-2 border-white/80 hover:bg-white hover:text-slate-900 text-white font-bold px-8 py-3.5 rounded-xl transition-all text-sm backdrop-blur-xs hover:scale-105">
                             Contact Us
                         </a>
                     </div>
@@ -83,61 +92,71 @@
     </div>
 
     <!-- Slider Dots -->
-    <div class="absolute bottom-6 left-0 right-0 flex justify-center gap-2 z-10">
-        <button class="slider-dot w-3 h-3 rounded-full bg-white transition-all" data-index="0"></button>
-        <button class="slider-dot w-3 h-3 rounded-full bg-white/40 transition-all" data-index="1"></button>
-        <button class="slider-dot w-3 h-3 rounded-full bg-white/40 transition-all" data-index="2"></button>
+    <div class="absolute bottom-6 left-0 right-0 flex justify-center gap-2.5 z-10">
+        <button class="slider-dot w-3 h-3 rounded-full bg-white transition-all shadow-md cursor-pointer" data-index="0" aria-label="Slide 1"></button>
+        <button class="slider-dot w-3 h-3 rounded-full bg-white/40 transition-all cursor-pointer" data-index="1" aria-label="Slide 2"></button>
+        <button class="slider-dot w-3 h-3 rounded-full bg-white/40 transition-all cursor-pointer" data-index="2" aria-label="Slide 3"></button>
     </div>
 </section>
 
 <!-- ===== STATS BANNER ===== -->
-<section class="bg-navy-800 border-y border-white/5">
-    <div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-        <div class="p-4">
-            <div class="text-brand-blue text-3xl mb-2"><i class="fas fa-users"></i></div>
-            <h3 class="text-2xl font-black text-white">2,500+</h3>
-            <p class="text-gray-400 text-sm">Students Enrolled</p>
+<section class="bg-slate-100 dark:bg-navy-800 border-y border-slate-200 dark:border-white/5 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div class="p-4 bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-none transition-all">
+            <div class="text-blue-600 dark:text-blue-400 text-3xl mb-2"><i class="fas fa-users"></i></div>
+            <h3 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">2,500+</h3>
+            <p class="text-slate-600 dark:text-gray-400 text-xs sm:text-sm font-medium mt-1">Students Enrolled</p>
         </div>
-        <div class="p-4">
-            <div class="text-brand-blue text-3xl mb-2"><i class="fas fa-chalkboard-teacher"></i></div>
-            <h3 class="text-2xl font-black text-white">120+</h3>
-            <p class="text-gray-400 text-sm">Qualified Teachers</p>
+        <div class="p-4 bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-none transition-all">
+            <div class="text-blue-600 dark:text-blue-400 text-3xl mb-2"><i class="fas fa-chalkboard-teacher"></i></div>
+            <h3 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">120+</h3>
+            <p class="text-slate-600 dark:text-gray-400 text-xs sm:text-sm font-medium mt-1">Qualified Teachers</p>
         </div>
-        <div class="p-4">
-            <div class="text-brand-blue text-3xl mb-2"><i class="fas fa-graduation-cap"></i></div>
-            <h3 class="text-2xl font-black text-white">98%</h3>
-            <p class="text-gray-400 text-sm">Graduation Rate</p>
+        <div class="p-4 bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-none transition-all">
+            <div class="text-blue-600 dark:text-blue-400 text-3xl mb-2"><i class="fas fa-graduation-cap"></i></div>
+            <h3 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">98%</h3>
+            <p class="text-slate-600 dark:text-gray-400 text-xs sm:text-sm font-medium mt-1">Graduation Rate</p>
         </div>
-        <div class="p-4">
-            <div class="text-brand-blue text-3xl mb-2"><i class="fas fa-trophy"></i></div>
-            <h3 class="text-2xl font-black text-white">50+</h3>
-            <p class="text-gray-400 text-sm">Awards Won</p>
+        <div class="p-4 bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-none transition-all">
+            <div class="text-blue-600 dark:text-blue-400 text-3xl mb-2"><i class="fas fa-trophy"></i></div>
+            <h3 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">50+</h3>
+            <p class="text-slate-600 dark:text-gray-400 text-xs sm:text-sm font-medium mt-1">Awards Won</p>
         </div>
     </div>
 </section>
 
 <!-- ===== ABOUT SECTION ===== -->
-<section id="about" class="bg-navy-900 py-20">
+<section id="about" class="bg-slate-50 dark:bg-navy-900 py-20 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div class="relative">
-            <img src="{% static 'images/about-1.jpg' %}" alt="Wachemo School" class="rounded-2xl shadow-2xl w-full object-cover h-80 md:h-96">
-            <div class="absolute -bottom-4 -right-4 bg-brand-blue text-white rounded-xl p-4 shadow-xl text-center">
+            <img src="{% static 'images/about-1.jpg' %}" alt="Wachemo School" class="rounded-2xl shadow-2xl w-full object-cover h-80 md:h-96 border border-slate-200 dark:border-white/10">
+            <div class="absolute -bottom-4 -right-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl p-5 shadow-xl text-center border border-white/20">
                 <div class="text-3xl font-black">25+</div>
-                <div class="text-xs font-semibold text-blue-100">Years of Excellence</div>
+                <div class="text-xs font-bold text-blue-100 uppercase tracking-wider">Years of Excellence</div>
             </div>
         </div>
         <div>
-            <p class="text-brand-blue text-xs font-bold uppercase tracking-widest mb-2">About Us</p>
-            <h2 class="text-3xl md:text-4xl font-black text-white mb-4">About Wachemo School</h2>
-            <p class="text-gray-400 leading-relaxed mb-4">Wachemo SaPS is a premier educational institution committed to providing quality education through innovative teaching methods and state-of-the-art facilities.</p>
-            <p class="text-gray-400 leading-relaxed mb-6">Our mission is to nurture young minds to become responsible global citizens with strong moral values and academic excellence.</p>
-            <ul class="space-y-2 mb-8">
-                <li class="flex items-center gap-3 text-sm text-gray-300"><i class="fas fa-check-circle text-brand-blue"></i> Modern digital learning platform</li>
-                <li class="flex items-center gap-3 text-sm text-gray-300"><i class="fas fa-check-circle text-brand-blue"></i> Highly qualified teaching staff</li>
-                <li class="flex items-center gap-3 text-sm text-gray-300"><i class="fas fa-check-circle text-brand-blue"></i> Comprehensive extracurricular programs</li>
-                <li class="flex items-center gap-3 text-sm text-gray-300"><i class="fas fa-check-circle text-brand-blue"></i> Safe and supportive learning environment</li>
+            <span class="px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 rounded-full inline-block mb-3">
+                About Us
+            </span>
+            <h2 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-4 tracking-tight">About Wachemo School</h2>
+            <p class="text-slate-600 dark:text-gray-400 leading-relaxed mb-4 text-base">Wachemo SaPS is a premier educational institution committed to providing quality education through innovative teaching methods and state-of-the-art facilities.</p>
+            <p class="text-slate-600 dark:text-gray-400 leading-relaxed mb-6 text-base">Our mission is to nurture young minds to become responsible global citizens with strong moral values and academic excellence.</p>
+            <ul class="space-y-3 mb-8">
+                <li class="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-gray-300">
+                    <i class="fas fa-check-circle text-blue-600 dark:text-blue-400 text-base"></i> Modern digital learning platform
+                </li>
+                <li class="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-gray-300">
+                    <i class="fas fa-check-circle text-blue-600 dark:text-blue-400 text-base"></i> Highly qualified teaching staff
+                </li>
+                <li class="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-gray-300">
+                    <i class="fas fa-check-circle text-blue-600 dark:text-blue-400 text-base"></i> Comprehensive extracurricular programs
+                </li>
+                <li class="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-gray-300">
+                    <i class="fas fa-check-circle text-blue-600 dark:text-blue-400 text-base"></i> Safe and supportive learning environment
+                </li>
             </ul>
-            <a href="{% url 'about' %}" class="inline-flex items-center gap-2 bg-brand-blue hover:bg-brand-light text-white font-bold px-6 py-3 rounded-lg transition-all shadow-lg text-sm">
+            <a href="{% url 'about' %}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/25 text-sm hover:scale-105">
                 Learn More About Us <i class="fas fa-arrow-right text-xs"></i>
             </a>
         </div>
@@ -145,101 +164,118 @@
 </section>
 
 <!-- ===== FEATURES SECTION ===== -->
-<section id="features" class="bg-navy-800 py-20 border-y border-white/5">
+<section id="features" class="bg-slate-100 dark:bg-navy-800 py-20 border-y border-slate-200 dark:border-white/5 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4">
         <div class="text-center mb-12">
-            <p class="text-brand-blue text-xs font-bold uppercase tracking-widest mb-2">Our Platform</p>
-            <h2 class="text-3xl md:text-4xl font-black text-white mb-3">Portal Features</h2>
-            <p class="text-gray-400 max-w-2xl mx-auto">Explore our comprehensive digital learning ecosystem designed for modern education</p>
+            <span class="px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 rounded-full inline-block mb-3">
+                Our Platform
+            </span>
+            <h2 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-3 tracking-tight">Portal Features</h2>
+            <p class="text-slate-600 dark:text-gray-400 max-w-2xl mx-auto text-base">Explore our comprehensive digital learning ecosystem designed for modern education.</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {% for feat in features_list %}
-            {% empty %}
-            <!-- Static fallback features -->
-            {% endfor %}
-            <div class="glass-card rounded-2xl p-6 hover:border-brand-blue/40 transition-all group">
-                <div class="w-12 h-12 bg-brand-blue/10 text-brand-blue rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-brand-blue group-hover:text-white transition-all">
-                    <i class="fas fa-laptop-code"></i>
+            <div class="bg-white dark:bg-navy-800/80 border border-slate-200 dark:border-white/10 rounded-2xl p-6 shadow-md dark:shadow-none hover:shadow-xl hover:border-blue-500/40 transition-all duration-300 group flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-2">E-Learning Platform</h3>
+                    <p class="text-slate-600 dark:text-gray-400 text-sm leading-relaxed">Access course materials, submit assignments, and take quizzes through our intuitive online platform.</p>
                 </div>
-                <h3 class="font-bold text-white text-lg mb-2">E-Learning Platform</h3>
-                <p class="text-gray-400 text-sm leading-relaxed">Access course materials, submit assignments, and take quizzes through our intuitive online platform.</p>
             </div>
-            <div class="glass-card rounded-2xl p-6 hover:border-brand-blue/40 transition-all group">
-                <div class="w-12 h-12 bg-brand-blue/10 text-brand-blue rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-brand-blue group-hover:text-white transition-all">
-                    <i class="fas fa-chart-line"></i>
+            <div class="bg-white dark:bg-navy-800/80 border border-slate-200 dark:border-white/10 rounded-2xl p-6 shadow-md dark:shadow-none hover:shadow-xl hover:border-blue-500/40 transition-all duration-300 group flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-purple-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-2">Grade Tracking</h3>
+                    <p class="text-slate-600 dark:text-gray-400 text-sm leading-relaxed">Real-time access to grades and performance analytics for students and parents.</p>
                 </div>
-                <h3 class="font-bold text-white text-lg mb-2">Grade Tracking</h3>
-                <p class="text-gray-400 text-sm leading-relaxed">Real-time access to grades and performance analytics for students and parents.</p>
             </div>
-            <div class="glass-card rounded-2xl p-6 hover:border-brand-blue/40 transition-all group">
-                <div class="w-12 h-12 bg-brand-blue/10 text-brand-blue rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-brand-blue group-hover:text-white transition-all">
-                    <i class="fas fa-calendar-alt"></i>
+            <div class="bg-white dark:bg-navy-800/80 border border-slate-200 dark:border-white/10 rounded-2xl p-6 shadow-md dark:shadow-none hover:shadow-xl hover:border-blue-500/40 transition-all duration-300 group flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-2">Interactive Calendar</h3>
+                    <p class="text-slate-600 dark:text-gray-400 text-sm leading-relaxed">Never miss important dates with our comprehensive school calendar and event notifications.</p>
                 </div>
-                <h3 class="font-bold text-white text-lg mb-2">Interactive Calendar</h3>
-                <p class="text-gray-400 text-sm leading-relaxed">Never miss important dates with our comprehensive school calendar and event notifications.</p>
             </div>
-            <div class="glass-card rounded-2xl p-6 hover:border-brand-blue/40 transition-all group">
-                <div class="w-12 h-12 bg-brand-blue/10 text-brand-blue rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-brand-blue group-hover:text-white transition-all">
-                    <i class="fas fa-comments"></i>
+            <div class="bg-white dark:bg-navy-800/80 border border-slate-200 dark:border-white/10 rounded-2xl p-6 shadow-md dark:shadow-none hover:shadow-xl hover:border-blue-500/40 transition-all duration-300 group flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-amber-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-2">Parent-Teacher Connect</h3>
+                    <p class="text-slate-600 dark:text-gray-400 text-sm leading-relaxed">Direct messaging system for seamless communication between parents and teachers.</p>
                 </div>
-                <h3 class="font-bold text-white text-lg mb-2">Parent-Teacher Communication</h3>
-                <p class="text-gray-400 text-sm leading-relaxed">Direct messaging system for seamless communication between parents and teachers.</p>
             </div>
-            <div class="glass-card rounded-2xl p-6 hover:border-brand-blue/40 transition-all group">
-                <div class="w-12 h-12 bg-brand-blue/10 text-brand-blue rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-brand-blue group-hover:text-white transition-all">
-                    <i class="fas fa-book-open"></i>
+            <div class="bg-white dark:bg-navy-800/80 border border-slate-200 dark:border-white/10 rounded-2xl p-6 shadow-md dark:shadow-none hover:shadow-xl hover:border-blue-500/40 transition-all duration-300 group flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 bg-sky-500/10 text-sky-600 dark:text-sky-400 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-sky-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-2">Digital Library</h3>
+                    <p class="text-slate-600 dark:text-gray-400 text-sm leading-relaxed">Access thousands of e-books, research papers, and educational resources anytime.</p>
                 </div>
-                <h3 class="font-bold text-white text-lg mb-2">Digital Library</h3>
-                <p class="text-gray-400 text-sm leading-relaxed">Access thousands of e-books, research papers, and educational resources.</p>
             </div>
-            <div class="glass-card rounded-2xl p-6 hover:border-brand-blue/40 transition-all group">
-                <div class="w-12 h-12 bg-brand-blue/10 text-brand-blue rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-brand-blue group-hover:text-white transition-all">
-                    <i class="fas fa-bell"></i>
+            <div class="bg-white dark:bg-navy-800/80 border border-slate-200 dark:border-white/10 rounded-2xl p-6 shadow-md dark:shadow-none hover:shadow-xl hover:border-blue-500/40 transition-all duration-300 group flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 bg-pink-500/10 text-pink-600 dark:text-pink-400 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-pink-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-2">Smart Notifications</h3>
+                    <p class="text-slate-600 dark:text-gray-400 text-sm leading-relaxed">Instant alerts for assignments, exams, events, and important campus announcements.</p>
                 </div>
-                <h3 class="font-bold text-white text-lg mb-2">Smart Notifications</h3>
-                <p class="text-gray-400 text-sm leading-relaxed">Instant alerts for assignments, exams, events, and important announcements.</p>
             </div>
         </div>
     </div>
 </section>
 
 <!-- ===== LATEST NEWS ===== -->
-<section id="news" class="bg-navy-900 py-20">
+<section id="news" class="bg-slate-50 dark:bg-navy-900 py-20 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4">
         <div class="flex items-end justify-between mb-10">
             <div>
-                <p class="text-brand-blue text-xs font-bold uppercase tracking-widest mb-2">Latest Updates</p>
-                <h2 class="text-3xl md:text-4xl font-black text-white">News & Announcements</h2>
+                <span class="px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 rounded-full inline-block mb-3">
+                    Latest Updates
+                </span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">News & Announcements</h2>
             </div>
-            <a href="{% url 'news' %}" class="hidden sm:flex items-center gap-2 text-sm font-semibold text-brand-blue hover:text-brand-light transition-colors">
+            <a href="{% url 'news' %}" class="hidden sm:flex items-center gap-2 text-sm font-bold text-blue-600 dark:text-blue-400 hover:underline transition-all">
                 View All News <i class="fas fa-arrow-right text-xs"></i>
             </a>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for news in topnews %}
-            <article class="glass-card rounded-2xl overflow-hidden hover:border-brand-blue/30 transition-all group">
-                <div class="relative h-48 overflow-hidden">
+            <article class="bg-white dark:bg-navy-800/80 border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-md dark:shadow-none hover:shadow-xl hover:border-blue-500/40 transition-all duration-300 flex flex-col group">
+                <div class="relative h-48 overflow-hidden bg-slate-100 dark:bg-navy-900">
                     <img src="{{ news.image }}" alt="{{ news.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute top-3 left-3 bg-brand-blue text-white rounded-lg px-3 py-1.5 text-center shadow-lg">
+                    <div class="absolute top-3 left-3 bg-gradient-to-b from-blue-600 to-indigo-600 text-white rounded-xl px-3 py-1.5 text-center shadow-lg shadow-blue-600/30">
                         <span class="block text-xl font-black leading-none">{{ news.day }}</span>
-                        <span class="block text-[10px] font-semibold uppercase leading-none mt-0.5">{{ news.month }}</span>
+                        <span class="block text-[10px] font-bold uppercase leading-none mt-0.5 opacity-90">{{ news.month }}</span>
                     </div>
                 </div>
-                <div class="p-5">
-                    <h3 class="font-bold text-white text-base mb-2 group-hover:text-brand-light transition-colors">{{ news.title }}</h3>
-                    <p class="text-xs text-gray-500 flex items-center gap-4 mb-3">
-                        <span class="flex items-center gap-1"><i class="fas fa-user text-brand-blue"></i> {{ news.reporter }}</span>
-                        <span class="flex items-center gap-1"><i class="fas fa-clock text-brand-blue"></i> {{ news.date|date:"M d, Y" }}</span>
-                    </p>
-                    <p class="text-sm text-gray-400 leading-relaxed line-clamp-3">{{ news.content|truncatewords:22 }}</p>
+                <div class="p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-base mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">{{ news.title }}</h3>
+                        <p class="text-xs font-medium text-slate-500 dark:text-gray-400 flex items-center gap-4 mb-3">
+                            <span class="flex items-center gap-1.5"><i class="fas fa-user text-blue-500"></i> {{ news.reporter }}</span>
+                            <span class="flex items-center gap-1.5"><i class="fas fa-clock text-blue-500"></i> {{ news.date|date:"M d, Y" }}</span>
+                        </p>
+                        <p class="text-slate-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-3">{{ news.content|truncatewords:22 }}</p>
+                    </div>
                 </div>
             </article>
             {% empty %}
-            <div class="col-span-3 text-center py-10 text-gray-500 text-sm">No news published yet.</div>
+            <div class="col-span-3 text-center py-12 bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/10 rounded-2xl">
+                <i class="fas fa-newspaper text-3xl text-slate-300 dark:text-gray-600 mb-2"></i>
+                <p class="text-slate-500 dark:text-gray-400 text-sm font-medium">No news published yet.</p>
+            </div>
             {% endfor %}
         </div>
         <div class="text-center mt-8 sm:hidden">
-            <a href="{% url 'news' %}" class="inline-flex items-center gap-2 border border-brand-blue text-brand-blue hover:bg-brand-blue hover:text-white font-semibold px-6 py-2.5 rounded-lg text-sm transition-all">
+            <a href="{% url 'news' %}" class="inline-flex items-center gap-2 border border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 hover:bg-blue-600 hover:text-white font-bold px-6 py-2.5 rounded-xl text-sm transition-all">
                 View All News <i class="fas fa-arrow-right text-xs"></i>
             </a>
         </div>
@@ -247,112 +283,134 @@
 </section>
 
 <!-- ===== GALLERY PREVIEW ===== -->
-<section id="gallery" class="bg-navy-800 py-20 border-y border-white/5">
+<section id="gallery" class="bg-slate-100 dark:bg-navy-800 py-20 border-y border-slate-200 dark:border-white/5 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4">
         <div class="flex items-end justify-between mb-10">
             <div>
-                <p class="text-brand-blue text-xs font-bold uppercase tracking-widest mb-2">Our Campus</p>
-                <h2 class="text-3xl md:text-4xl font-black text-white">School Gallery</h2>
+                <span class="px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 rounded-full inline-block mb-3">
+                    Our Campus
+                </span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">School Gallery</h2>
             </div>
-            <a href="{% url 'gallery' %}" class="hidden sm:flex items-center gap-2 text-sm font-semibold text-brand-blue hover:text-brand-light transition-colors">
+            <a href="{% url 'gallery' %}" class="hidden sm:flex items-center gap-2 text-sm font-bold text-blue-600 dark:text-blue-400 hover:underline transition-all">
                 View Full Gallery <i class="fas fa-arrow-right text-xs"></i>
             </a>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {% for image in topimages %}
-            <figure class="relative group overflow-hidden rounded-xl aspect-square">
-                <img src="{{ image.image }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="{{ image.description }}">
-                <div class="absolute inset-0 bg-navy-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <i class="fas fa-expand text-white text-2xl"></i>
+            <figure class="relative group overflow-hidden rounded-2xl aspect-square border border-slate-200 dark:border-white/10 bg-white dark:bg-navy-900 shadow-md dark:shadow-none">
+                <img src="{{ image.image }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="{{ image.description|default:'Gallery Image' }}">
+                <div class="absolute inset-0 bg-navy-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div class="w-10 h-10 rounded-full bg-blue-600/90 flex items-center justify-center text-white text-lg shadow-lg">
+                        <i class="fas fa-expand"></i>
+                    </div>
                 </div>
             </figure>
             {% empty %}
-            <div class="col-span-4 text-center py-10 text-gray-500 text-sm">Gallery is empty.</div>
+            <div class="col-span-4 text-center py-12 bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/10 rounded-2xl">
+                <i class="fas fa-images text-3xl text-slate-300 dark:text-gray-600 mb-2"></i>
+                <p class="text-slate-500 dark:text-gray-400 text-sm font-medium">Gallery is empty.</p>
+            </div>
             {% endfor %}
         </div>
     </div>
 </section>
 
 <!-- ===== EVENTS ===== -->
-<section class="bg-navy-900 py-20">
+<section class="bg-slate-50 dark:bg-navy-900 py-20 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4">
         <div class="flex items-end justify-between mb-10">
             <div>
-                <p class="text-brand-blue text-xs font-bold uppercase tracking-widest mb-2">Mark Your Calendar</p>
-                <h2 class="text-3xl md:text-4xl font-black text-white">Upcoming Events</h2>
+                <span class="px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 rounded-full inline-block mb-3">
+                    Mark Your Calendar
+                </span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">Upcoming Events</h2>
             </div>
-            <a href="{% url 'event' %}" class="hidden sm:flex items-center gap-2 text-sm font-semibold text-brand-blue hover:text-brand-light transition-colors">
+            <a href="{% url 'event' %}" class="hidden sm:flex items-center gap-2 text-sm font-bold text-blue-600 dark:text-blue-400 hover:underline transition-all">
                 View All Events <i class="fas fa-arrow-right text-xs"></i>
             </a>
         </div>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {% for event in topevents %}
-            <div class="glass-card rounded-2xl p-5 flex gap-5 items-start hover:border-brand-blue/30 transition-all">
-                <div class="bg-brand-blue text-white rounded-xl px-4 py-3 text-center shrink-0 shadow-lg shadow-brand-blue/20">
+            <div class="bg-white dark:bg-navy-800/80 border border-slate-200 dark:border-white/10 rounded-2xl p-6 shadow-md dark:shadow-none hover:shadow-xl hover:border-blue-500/40 transition-all duration-300 flex gap-5 items-start">
+                <div class="bg-gradient-to-b from-blue-600 to-indigo-600 text-white rounded-xl px-4 py-3 text-center shrink-0 shadow-lg shadow-blue-600/30">
                     <span class="block text-2xl font-black leading-none">{{ event.day }}</span>
-                    <span class="block text-xs font-bold uppercase leading-none mt-1">{{ event.month }}</span>
+                    <span class="block text-xs font-bold uppercase leading-none mt-1 opacity-90">{{ event.month }}</span>
                 </div>
                 <div class="flex-1">
-                    <h3 class="font-bold text-white text-base mb-1">{{ event.title }}</h3>
-                    <p class="text-xs text-gray-400 flex items-center gap-4 mb-2">
-                        {% if event.duration %}<span class="flex items-center gap-1"><i class="fas fa-clock text-brand-blue"></i> {{ event.duration }}</span>{% endif %}
-                        {% if event.location %}<span class="flex items-center gap-1"><i class="fas fa-map-marker-alt text-brand-blue"></i> {{ event.location }}</span>{% endif %}
+                    <h3 class="font-bold text-slate-900 dark:text-white text-base mb-1">{{ event.title }}</h3>
+                    <p class="text-xs font-medium text-slate-500 dark:text-gray-400 flex items-center gap-4 mb-2">
+                        {% if event.duration %}<span class="flex items-center gap-1.5"><i class="fas fa-clock text-blue-500"></i> {{ event.duration }}</span>{% endif %}
+                        {% if event.location %}<span class="flex items-center gap-1.5"><i class="fas fa-map-marker-alt text-blue-500"></i> {{ event.location }}</span>{% endif %}
                     </p>
-                    <p class="text-sm text-gray-400 leading-relaxed line-clamp-2">{{ event.description }}</p>
+                    <p class="text-slate-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-2">{{ event.description }}</p>
                 </div>
             </div>
             {% empty %}
-            <div class="col-span-2 text-center py-10 text-gray-500 text-sm">No upcoming events.</div>
+            <div class="col-span-2 text-center py-12 bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/10 rounded-2xl">
+                <i class="fas fa-calendar-times text-3xl text-slate-300 dark:text-gray-600 mb-2"></i>
+                <p class="text-slate-500 dark:text-gray-400 text-sm font-medium">No upcoming events.</p>
+            </div>
             {% endfor %}
         </div>
     </div>
 </section>
 
 <!-- ===== CONTACT SECTION ===== -->
-<section id="contact" class="bg-navy-800 py-20 border-t border-white/5">
+<section id="contact" class="bg-slate-100 dark:bg-navy-800 py-20 border-t border-slate-200 dark:border-white/5 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
         <div>
-            <p class="text-brand-blue text-xs font-bold uppercase tracking-widest mb-2">Get In Touch</p>
-            <h2 class="text-3xl md:text-4xl font-black text-white mb-6">Contact Us</h2>
-            <ul class="space-y-5">
+            <span class="px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 rounded-full inline-block mb-3">
+                Get In Touch
+            </span>
+            <h2 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-6 tracking-tight">Contact Us</h2>
+            <ul class="space-y-6">
                 <li class="flex items-start gap-4">
-                    <div class="w-10 h-10 bg-brand-blue/10 text-brand-blue rounded-xl flex items-center justify-center shrink-0"><i class="fas fa-map-marker-alt"></i></div>
-                    <div><h5 class="font-semibold text-white text-sm">Address</h5><p class="text-gray-400 text-sm">HV74+HG7, Hosaina, CERS, Ethiopia</p></div>
-                </li>
-                <li class="flex items-start gap-4">
-                    <div class="w-10 h-10 bg-brand-blue/10 text-brand-blue rounded-xl flex items-center justify-center shrink-0"><i class="fas fa-phone"></i></div>
-                    <div><h5 class="font-semibold text-white text-sm">Phone</h5>
-                        <a href="tel:+251908574808" class="text-brand-blue hover:text-brand-light text-sm transition-colors block">+251 908 574 808</a>
-                        <a href="tel:+251777888325" class="text-brand-blue hover:text-brand-light text-sm transition-colors block">+251 777 888 325</a>
+                    <div class="w-11 h-11 bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center shrink-0 text-lg"><i class="fas fa-map-marker-alt"></i></div>
+                    <div>
+                        <h5 class="font-bold text-slate-900 dark:text-white text-sm">School Address</h5>
+                        <p class="text-slate-600 dark:text-gray-400 text-sm mt-0.5">HV74+HG7, Hosaina, CERS, Ethiopia</p>
                     </div>
                 </li>
                 <li class="flex items-start gap-4">
-                    <div class="w-10 h-10 bg-brand-blue/10 text-brand-blue rounded-xl flex items-center justify-center shrink-0"><i class="fas fa-envelope"></i></div>
-                    <div><h5 class="font-semibold text-white text-sm">Email</h5><p class="text-gray-400 text-sm">info@wachemoschool.edu.et</p></div>
+                    <div class="w-11 h-11 bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center shrink-0 text-lg"><i class="fas fa-phone"></i></div>
+                    <div>
+                        <h5 class="font-bold text-slate-900 dark:text-white text-sm">Phone Support</h5>
+                        <a href="tel:+251908574808" class="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium transition-colors block">+251 908 574 808</a>
+                        <a href="tel:+251777888325" class="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium transition-colors block">+251 777 888 325</a>
+                    </div>
                 </li>
                 <li class="flex items-start gap-4">
-                    <div class="w-10 h-10 bg-brand-blue/10 text-brand-blue rounded-xl flex items-center justify-center shrink-0"><i class="fas fa-clock"></i></div>
-                    <div><h5 class="font-semibold text-white text-sm">Office Hours</h5>
-                        <p class="text-gray-400 text-sm">Mon – Fri: 8:00 AM – 5:00 PM</p>
-                        <p class="text-gray-400 text-sm">Saturday: 9:00 AM – 1:00 PM</p>
+                    <div class="w-11 h-11 bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center shrink-0 text-lg"><i class="fas fa-envelope"></i></div>
+                    <div>
+                        <h5 class="font-bold text-slate-900 dark:text-white text-sm">Email Address</h5>
+                        <p class="text-slate-600 dark:text-gray-400 text-sm mt-0.5">info@wachemoschool.edu.et</p>
+                    </div>
+                </li>
+                <li class="flex items-start gap-4">
+                    <div class="w-11 h-11 bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center shrink-0 text-lg"><i class="fas fa-clock"></i></div>
+                    <div>
+                        <h5 class="font-bold text-slate-900 dark:text-white text-sm">Office Hours</h5>
+                        <p class="text-slate-600 dark:text-gray-400 text-sm mt-0.5">Mon – Fri: 8:00 AM – 5:00 PM</p>
+                        <p class="text-slate-600 dark:text-gray-400 text-sm">Saturday: 9:00 AM – 1:00 PM</p>
                     </div>
                 </li>
             </ul>
         </div>
-        <div class="glass-card rounded-2xl p-8">
-            <h3 class="font-bold text-white text-xl mb-6">Send Us a Message</h3>
+        <div class="bg-white dark:bg-navy-800/80 border border-slate-200 dark:border-white/10 rounded-2xl p-8 shadow-md dark:shadow-none transition-all">
+            <h3 class="font-bold text-slate-900 dark:text-white text-xl mb-6">Send Us a Message</h3>
             <form class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <input type="text" placeholder="Your Name" class="w-full bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm px-4 py-3 rounded-lg focus:ring-2 focus:ring-brand-blue focus:outline-none transition-all">
+                        <input type="text" placeholder="Your Name" class="w-full bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 text-sm px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
                     </div>
                     <div>
-                        <input type="email" placeholder="Your Email" class="w-full bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm px-4 py-3 rounded-lg focus:ring-2 focus:ring-brand-blue focus:outline-none transition-all">
+                        <input type="email" placeholder="Your Email" class="w-full bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 text-sm px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
                     </div>
                 </div>
-                <input type="text" placeholder="Subject" class="w-full bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm px-4 py-3 rounded-lg focus:ring-2 focus:ring-brand-blue focus:outline-none transition-all">
-                <textarea rows="5" placeholder="Your Message..." class="w-full bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm px-4 py-3 rounded-lg focus:ring-2 focus:ring-brand-blue focus:outline-none resize-none transition-all"></textarea>
-                <button type="submit" class="w-full bg-brand-blue hover:bg-brand-light text-white font-bold py-3 rounded-lg transition-all shadow-lg shadow-brand-blue/20 text-sm">
+                <input type="text" placeholder="Subject" class="w-full bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 text-sm px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
+                <textarea rows="4" placeholder="Your Message..." class="w-full bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 text-sm px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none transition-all"></textarea>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/30 text-sm">
                     Send Message <i class="fas fa-paper-plane ml-2"></i>
                 </button>
             </form>
@@ -362,7 +420,7 @@
 
 <!-- ===== MAP ===== -->
 <div class="w-full">
-    <iframe class="w-full h-72 md:h-96" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d200.52304608904757!2d37.85709541862455!3d7.564094664250556!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x17b249d665555555%3A0x7c019d3f6fae862e!2sWachamo%20Preparatory%20And%20High%20School!5e1!3m2!1sen!2set!4v1747052298964!5m2!1sen!2set" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <iframe class="w-full h-72 md:h-96 filter contrast-[1.05]" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d200.52304608904757!2d37.85709541862455!3d7.564094664250556!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x17b249d665555555%3A0x7c019d3f6fae862e!2sWachamo%20Preparatory%20And%20High%20School!5e1!3m2!1sen!2set!4v1747052298964!5m2!1sen!2set" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 </div>
 
 {% endblock %}
@@ -376,6 +434,7 @@
     let interval;
 
     function goTo(index) {
+        if (!slides.length) return;
         slides[current].style.opacity = '0';
         dots[current].classList.remove('bg-white');
         dots[current].classList.add('bg-white/40');
@@ -386,18 +445,21 @@
     }
 
     function next() {
+        if (!slides.length) return;
         goTo((current + 1) % slides.length);
     }
 
-    interval = setInterval(next, 5000);
+    if (slides.length > 0) {
+        interval = setInterval(next, 5000);
 
-    dots.forEach(dot => {
-        dot.addEventListener('click', () => {
-            clearInterval(interval);
-            goTo(parseInt(dot.dataset.index));
-            interval = setInterval(next, 5000);
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                clearInterval(interval);
+                goTo(parseInt(dot.dataset.index));
+                interval = setInterval(next, 5000);
+            });
         });
-    });
+    }
 })();
 </script>
 {% endblock %}
