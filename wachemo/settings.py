@@ -99,10 +99,12 @@ if db_url:
         new_query = urlencode(qs, doseq=True)
         db_url = urlunparse((parsed.scheme, parsed.netloc, parsed.path, parsed.params, new_query, parsed.fragment))
 
+    conn_max_age = 0 if (os.environ.get('VERCEL') or not os.access(BASE_DIR, os.W_OK)) else 60
+
     DATABASES = {
         'default': dj_database_url.config(
             default=db_url,
-            conn_max_age=600,
+            conn_max_age=conn_max_age,
             conn_health_checks=True,
         )
     }
