@@ -1,40 +1,116 @@
 
 {% extends "base.html" %}
 
-{% block title %}Contact Us - wachemoSaPS{% endblock %}
+{% block title %}Contact Us - Wachemo Secondary & Preparatory School{% endblock %}
 
 {% block content %}
-
-<section id="contact" class="bg-white">
-  <div class="max-w-7xl mx-auto px-4 py-12">
-    <div class="text-center mb-8">
-      <h2 class="text-2xl font-semibold">Contact Us</h2>
-      <p class="text-gray-600">We'd love to hear from you</p>
+<section id="contact" class="bg-slate-50 dark:bg-navy-900 min-h-screen py-12 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Hero Header -->
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 rounded-full inline-block mb-3">
+        Reach Out To Us
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-3">
+        Contact & Support Center
+      </h1>
+      <p class="text-base text-slate-600 dark:text-gray-400">
+        Have questions about admissions, portal access, or academic programs? We'd love to hear from you.
+      </p>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div>
-        <h3 class="text-xl font-semibold">Get in Touch</h3>
-        <p class="text-gray-700 mt-2">Have questions about our school or the portal? Reach out to us through any of these channels.</p>
-        <ul class="mt-4 space-y-4 text-sm">
-          <li class="flex items-start gap-3"><i class="fas fa-map-marker-alt mt-1 text-blue-600"></i><div><h5 class="font-semibold">Address</h5><p>HV74+HG7, Hosaina, CERS, Ethiopia</p></div></li>
-          <li class="flex items-start gap-3"><i class="fas fa-phone mt-1 text-blue-600"></i><div><h5 class="font-semibold">Phone</h5><p><a class="text-blue-600" href="tel:+251908574808">+251 908 574 808</a></p><p><a class="text-blue-600" href="tel:+251777888325">+251 777 888 325</a></p></div></li>
-          <li class="flex items-start gap-3"><i class="fas fa-envelope mt-1 text-blue-600"></i><div><h5 class="font-semibold">Email</h5><p>info@wachemoschool.edu.et</p></div></li>
-          <li class="flex items-start gap-3"><i class="fas fa-clock mt-1 text-blue-600"></i><div><h5 class="font-semibold">Office Hours</h5><p>Monday - Friday: 8:00 AM - 5:00 PM</p><p>Saturday: 9:00 AM - 1:00 PM</p></div></li>
-        </ul>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      
+      <!-- Contact Info Card -->
+      <div class="bg-white dark:bg-navy-800/80 border border-slate-200 dark:border-white/10 rounded-2xl p-8 shadow-md dark:shadow-none transition-all duration-300 flex flex-col justify-between">
+        <div>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Get in Touch</h3>
+          <p class="text-slate-600 dark:text-gray-400 text-sm leading-relaxed mb-8">
+            Reach out to our administrative team or portal support through any of these direct communication channels.
+          </p>
+
+          <div class="space-y-6">
+            <div class="flex items-start gap-4">
+              <div class="w-11 h-11 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 text-lg">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm">School Address</h4>
+                <p class="text-sm text-slate-600 dark:text-gray-400 mt-0.5">HV74+HG7, Hosaina, CERS, Ethiopia</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-11 h-11 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 text-lg">
+                <i class="fas fa-phone"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm">Phone Support</h4>
+                <p class="text-sm text-slate-600 dark:text-gray-400 mt-0.5">
+                  <a class="text-blue-600 dark:text-blue-400 font-semibold hover:underline" href="tel:+251908574808">+251 908 574 808</a>
+                  <span class="mx-1.5 text-slate-300 dark:text-gray-600">|</span>
+                  <a class="text-blue-600 dark:text-blue-400 font-semibold hover:underline" href="tel:+251777888325">+251 777 888 325</a>
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-11 h-11 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 text-lg">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm">Official Email</h4>
+                <p class="text-sm text-slate-600 dark:text-gray-400 mt-0.5">info@wachemoschool.edu.et</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-11 h-11 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 text-lg">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm">Office Hours</h4>
+                <p class="text-sm text-slate-600 dark:text-gray-400 mt-0.5">Mon – Fri: 8:00 AM – 5:00 PM</p>
+                <p class="text-sm text-slate-600 dark:text-gray-400">Sat: 9:00 AM – 1:00 PM</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div>
-        <h3 class="text-xl font-semibold">Send Us a Message</h3>
-        <form id="contactForm" class="mt-3 space-y-3">
-          <input type="text" class="w-full px-3 py-2 border rounded" placeholder="Your Name" required>
-          <input type="email" class="w-full px-3 py-2 border rounded" placeholder="Your Email" required>
-          <input type="text" class="w-full px-3 py-2 border rounded" placeholder="Subject">
-          <textarea class="w-full px-3 py-2 border rounded" rows="5" placeholder="Your Message" required></textarea>
-          <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded">Send Message</button>
+
+      <!-- Contact Form -->
+      <div class="bg-white dark:bg-navy-800/80 border border-slate-200 dark:border-white/10 rounded-2xl p-8 shadow-md dark:shadow-none transition-all duration-300">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Send Us a Message</h3>
+        <p class="text-slate-600 dark:text-gray-400 text-sm mb-6">Fill out the form below and our team will get back to you within 24 hours.</p>
+        
+        <form id="contactForm" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-gray-300 mb-1">Your Name</label>
+            <input type="text" class="w-full bg-slate-50 dark:bg-navy-900/60 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white text-sm px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all" placeholder="Enter full name" required>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-gray-300 mb-1">Email Address</label>
+            <input type="email" class="w-full bg-slate-50 dark:bg-navy-900/60 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white text-sm px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all" placeholder="name@example.com" required>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-gray-300 mb-1">Subject</label>
+            <input type="text" class="w-full bg-slate-50 dark:bg-navy-900/60 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white text-sm px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all" placeholder="How can we help?">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-gray-300 mb-1">Your Message</label>
+            <textarea class="w-full bg-slate-50 dark:bg-navy-900/60 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white text-sm px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all" rows="4" placeholder="Write your message here..." required></textarea>
+          </div>
+          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-xl text-sm transition-all shadow-lg shadow-blue-600/30">
+            Send Message
+          </button>
         </form>
       </div>
+
     </div>
+
   </div>
 </section>
-
 {% endblock %}
+
 

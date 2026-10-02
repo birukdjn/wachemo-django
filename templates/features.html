@@ -1,60 +1,78 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Portal Features | WSaPS - Wachemo School Academic Portal{% endblock %}
 
 {% block content %}
-    
-   <!-- Features Section -->
-    <section id="features" class="bg-white">
-        <div class="max-w-7xl mx-auto px-4 py-12">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl font-semibold">Portal Features</h2>
-                <p class="text-gray-600">Explore our comprehensive digital learning platform</p>
+<!-- Hero Banner Section -->
+<section class="relative bg-slate-100 dark:bg-navy-900 py-16 overflow-hidden border-b border-slate-200 dark:border-white/10 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-4 relative z-10 text-center">
+    <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-100 dark:bg-brand-blue/10 text-blue-700 dark:text-blue-400 text-xs font-bold uppercase tracking-widest border border-blue-200 dark:border-brand-blue/20 mb-4 shadow-sm">
+      <i class="fas fa-wand-magic-sparkles"></i> Cutting-Edge Platform
+    </span>
+    <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4">
+      Portal Features
+    </h1>
+    <p class="text-slate-600 dark:text-gray-300 text-base md:text-lg max-w-2xl mx-auto font-light leading-relaxed">
+      Explore our comprehensive digital learning platform designed for students, teachers, and school administrators.
+    </p>
+  </div>
+</section>
+
+<!-- Features Grid Section -->
+<section id="features" class="py-16 bg-slate-50 dark:bg-navy-900 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <div class="bg-white dark:bg-navy-800/80 rounded-2xl p-8 border border-slate-200 dark:border-white/10 shadow-md dark:shadow-none hover:border-blue-500/40 hover:scale-105 transition-all duration-300">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-blue-600/30 text-xl">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">E-Learning Platform</h3>
+                <p class="text-slate-600 dark:text-gray-400 text-sm font-light leading-relaxed">Access course materials, submit assignments, and take quizzes through our intuitive online learning portal.</p>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="border rounded p-5">
-                    <div class="text-3xl text-blue-600 mb-2">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <h3 class="font-semibold">E-Learning Platform</h3>
-                    <p class="text-gray-700 text-sm">Access course materials, submit assignments, and take quizzes through our intuitive online platform.</p>
+
+            <div class="bg-white dark:bg-navy-800/80 rounded-2xl p-8 border border-slate-200 dark:border-white/10 shadow-md dark:shadow-none hover:border-blue-500/40 hover:scale-105 transition-all duration-300">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-emerald-600/30 text-xl">
+                    <i class="fas fa-chart-line"></i>
                 </div>
-                <div class="border rounded p-5">
-                    <div class="text-3xl text-blue-600 mb-2">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="font-semibold">Grade Tracking</h3>
-                    <p class="text-gray-700 text-sm">Real-time access to grades and performance analytics for students and parents.</p>
-                </div>
-                <div class="border rounded p-5">
-                    <div class="text-3xl text-blue-600 mb-2">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <h3 class="font-semibold">Interactive Calendar</h3>
-                    <p class="text-gray-700 text-sm">Never miss important dates with our comprehensive school calendar and event notifications.</p>
-                </div>
-                <div class="border rounded p-5">
-                    <div class="text-3xl text-blue-600 mb-2">
-                        <i class="fas fa-comments"></i>
-                    </div>
-                    <h3 class="font-semibold">Parent-Teacher Communication</h3>
-                    <p class="text-gray-700 text-sm">Direct messaging system for seamless communication between parents and teachers.</p>
-                </div>
-                <div class="border rounded p-5">
-                    <div class="text-3xl text-blue-600 mb-2">
-                        <i class="fas fa-book-open"></i>
-                    </div>
-                    <h3 class="font-semibold">Digital Library</h3>
-                    <p class="text-gray-700 text-sm">Access thousands of e-books, research papers, and educational resources.</p>
-                </div>
-                <div class="border rounded p-5">
-                    <div class="text-3xl text-blue-600 mb-2">
-                        <i class="fas fa-bell"></i>
-                    </div>
-                    <h3 class="font-semibold">Notification System</h3>
-                    <p class="text-gray-700 text-sm">Instant alerts for assignments, exams, events, and important announcements.</p>
-                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Grade Tracking</h3>
+                <p class="text-slate-600 dark:text-gray-400 text-sm font-light leading-relaxed">Real-time access to grades, exam reports, and performance analytics for students and parents.</p>
             </div>
+
+            <div class="bg-white dark:bg-navy-800/80 rounded-2xl p-8 border border-slate-200 dark:border-white/10 shadow-md dark:shadow-none hover:border-blue-500/40 hover:scale-105 transition-all duration-300">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-600 to-pink-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-purple-600/30 text-xl">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Interactive Calendar</h3>
+                <p class="text-slate-600 dark:text-gray-400 text-sm font-light leading-relaxed">Never miss important dates with our comprehensive academic calendar, timetable, and event notifications.</p>
+            </div>
+
+            <div class="bg-white dark:bg-navy-800/80 rounded-2xl p-8 border border-slate-200 dark:border-white/10 shadow-md dark:shadow-none hover:border-blue-500/40 hover:scale-105 transition-all duration-300">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-600 to-orange-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-amber-600/30 text-xl">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Messaging System</h3>
+                <p class="text-slate-600 dark:text-gray-400 text-sm font-light leading-relaxed">Direct internal messaging for seamless communication between students, teachers, and staff.</p>
+            </div>
+
+            <div class="bg-white dark:bg-navy-800/80 rounded-2xl p-8 border border-slate-200 dark:border-white/10 shadow-md dark:shadow-none hover:border-blue-500/40 hover:scale-105 transition-all duration-300">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-600 to-blue-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-cyan-600/30 text-xl">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Digital Library</h3>
+                <p class="text-slate-600 dark:text-gray-400 text-sm font-light leading-relaxed">Access e-books, research papers, study guides, and digital learning assets anytime, anywhere.</p>
+            </div>
+
+            <div class="bg-white dark:bg-navy-800/80 rounded-2xl p-8 border border-slate-200 dark:border-white/10 shadow-md dark:shadow-none hover:border-blue-500/40 hover:scale-105 transition-all duration-300">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-red-600 to-rose-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-red-600/30 text-xl">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Notification Center</h3>
+                <p class="text-slate-600 dark:text-gray-400 text-sm font-light leading-relaxed">Instant alerts for new assignments, exam announcements, club activities, and campus updates.</p>
+            </div>
+
         </div>
-    </section>
-
-
-{% endblock  %}
+    </div>
+</section>
+{% endblock %}
