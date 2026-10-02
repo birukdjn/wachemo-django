@@ -3,10 +3,10 @@
 {% block title %}Attendance - {{ course.code }} | Teacher Portal{% endblock %}
 
 {% block content %}
-<div class="flex min-h-screen bg-navy-900 portal-main-bg">
+<div class="flex h-screen overflow-hidden bg-navy-900 portal-main-bg">
     {% include 'teacher/sidebar.html' %}
 
-    <div class="flex-1 p-6 md:p-8 overflow-y-auto">
+    <div class="flex-1 h-screen overflow-y-auto p-6 md:p-8">
         <!-- Messages -->
         {% if messages %}
             <div class="mb-6 space-y-2">

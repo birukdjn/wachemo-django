@@ -380,3 +380,36 @@ def create_exam(request, course_id):
     return redirect('teacher_course_detail', course_id=course_id)
 
 
+@teacher_required
+def teacher_profile(request):
+    """
+    Display and update instructor profile details.
+    """
+    try:
+        instructor = Instructor.objects.get(user=request.user)
+    except Instructor.DoesNotExist:
+        messages.warning(request, 'Instructor profile not found.')
+        return redirect('teacher_dashboard')
+    
+    user = request.user
+    if request.method == 'POST':
+        user.first_name = request.POST.get('first_name', user.first_name).strip()
+        user.last_name = request.POST.get('last_name', user.last_name).strip()
+        user.email = request.POST.get('email', user.email).strip()
+        user.save()
+
+        instructor.phone = request.POST.get('phone', instructor.phone).strip()
+        instructor.office_location = request.POST.get('office_location', instructor.office_location).strip()
+        instructor.specialization = request.POST.get('specialization', instructor.specialization).strip()
+        instructor.save()
+
+        messages.success(request, 'Profile updated successfully!')
+        return redirect('teacher_profile')
+
+    context = {
+        'instructor': instructor,
+    }
+    return render(request, 'teacher/profile.html', context)
+
+
+
