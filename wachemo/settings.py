@@ -87,9 +87,12 @@ if os.environ.get('VERCEL') or not os.access(BASE_DIR, os.W_OK):
     if tmp_db.exists():
         DB_PATH = tmp_db
 
-if os.environ.get('DATABASE_URL'):
+db_url = os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL') or os.environ.get('POSTGRES_PRISMA_URL')
+
+if db_url:
     DATABASES = {
         'default': dj_database_url.config(
+            default=db_url,
             conn_max_age=600,
             conn_health_checks=True,
         )
