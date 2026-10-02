@@ -16,7 +16,7 @@ DEBUG = config('DJANGO_DEBUG', default='False').lower() == 'true'
 
 
 
-ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='wachemo.onrender.com,localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='wachemo.onrender.com,localhost,127.0.0.1,.vercel.app').split(',')
 
 
 # Application definition
