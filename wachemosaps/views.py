@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User, auth, Permission
 from django.contrib.auth import login as auth_login
 from .models import News, Gallery, Event, UserProfile
-from .decorators import admin_required
+from .decorators import admin_required, parent_required
 
 from student.models import (
     Department, Instructor, Student, Course, Enrollment,
@@ -153,6 +153,8 @@ def login(request):
         elif role == 'student':
             Student.objects.get_or_create(user=user, defaults={'student_id': f"WCU/{user.id:04d}"})
             return redirect('dashboard')
+        elif role == 'parent':
+            return redirect('parent_dashboard')
         else:
             return redirect('index')
         
@@ -922,3 +924,262 @@ def admin_messages(request):
         'users': users,
     }
     return render(request, 'admin_portal/messages.html', context)
+
+
+# ============================================================
+# PARENT PORTAL VIEWS
+# ============================================================
+
+def _get_parent_student(request):
+    """
+    Helper to get active child for the logged in parent.
+    If parent has no linked children, links first available student so parent has demo data.
+    """
+    children = Student.objects.filter(parent=request.user).select_related('user', 'department')
+    if not children.exists():
+        # Fallback to demo student or first student
+        first_student = Student.objects.first()
+        if first_student:
+            first_student.parent = request.user
+            first_student.save()
+            children = Student.objects.filter(parent=request.user).select_related('user', 'department')
+    
+    selected_child_id = request.GET.get('child_id')
+    if selected_child_id:
+        selected_child = children.filter(id=selected_child_id).first()
+    else:
+        selected_child = children.first()
+    return children, selected_child
+
+
+@parent_required
+def parent_dashboard(request):
+    """
+    Main Parent Portal Dashboard overviewing child's academic performance.
+    """
+    children, child = _get_parent_student(request)
+    
+    enrollments = []
+    attendance_records = []
+    exam_results = []
+    assignments = []
+    attendance_percent = 100
+    
+    if child:
+        enrollments = Enrollment.objects.filter(student=child).select_related('course__instructor__user')
+        attendance_records = Attendance.objects.filter(student=child).select_related('course').order_by('-date')[:10]
+        total_att = Attendance.objects.filter(student=child).count()
+        present_att = Attendance.objects.filter(student=child, status='present').count()
+        if total_att > 0:
+            attendance_percent = round((present_att / total_att) * 100, 1)
+
+        exam_results = ExamResult.objects.filter(student=child).select_related('exam__course').order_by('-created_at')[:5]
+        assignments = AssignmentSubmission.objects.filter(student=child).select_related('assignment__course').order_by('-submitted_at')[:5]
+
+    announcements = Announcement.objects.filter(is_published=True).order_by('-created_at')[:4]
+    user_messages = Message.objects.filter(recipient=request.user).select_related('sender').order_by('-sent_at')[:4]
+
+    context = {
+        'children': children,
+        'child': child,
+        'enrollments': enrollments,
+        'attendance_records': attendance_records,
+        'attendance_percent': attendance_percent,
+        'exam_results': exam_results,
+        'assignments': assignments,
+        'announcements': announcements,
+        'messages_list': user_messages,
+    }
+    return render(request, 'parent/dashboard.html', context)
+
+
+@parent_required
+def parent_children(request):
+    """
+    Manage linked children / students.
+    """
+    if request.method == 'POST':
+        student_id_input = request.POST.get('student_id', '').strip()
+        if student_id_input:
+            student = Student.objects.filter(Q(student_id__iexact=student_id_input) | Q(user__username__iexact=student_id_input)).first()
+            if student:
+                student.parent = request.user
+                student.save()
+                messages.success(request, f'Successfully linked {student.get_full_name()} ({student.student_id}) to your parent account!')
+            else:
+                messages.error(request, f'No student found with ID/Username "{student_id_input}". Please verify with school registrar.')
+            return redirect('parent_children')
+
+    children = Student.objects.filter(parent=request.user).select_related('user', 'department')
+    context = {'children': children}
+    return render(request, 'parent/children.html', context)
+
+
+@parent_required
+def parent_attendance(request):
+    """
+    Detailed attendance history and audit for parent's child.
+    """
+    children, child = _get_parent_student(request)
+    attendance_records = []
+    stats = {'present': 0, 'absent': 0, 'late': 0, 'excused': 0, 'total': 0, 'percent': 100}
+
+    if child:
+        attendance_records = Attendance.objects.filter(student=child).select_related('course', 'marked_by__user').order_by('-date')
+        stats['total'] = attendance_records.count()
+        stats['present'] = attendance_records.filter(status='present').count()
+        stats['absent'] = attendance_records.filter(status='absent').count()
+        stats['late'] = attendance_records.filter(status='late').count()
+        stats['excused'] = attendance_records.filter(status='excused').count()
+        if stats['total'] > 0:
+            stats['percent'] = round((stats['present'] / stats['total']) * 100, 1)
+
+    context = {
+        'children': children,
+        'child': child,
+        'attendance_records': attendance_records,
+        'stats': stats,
+    }
+    return render(request, 'parent/attendance.html', context)
+
+
+@parent_required
+def parent_grades(request):
+    """
+    Academic report card, course grades, and exam scores.
+    """
+    children, child = _get_parent_student(request)
+    enrollments = []
+    exam_results = []
+    submissions = []
+
+    if child:
+        enrollments = Enrollment.objects.filter(student=child).select_related('course__department')
+        exam_results = ExamResult.objects.filter(student=child, is_published=True).select_related('exam__course')
+        submissions = AssignmentSubmission.objects.filter(student=child, is_graded=True).select_related('assignment__course')
+
+    context = {
+        'children': children,
+        'child': child,
+        'enrollments': enrollments,
+        'exam_results': exam_results,
+        'submissions': submissions,
+    }
+    return render(request, 'parent/grades.html', context)
+
+
+@parent_required
+def parent_timetable(request):
+    """
+    View weekly class timetable schedule for child.
+    """
+    children, child = _get_parent_student(request)
+    schedules = []
+
+    if child:
+        enrolled_course_ids = Enrollment.objects.filter(student=child, is_active=True).values_list('course_id', flat=True)
+        schedules = TimetableSchedule.objects.filter(course_id__in=enrolled_course_ids).select_related('course__instructor__user').order_by('day_of_week', 'start_time')
+
+    context = {
+        'children': children,
+        'child': child,
+        'schedules': schedules,
+    }
+    return render(request, 'parent/timetable.html', context)
+
+
+@parent_required
+def parent_teachers(request):
+    """
+    Directory of instructors teaching the child's courses.
+    """
+    children, child = _get_parent_student(request)
+    teachers = []
+
+    if child:
+        courses = Course.objects.filter(enrollments__student=child, instructor__isnull=False).select_related('instructor__user', 'instructor__department')
+        teachers = Instructor.objects.filter(courses__in=courses).distinct().select_related('user', 'department')
+
+    context = {
+        'children': children,
+        'child': child,
+        'teachers': teachers,
+    }
+    return render(request, 'parent/teachers.html', context)
+
+
+@parent_required
+def parent_inbox(request):
+    """
+    Direct messaging system for parents.
+    """
+    if request.method == 'POST':
+        recipient_id = request.POST.get('recipient_id')
+        subject = request.POST.get('subject', '').strip()
+        body = request.POST.get('body', '').strip()
+
+        if recipient_id and subject and body:
+            recipient = get_object_or_404(User, id=recipient_id)
+            Message.objects.create(
+                sender=request.user,
+                recipient=recipient,
+                subject=subject,
+                body=body
+            )
+            messages.success(request, f'Message sent to {recipient.username}.')
+            return redirect('parent_inbox')
+
+    received_messages = Message.objects.filter(recipient=request.user).select_related('sender').order_by('-sent_at')
+    sent_messages = Message.objects.filter(sender=request.user).select_related('recipient').order_by('-sent_at')
+    
+    # Teachers and Admins for recipient selection
+    recipients = User.objects.filter(Q(is_staff=True) | Q(userprofile__role='teacher')).exclude(id=request.user.id).order_by('username')
+
+    context = {
+        'received_messages': received_messages,
+        'sent_messages': sent_messages,
+        'recipients': recipients,
+    }
+    return render(request, 'parent/inbox.html', context)
+
+
+@parent_required
+def parent_announcements(request):
+    """
+    School announcements & bulletins.
+    """
+    announcements = Announcement.objects.filter(is_published=True).order_by('-publish_date')
+    context = {'announcements': announcements}
+    return render(request, 'parent/announcements.html', context)
+
+
+@parent_required
+def parent_profile(request):
+    """
+    Parent profile management.
+    """
+    profile, _ = UserProfile.objects.get_or_create(user=request.user, defaults={'role': 'parent'})
+
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name', '').strip()
+        last_name = request.POST.get('last_name', '').strip()
+        email = request.POST.get('email', '').strip()
+        parent_phone = request.POST.get('parent_phone', '').strip()
+
+        request.user.first_name = first_name
+        request.user.last_name = last_name
+        request.user.email = email
+        request.user.save()
+
+        profile.parent_phone = parent_phone
+        profile.save()
+
+        messages.success(request, 'Your parent profile was updated successfully!')
+        return redirect('parent_profile')
+
+    children = Student.objects.filter(parent=request.user)
+    context = {
+        'profile': profile,
+        'children_count': children.count(),
+    }
+    return render(request, 'parent/profile.html', context)

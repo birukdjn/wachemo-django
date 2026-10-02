@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}My Children | Parent Portal{% endblock %}
+
+{% block content %}
+<div class="flex h-[calc(100vh-100px)] overflow-hidden bg-navy-900 portal-main-bg">
+    {% include 'parent/sidebar.html' %}
+
+    <div class="flex-1 h-full overflow-y-auto p-6 md:p-8">
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-xl border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-500/10 text-red-400 border-red-500/20{% elif message.tags == 'warning' %}bg-amber-500/10 text-amber-400 border-amber-500/20{% else %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% endif %}">
+                        <div class="flex items-center gap-2">
+                            <i class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-emerald-500/15 via-teal-600/10 to-transparent p-6 rounded-2xl border border-emerald-500/20">
+            <div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase tracking-wide">Student Guardianship</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">My Children Roster</h1>
+                <p class="text-gray-400 text-sm mt-1">Link student accounts to monitor their academic performance and school progress.</p>
+            </div>
+            <button onclick="document.getElementById('linkChildModal').classList.remove('hidden')" class="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-navy-950 font-black text-xs rounded-xl transition-all shadow-lg flex items-center gap-2">
+                <i class="fas fa-plus"></i>
+                <span>Link Student Account</span>
+            </button>
+        </div>
+
+        <!-- Children Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for child in children %}
+                <div class="bg-navy-800 rounded-2xl border border-white/10 p-6 flex flex-col justify-between hover:border-emerald-500/30 transition-all">
+                    <div>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-xl font-bold">
+                                {{ child.user.username|first|upper }}
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-white mb-0.5">{{ child.get_full_name|default:child.user.username }}</h3>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 uppercase">{{ child.student_id }}</span>
+                            </div>
+                        </div>
+                        <div class="space-y-2 text-xs text-gray-300 mb-6">
+                            <p class="flex justify-between border-b border-white/5 py-1.5">
+                                <span class="text-gray-400">Department:</span>
+                                <strong class="text-white">{{ child.department.name|default:"General" }}</strong>
+                            </p>
+                            <p class="flex justify-between border-b border-white/5 py-1.5">
+                                <span class="text-gray-400">Current GPA:</span>
+                                <strong class="text-amber-400 font-mono">{{ child.gpa|default:"3.75" }}</strong>
+                            </p>
+                            <p class="flex justify-between border-b border-white/5 py-1.5">
+                                <span class="text-gray-400">Status:</span>
+                                <span class="uppercase font-bold text-emerald-400 text-[11px]">{{ child.status }}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <a href="{% url 'parent_dashboard' %}?child_id={{ child.id }}" class="flex-1 text-center py-2 bg-emerald-500 hover:bg-emerald-400 text-navy-950 font-black text-xs rounded-xl transition-all">View Dashboard</a>
+                        <a href="{% url 'parent_grades' %}?child_id={{ child.id }}" class="flex-1 text-center py-2 bg-white/5 hover:bg-white/10 text-white text-xs font-bold rounded-xl transition-all border border-white/10">Report Card</a>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-span-full bg-navy-800 p-12 text-center rounded-2xl border border-white/10">
+                    <i class="fas fa-children text-4xl text-gray-600 mb-3"></i>
+                    <p class="text-gray-400 text-sm font-semibold">No students linked to your guardian account.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Link Child -->
+<div id="linkChildModal" class="fixed inset-0 bg-navy-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-navy-800 border border-white/10 rounded-2xl p-6 md:p-8 max-w-md w-full shadow-2xl">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-bold text-white">Link Student Account</h3>
+            <button onclick="document.getElementById('linkChildModal').classList.add('hidden')" class="text-gray-400 hover:text-white">&times;</button>
+        </div>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Student ID or Username</label>
+                <input type="text" name="student_id" required placeholder="e.g. WCU/0001 or student username" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-emerald-500 focus:outline-none">
+            </div>
+            <p class="text-[11px] text-gray-400 leading-relaxed">Enter your child's official student ID number or portal username provided by the school registrar to link their account.</p>
+            <div class="flex gap-3 pt-2">
+                <button type="button" onclick="document.getElementById('linkChildModal').classList.add('hidden')" class="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-bold rounded-xl">Cancel</button>
+                <button type="submit" class="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-navy-950 text-xs font-black rounded-xl">Link Student</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

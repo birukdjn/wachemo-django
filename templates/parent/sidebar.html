@@ -1,0 +1,101 @@
+<!-- Parent Portal Sidebar -->
+<aside id="parentSidebar" class="w-64 shrink-0 bg-navy-800 border-r border-white/5 h-full overflow-y-auto flex flex-col hidden lg:flex">
+    <!-- Parent Identity Card -->
+    {% if user.is_authenticated %}
+    <div class="mx-3 mt-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3.5 shrink-0">
+        <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 bg-emerald-500 rounded-lg flex items-center justify-center font-bold text-navy-950 text-sm shrink-0">
+                <i class="fas fa-person-shelter"></i>
+            </div>
+            <div class="min-w-0">
+                <p class="font-bold text-white text-xs truncate">{{ user.get_full_name|default:user.username }}</p>
+                <p class="text-emerald-400 text-[10px] font-semibold uppercase">Parent / Guardian</p>
+            </div>
+        </div>
+        <span class="inline-block mt-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+            WSaPS Parent Portal
+        </span>
+    </div>
+    {% endif %}
+
+    <!-- Navigation List -->
+    <nav class="flex-1 p-3 space-y-0.5 overflow-y-auto mt-2">
+        <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5">Overview</p>
+
+        <a href="{% url 'parent_dashboard' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
+            {% if request.resolver_match.url_name == 'parent_dashboard' %}bg-emerald-500 text-navy-950 shadow-lg shadow-emerald-500/20 font-bold{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-gauge-high w-4 text-center"></i>
+            <span>Parent Dashboard</span>
+        </a>
+
+        <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 mt-3">Student Monitoring</p>
+
+        <a href="{% url 'parent_children' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
+            {% if request.resolver_match.url_name == 'parent_children' %}bg-emerald-500 text-navy-950 shadow-lg shadow-emerald-500/20 font-bold{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-children w-4 text-center"></i>
+            <span>My Children</span>
+        </a>
+
+        <a href="{% url 'parent_attendance' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
+            {% if request.resolver_match.url_name == 'parent_attendance' %}bg-emerald-500 text-navy-950 shadow-lg shadow-emerald-500/20 font-bold{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-calendar-check w-4 text-center"></i>
+            <span>Attendance History</span>
+        </a>
+
+        <a href="{% url 'parent_grades' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
+            {% if request.resolver_match.url_name == 'parent_grades' %}bg-emerald-500 text-navy-950 shadow-lg shadow-emerald-500/20 font-bold{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-award w-4 text-center"></i>
+            <span>Grades & Report Card</span>
+        </a>
+
+        <a href="{% url 'parent_timetable' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
+            {% if request.resolver_match.url_name == 'parent_timetable' %}bg-emerald-500 text-navy-950 shadow-lg shadow-emerald-500/20 font-bold{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-clock w-4 text-center"></i>
+            <span>Class Timetable</span>
+        </a>
+
+        <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 mt-3">Communication</p>
+
+        <a href="{% url 'parent_teachers' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
+            {% if request.resolver_match.url_name == 'parent_teachers' %}bg-emerald-500 text-navy-950 shadow-lg shadow-emerald-500/20 font-bold{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-chalkboard-user w-4 text-center"></i>
+            <span>Faculty Teachers</span>
+        </a>
+
+        <a href="{% url 'parent_inbox' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
+            {% if request.resolver_match.url_name == 'parent_inbox' %}bg-emerald-500 text-navy-950 shadow-lg shadow-emerald-500/20 font-bold{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-envelope w-4 text-center"></i>
+            <span>Direct Messages</span>
+        </a>
+
+        <a href="{% url 'parent_announcements' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
+            {% if request.resolver_match.url_name == 'parent_announcements' %}bg-emerald-500 text-navy-950 shadow-lg shadow-emerald-500/20 font-bold{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-bullhorn w-4 text-center"></i>
+            <span>School Notices</span>
+        </a>
+
+        <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 mt-3">Account</p>
+
+        <a href="{% url 'parent_profile' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all
+            {% if request.resolver_match.url_name == 'parent_profile' %}bg-emerald-500 text-navy-950 shadow-lg shadow-emerald-500/20 font-bold{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
+            <i class="fas fa-user-gear w-4 text-center"></i>
+            <span>Guardian Profile</span>
+        </a>
+
+        <a href="{% url 'index' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-gray-400 hover:bg-white/5 hover:text-white">
+            <i class="fas fa-globe w-4 text-center"></i>
+            <span>Main Website</span>
+        </a>
+    </nav>
+
+    <!-- Logout -->
+    <div class="p-3 border-t border-white/5 shrink-0">
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all">
+                <i class="fas fa-sign-out-alt w-4 text-center"></i>
+                <span>Logout</span>
+            </button>
+        </form>
+    </div>
+</aside>

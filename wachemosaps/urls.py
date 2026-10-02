@@ -37,6 +37,17 @@ urlpatterns = [
     path('admin-dashboard/announcements/', views.admin_announcements, name='admin_announcements'),
     path('admin-dashboard/messages/', views.admin_messages, name='admin_messages'),
 
+    # Parent Portal Routes
+    path('parent/', views.parent_dashboard, name='parent_dashboard'),
+    path('parent/children/', views.parent_children, name='parent_children'),
+    path('parent/attendance/', views.parent_attendance, name='parent_attendance'),
+    path('parent/grades/', views.parent_grades, name='parent_grades'),
+    path('parent/timetable/', views.parent_timetable, name='parent_timetable'),
+    path('parent/teachers/', views.parent_teachers, name='parent_teachers'),
+    path('parent/inbox/', views.parent_inbox, name='parent_inbox'),
+    path('parent/announcements/', views.parent_announcements, name='parent_announcements'),
+    path('parent/profile/', views.parent_profile, name='parent_profile'),
+
     # Fallback patterns without trailing slash
     path('signup', views.signup),
     path('login', views.login),

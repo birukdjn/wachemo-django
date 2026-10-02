@@ -100,3 +100,31 @@ def admin_required(view_func):
             return redirect('index')
 
     return _wrapped_view
+
+
+def parent_required(view_func):
+    """
+    Strict isolation decorator for Parent Portal (/parent/).
+    ONLY active Parent accounts (or admins) can access Parent views.
+    """
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+            
+        user_profile, _ = UserProfile.objects.get_or_create(user=request.user, defaults={'role': 'parent'})
+        user_role = user_profile.role
+
+        if user_role == 'parent' or request.user.is_superuser or request.user.is_staff:
+            return view_func(request, *args, **kwargs)
+
+        messages.error(request, "Access Denied: You do not have permission to access the Parent Portal.")
+        if user_role == 'teacher':
+            return redirect('teacher_dashboard')
+        elif user_role == 'student':
+            return redirect('dashboard')
+        else:
+            return redirect('index')
+
+    return _wrapped_view
+

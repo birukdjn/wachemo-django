@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}School Bulletins | Parent Portal{% endblock %}
+
+{% block content %}
+<div class="flex h-[calc(100vh-100px)] overflow-hidden bg-navy-900 portal-main-bg">
+    {% include 'parent/sidebar.html' %}
+
+    <div class="flex-1 h-full overflow-y-auto p-6 md:p-8">
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-xl border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-500/10 text-red-400 border-red-500/20{% elif message.tags == 'warning' %}bg-amber-500/10 text-amber-400 border-amber-500/20{% else %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% endif %}">
+                        <div class="flex items-center gap-2">
+                            <i class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-emerald-500/15 via-teal-600/10 to-transparent p-6 rounded-2xl border border-emerald-500/20">
+            <div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase tracking-wide">Campus Bulletins</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">Official School Announcements</h1>
+                <p class="text-gray-400 text-sm mt-1">Stay updated with academic schedules, parent-teacher conferences, and school notices.</p>
+            </div>
+        </div>
+
+        <!-- Announcements Feed -->
+        <div class="space-y-4">
+            {% for ann in announcements %}
+                <div class="bg-navy-800 rounded-2xl border border-white/10 p-6 hover:border-emerald-500/30 transition-all">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase border {% if ann.priority == 'urgent' or ann.priority == 'high' %}bg-red-500/15 text-red-400 border-red-500/30{% elif ann.priority == 'medium' %}bg-amber-500/15 text-amber-400 border-amber-500/30{% else %}bg-blue-500/15 text-blue-400 border-blue-500/30{% endif %}">
+                            {{ ann.priority }} Priority
+                        </span>
+                        <span class="text-xs text-gray-400 font-mono">&bull; Published: {{ ann.publish_date|date:"M d, Y H:i" }}</span>
+                    </div>
+                    <h3 class="text-white font-bold text-lg mb-2">{{ ann.title }}</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">{{ ann.content }}</p>
+                </div>
+            {% empty %}
+                <div class="bg-navy-800 p-12 text-center rounded-2xl border border-white/10">
+                    <i class="fas fa-bullhorn text-4xl text-gray-600 mb-3"></i>
+                    <p class="text-gray-400 text-sm font-semibold">No school announcements published.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

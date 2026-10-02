@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+
+{% block title %}Parent Portal Dashboard | WSaPS{% endblock %}
+
+{% block content %}
+<div class="flex h-[calc(100vh-100px)] overflow-hidden bg-navy-900 portal-main-bg">
+    {% include 'parent/sidebar.html' %}
+
+    <div class="flex-1 h-full overflow-y-auto p-6 md:p-8">
+        <!-- Flash Messages -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-xl border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-500/10 text-red-400 border-red-500/20{% elif message.tags == 'warning' %}bg-amber-500/10 text-amber-400 border-amber-500/20{% else %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% endif %}">
+                        <div class="flex items-center gap-2">
+                            <i class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Header Banner with Child Selector -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-emerald-500/15 via-teal-600/10 to-transparent p-6 rounded-2xl border border-emerald-500/20">
+            <div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase tracking-wide">Parent Portal</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">Guardian Dashboard 👨‍👩‍👧‍👦</h1>
+                <p class="text-gray-400 text-sm mt-1">Monitor your child's academic progress, attendance records, and faculty updates.</p>
+            </div>
+            
+            {% if children.count > 1 %}
+            <div class="bg-navy-800 p-2.5 rounded-xl border border-white/10 shrink-0">
+                <label class="text-[10px] text-gray-400 uppercase font-bold block mb-1">Active Student Context</label>
+                <form method="get" class="flex items-center gap-2">
+                    <select name="child_id" onchange="this.form.submit()" class="text-xs p-2 bg-navy-900 border border-white/10 rounded-lg text-white font-bold focus:outline-none">
+                        {% for c in children %}
+                            <option value="{{ c.id }}" {% if child and child.id == c.id %}selected{% endif %}>
+                                {{ c.get_full_name|default:c.user.username }} ({{ c.student_id }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if child %}
+            <!-- Student Context Summary Banner -->
+            <div class="bg-navy-800 rounded-2xl border border-white/10 p-6 mb-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-2xl font-black shrink-0">
+                        {{ child.user.username|first|upper }}
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <h2 class="text-xl font-bold text-white">{{ child.get_full_name|default:child.user.username }}</h2>
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 uppercase">{{ child.student_id }}</span>
+                        </div>
+                        <p class="text-xs text-gray-400">
+                            Department: <strong class="text-gray-200">{{ child.department.name|default:"General Academics" }}</strong> &bull; Status: <strong class="text-emerald-400 uppercase font-bold">{{ child.status }}</strong>
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="{% url 'parent_attendance' %}" class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-bold rounded-xl transition-all">Attendance Report</a>
+                    <a href="{% url 'parent_grades' %}" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-navy-950 text-xs font-black rounded-xl transition-all shadow-md">Full Report Card</a>
+                </div>
+            </div>
+
+            <!-- Metrics Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg flex items-center justify-between group hover:border-emerald-500/40 transition-all">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Attendance Rate</p>
+                        <p class="text-3xl font-black text-white mt-1">{{ attendance_percent }}%</p>
+                        <p class="text-[11px] text-gray-500 mt-1"><i class="fas fa-calendar-check text-emerald-400 mr-1"></i> Class compliance</p>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                </div>
+
+                <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg flex items-center justify-between group hover:border-amber-500/40 transition-all">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Current GPA</p>
+                        <p class="text-3xl font-black text-white mt-1">{{ child.gpa|default:"3.75" }}</p>
+                        <p class="text-[11px] text-gray-500 mt-1"><i class="fas fa-award text-amber-400 mr-1"></i> Grade Point Average</p>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+
+                <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg flex items-center justify-between group hover:border-blue-500/40 transition-all">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Enrolled Courses</p>
+                        <p class="text-3xl font-black text-white mt-1">{{ enrollments.count }}</p>
+                        <p class="text-[11px] text-gray-500 mt-1"><i class="fas fa-book-open text-blue-400 mr-1"></i> Active subjects</p>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">
+                        <i class="fas fa-book"></i>
+                    </div>
+                </div>
+
+                <div class="bg-navy-800 p-6 rounded-2xl border border-white/10 shadow-lg flex items-center justify-between group hover:border-purple-500/40 transition-all">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Credits Completed</p>
+                        <p class="text-3xl font-black text-white mt-1">{{ child.credits_completed }} / {{ child.credits_required }}</p>
+                        <p class="text-[11px] text-gray-500 mt-1"><i class="fas fa-graduation-cap text-purple-400 mr-1"></i> Degree progress</p>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Grid: Recent Attendance & Exam Scorecard -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Attendance History Preview -->
+                <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden flex flex-col">
+                    <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-clipboard-user text-emerald-400"></i>
+                            <h2 class="font-bold text-white text-base">Recent Attendance Log</h2>
+                        </div>
+                        <a href="{% url 'parent_attendance' %}" class="text-xs font-bold text-emerald-400 hover:text-white transition-colors">View All &rarr;</a>
+                    </div>
+                    <div class="p-6 space-y-3 overflow-y-auto max-h-[400px]">
+                        {% for att in attendance_records %}
+                            <div class="p-3.5 bg-navy-900/60 border border-white/5 rounded-xl flex items-center justify-between">
+                                <div>
+                                    <span class="font-bold text-white text-xs block">{{ att.course.code }} - {{ att.course.name }}</span>
+                                    <span class="text-[10px] text-gray-400 font-mono">{{ att.date|date:"M d, Y" }}</span>
+                                </div>
+                                <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg uppercase border {% if att.status == 'present' %}bg-emerald-500/15 text-emerald-400 border-emerald-500/30{% elif att.status == 'late' %}bg-amber-500/15 text-amber-400 border-amber-500/30{% else %}bg-red-500/15 text-red-400 border-red-500/30{% endif %}">
+                                    {{ att.status }}
+                                </span>
+                            </div>
+                        {% empty %}
+                            <p class="text-gray-400 text-xs text-center py-8">No attendance entries recorded yet.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Exam Scorecards Preview -->
+                <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden flex flex-col">
+                    <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-award text-amber-400"></i>
+                            <h2 class="font-bold text-white text-base">Latest Exam Scorecards</h2>
+                        </div>
+                        <a href="{% url 'parent_grades' %}" class="text-xs font-bold text-emerald-400 hover:text-white transition-colors">View Report Card &rarr;</a>
+                    </div>
+                    <div class="p-6 space-y-3 overflow-y-auto max-h-[400px]">
+                        {% for res in exam_results %}
+                            <div class="p-3.5 bg-navy-900/60 border border-white/5 rounded-xl flex items-center justify-between">
+                                <div>
+                                    <span class="font-bold text-white text-xs block">{{ res.exam.course.code }} &bull; {{ res.exam.title }}</span>
+                                    <span class="text-[10px] text-gray-400 font-mono">Exam Date: {{ res.exam.exam_date|date:"M d, Y" }}</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-sm font-extrabold text-amber-400 block">{{ res.points_earned }} / {{ res.exam.max_points }}</span>
+                                    <span class="text-[10px] font-mono uppercase px-2 py-0.5 bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 rounded">Grade: {{ res.grade|default:"N/A" }}</span>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p class="text-gray-400 text-xs text-center py-8">No exam scorecards available yet.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="bg-navy-800 p-12 text-center rounded-2xl border border-white/10 mb-8">
+                <i class="fas fa-child text-5xl text-gray-600 mb-4"></i>
+                <h3 class="text-xl font-bold text-white mb-2">No Student Linked to Your Account</h3>
+                <p class="text-gray-400 text-sm max-w-md mx-auto mb-6">Link your child's student account using their Student ID to monitor their grades, attendance, and timetable.</p>
+                <a href="{% url 'parent_children' %}" class="px-5 py-3 bg-emerald-500 hover:bg-emerald-400 text-navy-950 font-black text-xs rounded-xl transition-all shadow-lg inline-flex items-center gap-2">
+                    <i class="fas fa-plus"></i> Link Student Account
+                </a>
+            </div>
+        {% endif %}
+
+        <!-- Announcements & Notices -->
+        <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg p-6">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-bullhorn text-emerald-400"></i>
+                    <h2 class="font-bold text-white text-base">School Bulletins & Announcements</h2>
+                </div>
+                <a href="{% url 'parent_announcements' %}" class="text-xs font-bold text-emerald-400 hover:text-white transition-colors">All Notices &rarr;</a>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {% for ann in announcements %}
+                    <div class="p-4 bg-navy-900/60 border border-white/5 rounded-xl">
+                        <div class="flex items-center justify-between text-[11px] text-gray-400 font-mono mb-1">
+                            <span class="text-emerald-400 font-bold uppercase">{{ ann.priority }} Priority</span>
+                            <span>{{ ann.created_at|date:"M d, Y" }}</span>
+                        </div>
+                        <h4 class="font-bold text-white text-sm mb-1">{{ ann.title }}</h4>
+                        <p class="text-xs text-gray-400 line-clamp-2">{{ ann.content }}</p>
+                    </div>
+                {% empty %}
+                    <p class="text-gray-400 text-xs text-center py-6 col-span-full">No active announcements.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

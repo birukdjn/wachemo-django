@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Direct Messages | Parent Portal{% endblock %}
+
+{% block content %}
+<div class="flex h-[calc(100vh-100px)] overflow-hidden bg-navy-900 portal-main-bg">
+    {% include 'parent/sidebar.html' %}
+
+    <div class="flex-1 h-full overflow-y-auto p-6 md:p-8">
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-xl border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-500/10 text-red-400 border-red-500/20{% elif message.tags == 'warning' %}bg-amber-500/10 text-amber-400 border-amber-500/20{% else %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% endif %}">
+                        <div class="flex items-center gap-2">
+                            <i class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-emerald-500/15 via-teal-600/10 to-transparent p-6 rounded-2xl border border-emerald-500/20">
+            <div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase tracking-wide">Parent Communications</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">Direct Messages & Inquiries</h1>
+                <p class="text-gray-400 text-sm mt-1">Communicate directly with course teachers, department heads, and school administration.</p>
+            </div>
+            <button onclick="document.getElementById('composeModal').classList.remove('hidden')" class="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-navy-950 font-black text-xs rounded-xl transition-all shadow-lg flex items-center gap-2">
+                <i class="fas fa-paper-plane"></i>
+                <span>Compose Message</span>
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Received Messages (Inbox) -->
+            <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden flex flex-col">
+                <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-inbox text-emerald-400"></i>
+                        <h2 class="font-bold text-white text-base">Inbox (Received)</h2>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4 overflow-y-auto max-h-[600px]">
+                    {% for msg in received_messages %}
+                        <div class="p-4 bg-navy-900/60 border border-white/5 rounded-xl">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-bold text-white text-xs block">From: <strong class="text-emerald-300">{{ msg.sender.username }}</strong></span>
+                                <span class="text-[10px] font-mono text-gray-400">{{ msg.sent_at|date:"M d, H:i" }}</span>
+                            </div>
+                            <h4 class="text-sm font-bold text-white mb-1">{{ msg.subject }}</h4>
+                            <p class="text-xs text-gray-300 leading-relaxed">{{ msg.body }}</p>
+                        </div>
+                    {% empty %}
+                        <p class="text-gray-400 text-xs text-center py-8">No messages received yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Sent Messages -->
+            <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden flex flex-col">
+                <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-share text-blue-400"></i>
+                        <h2 class="font-bold text-white text-base">Sent Messages</h2>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4 overflow-y-auto max-h-[600px]">
+                    {% for msg in sent_messages %}
+                        <div class="p-4 bg-navy-900/60 border border-white/5 rounded-xl">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-bold text-white text-xs block">To: <strong class="text-blue-400">{{ msg.recipient.username }}</strong></span>
+                                <span class="text-[10px] font-mono text-gray-400">{{ msg.sent_at|date:"M d, H:i" }}</span>
+                            </div>
+                            <h4 class="text-sm font-bold text-white mb-1">{{ msg.subject }}</h4>
+                            <p class="text-xs text-gray-300 leading-relaxed">{{ msg.body }}</p>
+                        </div>
+                    {% empty %}
+                        <p class="text-gray-400 text-xs text-center py-8">No sent messages recorded.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Compose Message -->
+<div id="composeModal" class="fixed inset-0 bg-navy-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-navy-800 border border-white/10 rounded-2xl p-6 md:p-8 max-w-md w-full shadow-2xl">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-bold text-white">Compose Message to School</h3>
+            <button onclick="document.getElementById('composeModal').classList.add('hidden')" class="text-gray-400 hover:text-white">&times;</button>
+        </div>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Recipient (Teacher / Admin)</label>
+                <select name="recipient_id" required class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-emerald-500 focus:outline-none">
+                    <option value="">-- Select Recipient --</option>
+                    {% for r in recipients %}
+                        <option value="{{ r.id }}">{{ r.get_full_name|default:r.username }} ({{ r.username }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Subject</label>
+                <input type="text" name="subject" required placeholder="e.g. Inquiry regarding math test score" class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-emerald-500 focus:outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Message</label>
+                <textarea name="body" rows="4" required placeholder="Write your message here..." class="w-full text-xs p-3 bg-navy-900 border border-white/10 rounded-xl text-white focus:border-emerald-500 focus:outline-none"></textarea>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button type="button" onclick="document.getElementById('composeModal').classList.add('hidden')" class="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-bold rounded-xl">Cancel</button>
+                <button type="submit" class="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-navy-950 text-xs font-black rounded-xl">Send Message</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

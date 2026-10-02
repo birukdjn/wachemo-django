@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %}Report Card & Grades | Parent Portal{% endblock %}
+
+{% block content %}
+<div class="flex h-[calc(100vh-100px)] overflow-hidden bg-navy-900 portal-main-bg">
+    {% include 'parent/sidebar.html' %}
+
+    <div class="flex-1 h-full overflow-y-auto p-6 md:p-8">
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-xl border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-500/10 text-red-400 border-red-500/20{% elif message.tags == 'warning' %}bg-amber-500/10 text-amber-400 border-amber-500/20{% else %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20{% endif %}">
+                        <div class="flex items-center gap-2">
+                            <i class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-gradient-to-r from-emerald-500/15 via-teal-600/10 to-transparent p-6 rounded-2xl border border-emerald-500/20">
+            <div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase tracking-wide">Academic Progress</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">Official Report Card & Exam Scores</h1>
+                <p class="text-gray-400 text-sm mt-1">Academic report card for <strong>{{ child.get_full_name|default:child.user.username }}</strong> (GPA: <strong class="text-amber-300">{{ child.gpa|default:"3.75" }}</strong>).</p>
+            </div>
+            
+            {% if children.count > 1 %}
+            <div class="bg-navy-800 p-2.5 rounded-xl border border-white/10 shrink-0">
+                <form method="get" class="flex items-center gap-2">
+                    <select name="child_id" onchange="this.form.submit()" class="text-xs p-2 bg-navy-900 border border-white/10 rounded-lg text-white font-bold focus:outline-none">
+                        {% for c in children %}
+                            <option value="{{ c.id }}" {% if child and child.id == c.id %}selected{% endif %}>
+                                {{ c.get_full_name|default:c.user.username }} ({{ c.student_id }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Course Final Grades -->
+            <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden flex flex-col">
+                <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-graduation-cap text-emerald-400"></i>
+                        <h2 class="font-bold text-white text-base">Course Letter Grades</h2>
+                    </div>
+                </div>
+                <div class="divide-y divide-white/5">
+                    {% for e in enrollments %}
+                        <div class="p-4 flex items-center justify-between hover:bg-white/5 transition-colors">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="font-mono text-xs font-bold text-emerald-300 bg-emerald-500/15 px-2 py-0.5 rounded border border-emerald-500/30">{{ e.course.code }}</span>
+                                    <h4 class="font-bold text-white text-sm">{{ e.course.name }}</h4>
+                                </div>
+                                <p class="text-xs text-gray-400">Credits: {{ e.course.credits|default:3 }} &bull; Term: {{ e.semester }}</p>
+                            </div>
+                            <span class="text-sm font-extrabold px-3 py-1 rounded-lg border {% if e.grade %}bg-emerald-500/15 text-emerald-400 border-emerald-500/30{% else %}bg-gray-500/15 text-gray-400 border-gray-500/30{% endif %}">
+                                {{ e.grade|default:"In Progress" }}
+                            </span>
+                        </div>
+                    {% empty %}
+                        <p class="text-gray-400 text-xs text-center py-8">No course enrollments found.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Exam Scorecards -->
+            <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden flex flex-col">
+                <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-award text-amber-400"></i>
+                        <h2 class="font-bold text-white text-base">Exam Scorecard Breakdown</h2>
+                    </div>
+                </div>
+                <div class="p-6 space-y-3 overflow-y-auto max-h-[400px]">
+                    {% for res in exam_results %}
+                        <div class="p-4 bg-navy-900/60 border border-white/5 rounded-xl flex items-center justify-between">
+                            <div>
+                                <span class="font-bold text-white text-xs block">{{ res.exam.course.code }} &bull; {{ res.exam.title }}</span>
+                                <span class="text-[10px] text-gray-400 font-mono">Exam Type: <strong class="text-amber-300 uppercase">{{ res.exam.exam_type }}</strong></span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-base font-extrabold text-amber-400 block">{{ res.points_earned }} / {{ res.exam.max_points }}</span>
+                                <span class="text-[10px] font-mono uppercase px-2 py-0.5 bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 rounded">Grade: {{ res.grade|default:"N/A" }}</span>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="text-gray-400 text-xs text-center py-8">No exam results published.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Assignment Grades -->
+        <div class="bg-navy-800 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-tasks text-blue-400"></i>
+                    <h2 class="font-bold text-white text-base">Graded Course Assignments</h2>
+                </div>
+            </div>
+            <div class="p-6 space-y-3 overflow-y-auto max-h-[400px]">
+                {% for sub in submissions %}
+                    <div class="p-4 bg-navy-900/60 border border-white/5 rounded-xl flex items-center justify-between">
+                        <div>
+                            <span class="font-bold text-white text-xs block">{{ sub.assignment.course.code }} &bull; {{ sub.assignment.title }}</span>
+                            <span class="text-[10px] text-gray-400 font-mono">Submitted: {{ sub.submitted_at|date:"M d, Y" }}</span>
+                            {% if sub.feedback %}
+                                <p class="text-xs text-gray-400 mt-1 italic">Teacher Feedback: "{{ sub.feedback }}"</p>
+                            {% endif %}
+                        </div>
+                        <div class="text-right">
+                            <span class="text-sm font-extrabold text-emerald-400 block">{{ sub.points_earned }} / {{ sub.assignment.max_points }} pts</span>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-gray-400 text-xs text-center py-8">No graded assignments.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
