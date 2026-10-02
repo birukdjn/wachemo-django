@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.code }} Details | Teacher Portal{% endblock %}
+
+{% block content %}
+<div class="flex min-h-screen bg-slate-50">
+    {% include 'teacher/sidebar.html' %}
+
+    <div class="flex-1 p-8 overflow-y-auto">
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-lg border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-50 text-red-700 border-red-200{% elif message.tags == 'warning' %}bg-amber-50 text-amber-700 border-amber-200{% else %}bg-emerald-50 text-emerald-700 border-emerald-200{% endif %}">
+                        <span>{{ message }}</span>
+                        <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-600">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Header -->
+        <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <a href="{% url 'teacher_courses' %}" class="text-xs font-semibold text-slate-400 hover:text-indigo-600">&larr; Back to Courses</a>
+                    <span class="text-slate-300">•</span>
+                    <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 uppercase">{{ course.code }}</span>
+                </div>
+                <h1 class="text-3xl font-extrabold text-slate-900">{{ course.name }}</h1>
+                <p class="text-slate-500 mt-1">{{ course.description|default:"No description set." }}</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="{% url 'teacher_attendance' course.id %}" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-lg transition-colors">
+                    <i class="fas fa-clipboard-user mr-1"></i> Attendance
+                </a>
+                <a href="{% url 'teacher_gradebook' course.id %}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg transition-colors">
+                    <i class="fas fa-calculator mr-1"></i> Gradebook
+                </a>
+            </div>
+        </div>
+
+        <!-- Enrolled Students Table -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-8">
+            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
+                <h2 class="font-bold text-slate-900 text-lg">Enrolled Students ({{ enrollments.count }})</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-600">
+                    <thead class="bg-slate-50 text-slate-400 font-semibold uppercase text-xs">
+                        <tr>
+                            <th class="px-6 py-3">Student ID</th>
+                            <th class="px-6 py-3">Name</th>
+                            <th class="px-6 py-3">Email</th>
+                            <th class="px-6 py-3">Enrolled Date</th>
+                            <th class="px-6 py-3">Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        {% for enrollment in enrollments %}
+                            <tr class="hover:bg-slate-50/50">
+                                <td class="px-6 py-4 font-mono text-xs font-semibold text-indigo-600">{{ enrollment.student.student_id }}</td>
+                                <td class="px-6 py-4 font-medium text-slate-900">{{ enrollment.student.get_full_name }}</td>
+                                <td class="px-6 py-4 text-xs text-slate-500">{{ enrollment.student.user.email }}</td>
+                                <td class="px-6 py-4 text-xs text-slate-400">{{ enrollment.enrollment_date|date:"M d, Y" }}</td>
+                                <td class="px-6 py-4">
+                                    <span class="font-bold px-2 py-0.5 rounded text-xs {% if enrollment.grade %}bg-emerald-50 text-emerald-700 border border-emerald-200{% else %}bg-slate-100 text-slate-400{% endif %}">
+                                        {{ enrollment.grade|default:"Pending" }}
+                                    </span>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5" class="px-6 py-8 text-center text-slate-400 text-sm">
+                                    No students are currently enrolled in this course.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Course Assignments & Exams Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Assignments Column -->
+            <div class="space-y-6">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
+                        <h2 class="font-bold text-slate-900 text-lg">Assignments</h2>
+                    </div>
+                    <div class="divide-y divide-slate-100">
+                        {% for assignment in assignments %}
+                            <div class="p-4 flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-semibold text-slate-900 text-sm">{{ assignment.title }}</h4>
+                                    <p class="text-xs text-slate-400">Due: {{ assignment.due_date|date:"M d, Y H:i" }} • Max: {{ assignment.max_points }} pts</p>
+                                </div>
+                                <span class="text-xs font-semibold px-2 py-0.5 rounded {% if assignment.is_published %}bg-emerald-50 text-emerald-700{% else %}bg-amber-50 text-amber-700{% endif %}">
+                                    {% if assignment.is_published %}Published{% else %}Draft{% endif %}
+                                </span>
+                            </div>
+                        {% empty %}
+                            <div class="p-6 text-center text-slate-400 text-sm">No assignments posted yet.</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Create Assignment Form -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-slate-900 text-base mb-4 flex items-center gap-2">
+                        <i class="fas fa-plus-circle text-indigo-600"></i> Create New Assignment
+                    </h3>
+                    <form method="post" action="{% url 'teacher_create_assignment' course.id %}" class="space-y-3">
+                        {% csrf_token %}
+                        <div>
+                            <input type="text" name="title" required placeholder="Assignment Title" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <textarea name="description" rows="2" placeholder="Assignment Instructions..." class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none"></textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[11px] font-semibold text-slate-500 block mb-1">Due Date & Time</label>
+                                <input type="datetime-local" name="due_date" required class="w-full text-xs p-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-semibold text-slate-500 block mb-1">Max Points</label>
+                                <input type="number" name="max_points" value="100" class="w-full text-xs p-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between pt-2">
+                            <label class="flex items-center gap-2 text-xs text-slate-600 font-medium">
+                                <input type="checkbox" name="is_published" checked class="text-indigo-600 rounded"> Publish immediately
+                            </label>
+                            <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-colors">
+                                Create Assignment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Exams Column -->
+            <div class="space-y-6">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
+                        <h2 class="font-bold text-slate-900 text-lg">Exams</h2>
+                    </div>
+                    <div class="divide-y divide-slate-100">
+                        {% for exam in exams %}
+                            <div class="p-4 flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-semibold text-slate-900 text-sm">{{ exam.title }}</h4>
+                                    <p class="text-xs text-slate-400">Date: {{ exam.exam_date|date:"M d, Y H:i" }} • {{ exam.duration_minutes }} mins</p>
+                                </div>
+                                <span class="text-xs font-semibold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 uppercase">{{ exam.exam_type }}</span>
+                            </div>
+                        {% empty %}
+                            <div class="p-6 text-center text-slate-400 text-sm">No exams scheduled yet.</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Schedule Exam Form -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-slate-900 text-base mb-4 flex items-center gap-2">
+                        <i class="fas fa-calendar-plus text-indigo-600"></i> Schedule New Exam
+                    </h3>
+                    <form method="post" action="{% url 'teacher_create_exam' course.id %}" class="space-y-3">
+                        {% csrf_token %}
+                        <div class="grid grid-cols-3 gap-3">
+                            <div class="col-span-2">
+                                <input type="text" name="title" required placeholder="Exam Title" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <select name="exam_type" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                                    <option value="midterm">Midterm</option>
+                                    <option value="final">Final</option>
+                                    <option value="quiz">Quiz</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[11px] font-semibold text-slate-500 block mb-1">Exam Date & Time</label>
+                                <input type="datetime-local" name="exam_date" required class="w-full text-xs p-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-semibold text-slate-500 block mb-1">Duration (Mins)</label>
+                                <input type="number" name="duration_minutes" value="120" class="w-full text-xs p-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <input type="text" name="location" placeholder="Location (Hall / Hall B)" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div class="flex items-center justify-between pt-2">
+                            <label class="flex items-center gap-2 text-xs text-slate-600 font-medium">
+                                <input type="checkbox" name="is_published" checked class="text-indigo-600 rounded"> Publish to students
+                            </label>
+                            <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-colors">
+                                Schedule Exam
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,185 +1,113 @@
 {% extends 'student/base.html' %}
 {% load static %}
 
-{% block title %}Assignments - Wachemo SaPS{% endblock %}
+{% block title %}Assignments - WSaPS{% endblock %}
 
-{% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
-            {% include 'student/sidebar.html' %}
+{% block student_content %}
+<div class="space-y-8">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-3xl font-extrabold text-slate-900">Assignments</h1>
+            <p class="text-slate-500 text-sm mt-1">View pending tasks and submit your coursework.</p>
         </div>
+    </div>
 
-        <!-- Main content -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2 text-gray-800">My Assignments</h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <div class="btn-group me-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Filter</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Assignment Stats -->
-            <div class="row g-4 mb-4">
-                <div class="col-md-3 col-6">
-                    <div class="card text-bg-primary h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-tasks fa-2x mb-2"></i>
-                            <h5 class="card-title mb-1">Total Assignments</h5>
-                            <h3 class="mb-0">{{ assignments|length }}</h3>
+    <!-- Assignment Cards List -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/50">
+            <h2 class="font-bold text-slate-900 text-lg">Upcoming & Active Assignments</h2>
+        </div>
+        <div class="divide-y divide-slate-100">
+            {% for assignment in assignments %}
+                <div class="p-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-mono font-bold text-xs bg-indigo-50 text-indigo-700 px-2.5 py-0.5 rounded border border-indigo-200 uppercase">{{ assignment.course.code }}</span>
+                                <h3 class="font-bold text-slate-900 text-lg">{{ assignment.title }}</h3>
+                            </div>
+                            <p class="text-xs text-slate-500">Due: <strong class="text-slate-700">{{ assignment.due_date|date:"M d, Y H:i" }}</strong> • Points: <strong class="text-slate-700">{{ assignment.max_points }}</strong></p>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="card text-bg-warning h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-clock fa-2x mb-2"></i>
-                            <h5 class="card-title mb-1">Pending</h5>
-                            <h3 class="mb-0">{{ assignments|length }}</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="card text-bg-success h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-check-circle fa-2x mb-2"></i>
-                            <h5 class="card-title mb-1">Submitted</h5>
-                            <h3 class="mb-0">{{ submissions|length }}</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="card text-bg-info h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-star fa-2x mb-2"></i>
-                            <h5 class="card-title mb-1">Average Grade</h5>
-                            <h3 class="mb-0">85%</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Upcoming Assignments -->
-            <div class="row mb-4">
-                <div class="col-12">
-                    <h4 class="text-gray-800 mb-3">Upcoming Assignments</h4>
-                    <div class="table-responsive">
-                        <table class="table table-striped align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Assignment</th>
-                                    <th>Course</th>
-                                    <th>Due Date</th>
-                                    <th>Points</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for assignment in assignments %}
-                                <tr>
-                                    <td>
-                                        <div>
-                                            <h6 class="mb-1">{{ assignment.title }}</h6>
-                                            <small class="text-muted">{{ assignment.description|truncatechars:50 }}</small>
-                                        </div>
-                                    </td>
-                                    <td>{{ assignment.course.code }} - {{ assignment.course.name }}</td>
-                                    <td>
-                                        <span class="{% if assignment.due_date|date:'Y-m-d' < today %}text-danger{% elif assignment.due_date|date:'Y-m-d' == today %}text-warning{% else %}text-success{% endif %}">
-                                            {{ assignment.due_date|date:"M d, Y H:i" }}
-                                        </span>
-                                    </td>
-                                    <td>{{ assignment.max_points }}</td>
-                                    <td>
-                                        {% for submission in submissions %}
-                                            {% if submission.assignment == assignment %}
-                                                {% if submission.is_graded %}
-                                                    <span class="badge bg-success">Graded</span>
-                                                {% else %}
-                                                    <span class="badge bg-info">Submitted</span>
-                                                {% endif %}
-                                            {% endif %}
-                                        {% empty %}
-                                            <span class="badge bg-warning">Not Submitted</span>
-                                        {% endfor %}
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary">View</button>
-                                        <button class="btn btn-sm btn-outline-primary">Submit</button>
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted">No assignments found</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+                    <p class="text-sm text-slate-600 mb-4 bg-slate-50 p-4 rounded-lg border border-slate-100">{{ assignment.description }}</p>
 
-            <!-- Submitted Assignments -->
-            <div class="row">
-                <div class="col-12">
-                    <h4 class="text-gray-800 mb-3">Submitted Assignments</h4>
-                    <div class="table-responsive">
-                        <table class="table table-striped align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Assignment</th>
-                                    <th>Course</th>
-                                    <th>Submitted</th>
-                                    <th>Points Earned</th>
-                                    <th>Grade</th>
-                                    <th>Feedback</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for submission in submissions %}
-                                <tr>
-                                    <td>{{ submission.assignment.title }}</td>
-                                    <td>{{ submission.assignment.course.code }}</td>
-                                    <td>{{ submission.submitted_at|date:"M d, Y H:i" }}</td>
-                                    <td>
-                                        {% if submission.is_graded %}
-                                            {{ submission.points_earned }}/{{ submission.assignment.max_points }}
-                                        {% else %}
-                                            <span class="text-muted">Pending</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if submission.is_graded %}
-                                            <span class="badge bg-success">{{ submission.points_earned|floatformat:0 }}%</span>
-                                        {% else %}
-                                            <span class="badge bg-warning">Not Graded</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if submission.feedback %}
-                                            <button class="btn btn-sm btn-outline-info" data-bs-toggle="tooltip" title="{{ submission.feedback }}">
-                                                View Feedback
-                                            </button>
-                                        {% else %}
-                                            <span class="text-muted">No feedback</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted">No submitted assignments found</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                    <!-- Submission Form -->
+                    <div class="bg-slate-50/80 p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-semibold text-xs text-slate-700 uppercase tracking-wider mb-3">Submit Your Work</h4>
+                        <form method="post" action="{% url 'submit_assignment' assignment.id %}" enctype="multipart/form-data" class="space-y-3">
+                            {% csrf_token %}
+                            <div>
+                                <textarea name="submission_text" rows="3" placeholder="Type your assignment text or submission notes here..." class="w-full text-xs p-3 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none bg-white"></textarea>
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <input type="file" name="submission_file" class="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                                <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm shrink-0">
+                                    <i class="fas fa-paper-plane mr-1"></i> Submit Assignment
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </div>
-        </main>
+            {% empty %}
+                <div class="p-8 text-center text-slate-400 text-sm">
+                    No active assignments found for your enrolled courses.
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Submissions History -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/50">
+            <h2 class="font-bold text-slate-900 text-lg">My Past Submissions</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-slate-600">
+                <thead class="bg-slate-50 text-slate-400 font-semibold uppercase text-xs">
+                    <tr>
+                        <th class="px-6 py-3">Assignment</th>
+                        <th class="px-6 py-3">Submitted At</th>
+                        <th class="px-6 py-3">Score</th>
+                        <th class="px-6 py-3">Status</th>
+                        <th class="px-6 py-3">Feedback</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for sub in submissions %}
+                        <tr class="hover:bg-slate-50/50">
+                            <td class="px-6 py-4 font-medium text-slate-900">
+                                {{ sub.assignment.title }}
+                                <span class="block text-xs text-slate-400 font-mono">{{ sub.assignment.course.code }}</span>
+                            </td>
+                            <td class="px-6 py-4 text-xs text-slate-400">{{ sub.submitted_at|date:"M d, Y H:i" }}</td>
+                            <td class="px-6 py-4 font-bold text-slate-900">
+                                {% if sub.is_graded %}
+                                    {{ sub.points_earned }} / {{ sub.assignment.max_points }}
+                                {% else %}
+                                    <span class="text-xs font-normal text-slate-400">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded {% if sub.is_graded %}bg-emerald-50 text-emerald-700 border border-emerald-200{% else %}bg-amber-50 text-amber-700 border border-amber-200{% endif %}">
+                                    {% if sub.is_graded %}Graded{% else %}Submitted{% endif %}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-xs text-slate-500 max-w-xs truncate">
+                                {{ sub.feedback|default:"No feedback provided" }}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="px-6 py-8 text-center text-slate-400 text-sm">
+                                You have not submitted any assignments yet.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 {% endblock %}

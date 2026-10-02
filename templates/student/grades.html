@@ -1,251 +1,76 @@
 {% extends 'student/base.html' %}
 {% load static %}
 
-{% block title %}Grades - Wachemo SaPS{% endblock %}
+{% block title %}Grades & Transcript - WSaPS{% endblock %}
 
-{% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
-            {% include 'student/sidebar.html' %}
+{% block student_content %}
+<div class="space-y-8">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-3xl font-extrabold text-slate-900">Academic Progress & Grades</h1>
+            <p class="text-slate-500 text-sm mt-1">Summary of enrolled course grades and calculated GPA.</p>
+        </div>
+    </div>
+
+    <!-- GPA Overview Card -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="bg-indigo-600 text-white p-6 rounded-xl shadow-sm">
+            <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200">Calculated GPA</p>
+            <h2 class="text-4xl font-black mt-2">{{ calculated_gpa|floatformat:2 }}</h2>
+            <p class="text-xs text-indigo-200 mt-2">Based on completed course grades</p>
         </div>
 
-        <!-- Main content -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2 text-gray-800">My Grades</h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <div class="btn-group me-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Print</button>
-                    </div>
-                </div>
-            </div>
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Enrolled Courses</p>
+            <h2 class="text-3xl font-black text-slate-900 mt-2">{{ enrollments|length }}</h2>
+        </div>
 
-            <!-- Academic Summary -->
-            <div class="row g-4 mb-4">
-                <div class="col-md-3 col-6">
-                    <div class="card text-bg-primary h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-graduation-cap fa-2x mb-2"></i>
-                            <h5 class="card-title mb-1">Current GPA</h5>
-                            <h3 class="mb-0">{{ calculated_gpa|floatformat:2 }}</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="card text-bg-success h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-check-circle fa-2x mb-2"></i>
-                            <h5 class="card-title mb-1">Credits Completed</h5>
-                            <h3 class="mb-0">{{ student.credits_completed }}</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="card text-bg-info h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-target fa-2x mb-2"></i>
-                            <h5 class="card-title mb-1">Credits Required</h5>
-                            <h3 class="mb-0">{{ student.credits_required }}</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="card text-bg-warning h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-percentage fa-2x mb-2"></i>
-                            <h5 class="card-title mb-1">Progress</h5>
-                            <h3 class="mb-0">{% widthratio student.credits_completed student.credits_required 100 %}%</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Graded Assignments</p>
+            <h2 class="text-3xl font-black text-slate-900 mt-2">{{ assignment_grades|length }}</h2>
+        </div>
+    </div>
 
-            <!-- Course Grades -->
-            <div class="row mb-4">
-                <div class="col-12">
-                    <h4 class="text-gray-800 mb-3">Course Grades</h4>
-                    <div class="table-responsive">
-                        <table class="table table-striped align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Course</th>
-                                    <th>Instructor</th>
-                                    <th>Credits</th>
-                                    <th>Grade</th>
-                                    <th>GPA Points</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for enrollment in enrollments %}
-                                <tr>
-                                    <td>
-                                        <div>
-                                            <h6 class="mb-1">{{ enrollment.course.code }}</h6>
-                                            <small class="text-muted">{{ enrollment.course.name }}</small>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        {% if enrollment.course.instructor %}
-                                            {{ enrollment.course.instructor.get_full_name }}
-                                        {% else %}
-                                            <span class="text-muted">TBA</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>{{ enrollment.course.credits|default:"-" }}</td>
-                                    <td>
-                                        {% if enrollment.grade %}
-                                            <span class="badge bg-{% if enrollment.grade == 'A' %}success{% elif enrollment.grade == 'B' %}info{% elif enrollment.grade == 'C' %}warning{% else %}danger{% endif %} fs-6">
-                                                {{ enrollment.grade }}
-                                            </span>
-                                        {% else %}
-                                            <span class="text-muted">In Progress</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if enrollment.grade %}
-                                            {% if enrollment.grade == 'A' %}4.0{% elif enrollment.grade == 'B' %}3.0{% elif enrollment.grade == 'C' %}2.0{% elif enrollment.grade == 'D' %}1.0{% else %}0.0{% endif %}
-                                        {% else %}
-                                            <span class="text-muted">-</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if enrollment.is_active %}
-                                            <span class="badge bg-primary">Active</span>
-                                        {% else %}
-                                            <span class="badge bg-secondary">Completed</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted">No course enrollments found</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Assignment Grades -->
-            <div class="row mb-4">
-                <div class="col-12">
-                    <h4 class="text-gray-800 mb-3">Assignment Grades</h4>
-                    <div class="table-responsive">
-                        <table class="table table-striped align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Assignment</th>
-                                    <th>Course</th>
-                                    <th>Due Date</th>
-                                    <th>Points Earned</th>
-                                    <th>Percentage</th>
-                                    <th>Grade</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for submission in assignment_grades %}
-                                <tr>
-                                    <td>{{ submission.assignment.title }}</td>
-                                    <td>{{ submission.assignment.course.code }}</td>
-                                    <td>{{ submission.assignment.due_date|date:"M d, Y" }}</td>
-                                    <td>
-                                        <span class="fw-bold">{{ submission.points_earned }}/{{ submission.assignment.max_points }}</span>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="progress me-2" style="width: 100px; height: 8px;">
-                                                <div class="progress-bar" role="progressbar" 
-                                                     style="width: {% widthratio submission.points_earned submission.assignment.max_points 100 %}%"></div>
-                                            </div>
-                                            <span class="small">{% widthratio submission.points_earned submission.assignment.max_points 100 %}%</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        {% widthratio submission.points_earned submission.assignment.max_points 100 as percentage %}
-                                        {% if percentage >= 90 %}
-                                            <span class="badge bg-success">A</span>
-                                        {% elif percentage >= 80 %}
-                                            <span class="badge bg-info">B</span>
-                                        {% elif percentage >= 70 %}
-                                            <span class="badge bg-warning">C</span>
-                                        {% elif percentage >= 60 %}
-                                            <span class="badge bg-danger">D</span>
-                                        {% else %}
-                                            <span class="badge bg-dark">F</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted">No assignment grades found</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Exam Grades -->
-            <div class="row">
-                <div class="col-12">
-                    <h4 class="text-gray-800 mb-3">Exam Grades</h4>
-                    <div class="table-responsive">
-                        <table class="table table-striped align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Exam</th>
-                                    <th>Course</th>
-                                    <th>Type</th>
-                                    <th>Date</th>
-                                    <th>Score</th>
-                                    <th>Grade</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for result in exam_grades %}
-                                <tr>
-                                    <td>{{ result.exam.title }}</td>
-                                    <td>{{ result.exam.course.code }}</td>
-                                    <td>
-                                        <span class="badge bg-{% if result.exam.exam_type == 'final' %}danger{% elif result.exam.exam_type == 'midterm' %}warning{% else %}info{% endif %}">
-                                            {{ result.exam.get_exam_type_display }}
-                                        </span>
-                                    </td>
-                                    <td>{{ result.exam.exam_date|date:"M d, Y" }}</td>
-                                    <td>
-                                        <span class="fw-bold">{{ result.points_earned }}/{{ result.exam.max_points }}</span>
-                                        <div class="progress mt-1" style="height: 4px;">
-                                            <div class="progress-bar" role="progressbar" 
-                                                 style="width: {% widthratio result.points_earned result.exam.max_points 100 %}%"></div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        {% if result.grade %}
-                                            <span class="badge bg-{% if result.grade == 'A' %}success{% elif result.grade == 'B' %}info{% elif result.grade == 'C' %}warning{% else %}danger{% endif %}">
-                                                {{ result.grade }}
-                                            </span>
-                                        {% else %}
-                                            <span class="text-muted">-</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted">No exam grades found</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </main>
+    <!-- Course Grades Table -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/50">
+            <h2 class="font-bold text-slate-900 text-lg">Course Grade Breakdown</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-slate-600">
+                <thead class="bg-slate-50 text-slate-400 font-semibold uppercase text-xs">
+                    <tr>
+                        <th class="px-6 py-3">Course Code</th>
+                        <th class="px-6 py-3">Course Name</th>
+                        <th class="px-6 py-3">Instructor</th>
+                        <th class="px-6 py-3">Credits</th>
+                        <th class="px-6 py-3">Final Grade</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for enrollment in enrollments %}
+                        <tr class="hover:bg-slate-50/50">
+                            <td class="px-6 py-4 font-mono font-bold text-xs text-indigo-600">{{ enrollment.course.code }}</td>
+                            <td class="px-6 py-4 font-medium text-slate-900">{{ enrollment.course.name }}</td>
+                            <td class="px-6 py-4 text-xs text-slate-500">{{ enrollment.course.instructor.get_full_name|default:"Faculty" }}</td>
+                            <td class="px-6 py-4 font-medium text-slate-900">{{ enrollment.course.credits|default:"3" }}</td>
+                            <td class="px-6 py-4">
+                                <span class="font-extrabold px-3 py-1 rounded text-xs {% if enrollment.grade %}bg-emerald-50 text-emerald-700 border border-emerald-200{% else %}bg-slate-100 text-slate-400{% endif %}">
+                                    {{ enrollment.grade|default:"In Progress" }}
+                                </span>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="px-6 py-8 text-center text-slate-400 text-sm">
+                                You are not currently enrolled in any graded courses.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 {% endblock %}

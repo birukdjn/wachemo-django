@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Portal - WSaPS{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-[16rem_1fr] gap-6 min-h-screen bg-slate-50">
+  <div>
+    {% include 'student/sidebar.html' %}
+  </div>
+
+  <main class="space-y-6">
+    <!-- Messages Alerts -->
+    {% if messages %}
+      <div class="space-y-2">
+        {% for message in messages %}
+          <div class="p-4 rounded-lg border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-50 text-red-700 border-red-200{% elif message.tags == 'warning' %}bg-amber-50 text-amber-700 border-amber-200{% else %}bg-emerald-50 text-emerald-700 border-emerald-200{% endif %}">
+            <span>{{ message }}</span>
+            <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-600">&times;</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% block student_content %}{% endblock %}
+  </main>
+</div>
+{% endblock %}

@@ -437,22 +437,46 @@ def grades(request):
 @login_required
 def profile(request):
     """
-    Display the current user's profile and role info.
+    Display and update the current user's profile info.
     """
     user: User = request.user
-    user_profile = UserProfile.objects.filter(user=user).first()
+    user_profile, _ = UserProfile.objects.get_or_create(user=user, defaults={'role': 'student'})
     
-    # Get student profile if exists
     try:
         student = Student.objects.get(user=user)
     except Student.DoesNotExist:
         student = None
     
-    # Get instructor profile if exists
     try:
         instructor = Instructor.objects.get(user=user)
     except Instructor.DoesNotExist:
         instructor = None
+
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name', user.first_name)
+        last_name = request.POST.get('last_name', user.last_name)
+        email = request.POST.get('email', user.email)
+        
+        user.first_name = first_name
+        user.last_name = last_name
+        user.email = email
+        user.save()
+        
+        if student:
+            student.phone = request.POST.get('phone', student.phone)
+            student.address = request.POST.get('address', student.address)
+            student.emergency_contact = request.POST.get('emergency_contact', student.emergency_contact)
+            student.emergency_phone = request.POST.get('emergency_phone', student.emergency_phone)
+            student.save()
+            
+        if instructor:
+            instructor.phone = request.POST.get('phone', instructor.phone)
+            instructor.office_location = request.POST.get('office_location', instructor.office_location)
+            instructor.specialization = request.POST.get('specialization', instructor.specialization)
+            instructor.save()
+
+        messages.success(request, 'Profile updated successfully!')
+        return redirect('student_profile')
     
     context = {
         'user': user,
@@ -461,3 +485,94 @@ def profile(request):
         'instructor': instructor,
     }
     return render(request, 'student/profile.html', context)
+
+
+
+@login_required
+def enroll_course(request, course_id):
+    """
+    Handle course enrollment for students.
+    """
+    if request.method == 'POST':
+        try:
+            student = Student.objects.get(user=request.user)
+        except Student.DoesNotExist:
+            student, _ = Student.objects.get_or_create(user=request.user, defaults={'student_id': f"WCU/{request.user.id:04d}"})
+        
+        course = get_object_or_404(Course, id=course_id)
+        enrollment, created = Enrollment.objects.get_or_create(
+            student=student,
+            course=course,
+            defaults={
+                'is_active': True,
+                'semester': course.semester or 'Fall 2024',
+                'academic_year': course.academic_year or '2024/2025'
+            }
+        )
+        if created:
+            messages.success(request, f'Successfully enrolled in {course.code} - {course.name}!')
+        else:
+            messages.info(request, f'You are already enrolled in {course.name}.')
+    return redirect('courses')
+
+
+@login_required
+def submit_assignment(request, assignment_id):
+    """
+    Handle assignment submission for students.
+    """
+    if request.method == 'POST':
+        try:
+            student = Student.objects.get(user=request.user)
+        except Student.DoesNotExist:
+            student, _ = Student.objects.get_or_create(user=request.user, defaults={'student_id': f"WCU/{request.user.id:04d}"})
+        
+        assignment = get_object_or_404(Assignment, id=assignment_id)
+        submission_text = request.POST.get('submission_text', '')
+        submission_file = request.FILES.get('submission_file')
+
+        submission, created = AssignmentSubmission.objects.get_or_create(
+            assignment=assignment,
+            student=student,
+            defaults={
+                'submission_text': submission_text,
+                'submission_file': submission_file
+            }
+        )
+        if not created:
+            submission.submission_text = submission_text
+            if submission_file:
+                submission.submission_file = submission_file
+            submission.submitted_at = timezone.now()
+            submission.save()
+        
+        messages.success(request, f'Assignment "{assignment.title}" submitted successfully!')
+    return redirect('assignments')
+
+
+@login_required
+def borrow_book(request, book_id):
+    """
+    Handle library book borrowing for students.
+    """
+    if request.method == 'POST':
+        try:
+            student = Student.objects.get(user=request.user)
+        except Student.DoesNotExist:
+            student, _ = Student.objects.get_or_create(user=request.user, defaults={'student_id': f"WCU/{request.user.id:04d}"})
+        
+        book = get_object_or_404(Book, id=book_id)
+        if book.available_copies <= 0:
+            messages.error(request, f'Sorry, "{book.title}" currently has no available copies.')
+            return redirect('library')
+        
+        BookBorrowing.objects.create(
+            book=book,
+            student=student,
+            due_date=timezone.now() + timedelta(days=14),
+            status='borrowed'
+        )
+        book.available_copies -= 1
+        book.save()
+        messages.success(request, f'Successfully borrowed "{book.title}". Return due date is in 14 days.')
+    return redirect('library')

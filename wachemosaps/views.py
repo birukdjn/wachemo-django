@@ -55,15 +55,17 @@ def exams(request):
 
 
     
+from student.models import Student, Instructor
+
 def signup(request):
     if request.method == 'POST':
-        firstname = request.POST['firstname']
-        lastname = request.POST['lastname']
-        email = request.POST['email']
-        username = request.POST['username']
-        password = request.POST['password']
-        role = request.POST['role']
-        confirm_password = request.POST['confirm_password']
+        firstname = request.POST.get('firstname', '')
+        lastname = request.POST.get('lastname', '')
+        email = request.POST.get('email', '')
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        role = request.POST.get('role', 'student')
+        confirm_password = request.POST.get('confirm_password', '')
         
         # Validation checks
         if password != confirm_password:
@@ -86,16 +88,23 @@ def signup(request):
                 last_name=lastname
             )
             
-            # Create user profile with role
-            UserProfile.objects.create(
-                user=user,
-                role=role,
-                student_id=request.POST.get('student_id', '') if role == 'student' else None,
-                teacher_subject=request.POST.get('teacher_subject', '') if role == 'teacher' else None,
-                parent_phone=request.POST.get('parent_phone', '') if role == 'parent' else None
-            )
+            # Get or create user profile with role
+            user_profile, _ = UserProfile.objects.get_or_create(user=user)
+            user_profile.role = role
+            user_profile.student_id = request.POST.get('student_id', '') if role == 'student' else None
+            user_profile.teacher_subject = request.POST.get('teacher_subject', '') if role == 'teacher' else None
+            user_profile.parent_phone = request.POST.get('parent_phone', '') if role == 'parent' else None
+            user_profile.save()
             
-            messages.success(request, ' Account created successfully! Please log in.')
+            # Auto-create Student / Instructor records if applicable
+            if role == 'student':
+                sid = user_profile.student_id or f"WCU/{user.id:04d}"
+                Student.objects.get_or_create(user=user, defaults={'student_id': sid})
+            elif role == 'teacher':
+                eid = f"EMP/{user.id:04d}"
+                Instructor.objects.get_or_create(user=user, defaults={'employee_id': eid, 'specialization': user_profile.teacher_subject or ''})
+            
+            messages.success(request, 'Account created successfully! Please log in.')
             return redirect('login')
             
         except Exception as e:
@@ -105,27 +114,32 @@ def signup(request):
 
 def login(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
 
         user = auth.authenticate(username=username, password=password)
         if user is None:
             messages.error(request, 'Invalid credentials. Please try again.')
             return redirect('login')
 
-        # Get user role from UserProfile
-        user_profile = UserProfile.objects.filter(user=user).first()
-        role = user_profile.role if user_profile else None
+        # Get or create user profile
+        user_profile, _ = UserProfile.objects.get_or_create(user=user, defaults={'role': 'student'})
+        role = user_profile.role
 
         auth_login(request, user)
 
         if user.is_staff:
             return redirect('/admin/')
+        elif role == 'teacher':
+            Instructor.objects.get_or_create(user=user, defaults={'employee_id': f"EMP/{user.id:04d}"})
+            return redirect('teacher_dashboard')
         elif role == 'student':
+            Student.objects.get_or_create(user=user, defaults={'student_id': f"WCU/{user.id:04d}"})
             return redirect('dashboard')
         else:
             return redirect('index')
         
     else:
         return render(request, 'login.html')
+
     

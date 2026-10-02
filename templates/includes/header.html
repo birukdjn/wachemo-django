@@ -89,29 +89,41 @@
             </div>
             <div class="ml-4">
                 {% if user.is_authenticated %}
-        <div class="relative inline-block text-left" x-data="{open:false}">
-            <button class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded inline-flex items-center gap-2" type="button" id="dropdownMenuButton">
-                <i class="fas fa-user-circle"></i> {{ user.username }}
-            </button>
-            <ul class="hidden absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded shadow-lg" aria-labelledby="dropdownMenuButton">
-                <li><a class="block px-4 py-2 hover:bg-gray-100" href=" {% url 'student_profile' %}"><i class="fas fa-user-edit mr-1"></i> Profile</a></li>
-                <li>
-        <form method="post" action="{% url 'logout' %}">
-          {% csrf_token %}
-          <button type="submit" class="w-full text-left block px-4 py-2 hover:bg-gray-100">
-         <i class="fas fa-sign-out-alt mr-1"></i> Logout
-           </button>
-         </form>
-        </li>
-            </ul>
+                <div class="relative group inline-block text-left">
+                    <button class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded inline-flex items-center gap-2" type="button">
+                        <i class="fas fa-user-circle"></i> {{ user.username }}
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </button>
+                    <ul class="absolute right-0 hidden group-hover:block mt-1 w-48 bg-white text-gray-800 rounded shadow-xl border border-gray-200 z-50">
+                        <li>
+                            <a class="block px-4 py-2 hover:bg-gray-100 font-semibold text-blue-700" href="{% if user.userprofile.role == 'teacher' %}{% url 'teacher_dashboard' %}{% else %}{% url 'dashboard' %}{% endif %}">
+                                <i class="fas fa-gauge mr-1"></i> Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block px-4 py-2 hover:bg-gray-100 text-gray-700" href="{% url 'student_profile' %}">
+                                <i class="fas fa-user-edit mr-1"></i> Profile
+                            </a>
+                        </li>
+                        <li><hr class="my-1"></li>
+                        <li>
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="w-full text-left block px-4 py-2 hover:bg-red-50 text-red-600 font-semibold">
+                                    <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                {% else %}
+                <div class="relative inline-block text-left">
+                    <a class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded inline-flex items-center gap-2" href="{% url 'login' %}">
+                        <i class="fas fa-user-circle"></i> Account
+                    </a>
+                </div>
+                {% endif %}
+            </div>
 
-            {% else %}
-            <div class="relative inline-block text-left">
-                <a class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded inline-flex items-center gap-2" href="{% url 'login' %}">
-                <i class="fas fa-user-circle"></i> Account
-                </a>
-            </div>
-            {% endif %}
-            </div>
         </div>
     </nav>

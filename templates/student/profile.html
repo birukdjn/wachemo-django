@@ -1,50 +1,102 @@
 {% extends 'base.html' %}
-{% block title %}Profile - Student{% endblock %}
-{% block content %}
-<section class="bg-gray-50">
-  <div class="max-w-5xl mx-auto px-4 py-8">
-    <h1 class="text-2xl font-semibold mb-6">My Profile</h1>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="md:col-span-1 bg-white rounded shadow p-4">
-        <div class="flex items-center gap-3">
-          <div class="h-16 w-16 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-2xl">
-            <i class="fas fa-user"></i>
-          </div>
-          <div>
-            <p class="font-semibold">{{ user.get_full_name|default:user.username }}</p>
-            <p class="text-sm text-gray-600">{{ user.email }}</p>
-          </div>
-        </div>
-        <div class="mt-4 text-sm">
-          <p><span class="text-gray-500">Role:</span> {{ profile.get_role_display|default:'N/A' }}</p>
-          <p><span class="text-gray-500">Username:</span> {{ user.username }}</p>
-        </div>
-      </div>
-      <div class="md:col-span-2 space-y-6">
-        <div class="bg-white rounded shadow p-4">
-          <h2 class="font-semibold mb-3">Account Details</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-            <p><span class="text-gray-500">First name:</span> {{ user.first_name }}</p>
-            <p><span class="text-gray-500">Last name:</span> {{ user.last_name }}</p>
-            {% if profile and profile.role == 'student' %}
-            <p><span class="text-gray-500">Student ID:</span> {{ profile.student_id|default:'—' }}</p>
-            {% elif profile and profile.role == 'teacher' %}
-            <p><span class="text-gray-500">Subject:</span> {{ profile.teacher_subject|default:'—' }}</p>
-            {% elif profile and profile.role == 'parent' %}
-            <p><span class="text-gray-500">Phone:</span> {{ profile.parent_phone|default:'—' }}</p>
-            {% endif %}
-          </div>
-        </div>
-        <div class="bg-white rounded shadow p-4">
-          <h2 class="font-semibold mb-3">Quick Actions</h2>
-          <div class="flex gap-3">
-            <a href="{% url 'courses' %}" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">My Courses</a>
-            <a href="{% url 'settings' %}" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded">Settings</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-{% endblock %}
+{% block title %}My Profile | WSaPS{% endblock %}
 
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-8">
+    <!-- Messages -->
+    {% if messages %}
+        <div class="mb-6 space-y-2">
+            {% for message in messages %}
+                <div class="p-4 rounded-lg border text-sm font-medium flex items-center justify-between {% if message.tags == 'error' %}bg-red-50 text-red-700 border-red-200{% else %}bg-emerald-50 text-emerald-700 border-emerald-200{% endif %}">
+                    <span>{{ message }}</span>
+                    <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-600">&times;</button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <h1 class="text-3xl font-extrabold text-slate-900 mb-6">User Profile Settings</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Sidebar Card -->
+        <div class="md:col-span-1 bg-white rounded-xl border border-slate-200 shadow-sm p-6 text-center">
+            <div class="w-20 h-20 mx-auto rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-3xl font-bold mb-4 shadow-inner">
+                <i class="fas fa-user"></i>
+            </div>
+            <h2 class="font-bold text-slate-900 text-xl">{{ user.get_full_name|default:user.username }}</h2>
+            <p class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200 inline-block mt-2 uppercase">
+                {{ profile.get_role_display|default:'User' }}
+            </p>
+            <p class="text-xs text-slate-400 mt-2 font-mono">{{ user.email }}</p>
+
+            <div class="mt-6 pt-6 border-t border-slate-100 text-left text-xs space-y-2 text-slate-600">
+                <p><strong class="text-slate-800">Username:</strong> {{ user.username }}</p>
+                {% if student %}
+                    <p><strong class="text-slate-800">Student ID:</strong> {{ student.student_id }}</p>
+                    <p><strong class="text-slate-800">Status:</strong> <span class="capitalize font-bold text-emerald-600">{{ student.status }}</span></p>
+                {% elif instructor %}
+                    <p><strong class="text-slate-800">Employee ID:</strong> {{ instructor.employee_id }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Edit Form Card -->
+        <div class="md:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+            <h2 class="font-bold text-slate-900 text-lg mb-4 border-b border-slate-100 pb-3">Edit Personal Information</h2>
+            
+            <form method="post" action="{% url 'student_profile' %}" class="space-y-4">
+                {% csrf_token %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">First Name</label>
+                        <input type="text" name="first_name" value="{{ user.first_name }}" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Last Name</label>
+                        <input type="text" name="last_name" value="{{ user.last_name }}" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Email Address</label>
+                    <input type="email" name="email" value="{{ user.email }}" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                </div>
+
+                {% if student %}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Phone Number</label>
+                            <input type="text" name="phone" value="{{ student.phone }}" placeholder="+251..." class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Emergency Phone</label>
+                            <input type="text" name="emergency_phone" value="{{ student.emergency_phone }}" placeholder="+251..." class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Home Address</label>
+                        <textarea name="address" rows="2" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">{{ student.address }}</textarea>
+                    </div>
+                {% elif instructor %}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Phone Number</label>
+                            <input type="text" name="phone" value="{{ instructor.phone }}" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Office Location</label>
+                            <input type="text" name="office_location" value="{{ instructor.office_location }}" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="pt-4 border-t border-slate-100 text-right">
+                    <button type="submit" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg transition-colors shadow-sm">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
