@@ -16,7 +16,10 @@ DEBUG = config('DJANGO_DEBUG', default='False').lower() == 'true'
 
 
 
-ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='wachemo.onrender.com,localhost,127.0.0.1,.vercel.app').split(',')
+ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='wachemo-sps.vercel.app,wachemo-SPS.vercel.app,wachemo.onrender.com,localhost,127.0.0.1,.vercel.app,*').split(',')
+
+# Trust Vercel / reverse proxy HTTPS header
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition

@@ -12,7 +12,7 @@ ENV/
 .venv/
 
 # Django static & media (keep if needed, usually generated)
-staticfiles/
+# staticfiles/
 media/
 
 # Local SQLite DB (optional — if you don’t want to push it)
@@ -56,3 +56,5 @@ coverage.xml
 build/
 dist/
 *.egg-info/
+.vercel
+.env*
