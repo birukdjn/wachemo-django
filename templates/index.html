@@ -10,7 +10,7 @@
     <!-- Slides -->
     <div id="heroSlider" class="absolute inset-0">
         <!-- Slide 1 -->
-        <div class="hero-slide absolute inset-0 opacity-100" style="background: linear-gradient(rgba(13,26,46,0.55), rgba(13,26,46,0.7)), url('https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1600&q=80&auto=format&fit=crop') center/cover no-repeat;">
+        <div class="hero-slide absolute inset-0 opacity-100" style="background: linear-gradient(rgba(13,26,46,0.55), rgba(13,26,46,0.7)), url('{% static "images/hero-1.jpg" %}') center/cover no-repeat;">
             <div class="absolute inset-0 flex items-center justify-center text-center px-6">
                 <div class="max-w-3xl">
                     <h1 class="text-4xl md:text-6xl font-black text-white leading-tight drop-shadow-lg mb-4">
@@ -38,7 +38,7 @@
         </div>
 
         <!-- Slide 2 -->
-        <div class="hero-slide absolute inset-0 opacity-0" style="background: linear-gradient(rgba(13,26,46,0.5), rgba(13,26,46,0.7)), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1600&q=80&auto=format&fit=crop') center/cover no-repeat;">
+        <div class="hero-slide absolute inset-0 opacity-0" style="background: linear-gradient(rgba(13,26,46,0.5), rgba(13,26,46,0.7)), url('{% static "images/hero-2.jpg" %}') center/cover no-repeat;">
             <div class="absolute inset-0 flex items-center justify-center text-center px-6">
                 <div class="max-w-3xl">
                     <h1 class="text-4xl md:text-6xl font-black text-white leading-tight drop-shadow-lg mb-4">
@@ -60,7 +60,7 @@
         </div>
 
         <!-- Slide 3 -->
-        <div class="hero-slide absolute inset-0 opacity-0" style="background: linear-gradient(rgba(13,26,46,0.5), rgba(13,26,46,0.75)), url('https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1600&q=80&auto=format&fit=crop') center/cover no-repeat;">
+        <div class="hero-slide absolute inset-0 opacity-0" style="background: linear-gradient(rgba(13,26,46,0.5), rgba(13,26,46,0.75)), url('{% static "images/hero-3.jpg" %}') center/cover no-repeat;">
             <div class="absolute inset-0 flex items-center justify-center text-center px-6">
                 <div class="max-w-3xl">
                     <h1 class="text-4xl md:text-6xl font-black text-white leading-tight drop-shadow-lg mb-4">
@@ -120,7 +120,7 @@
 <section id="about" class="bg-navy-900 py-20">
     <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div class="relative">
-            <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&q=80&auto=format&fit=crop" alt="Wachemo School" class="rounded-2xl shadow-2xl w-full object-cover h-80 md:h-96">
+            <img src="{% static 'images/about-1.jpg' %}" alt="Wachemo School" class="rounded-2xl shadow-2xl w-full object-cover h-80 md:h-96">
             <div class="absolute -bottom-4 -right-4 bg-brand-blue text-white rounded-xl p-4 shadow-xl text-center">
                 <div class="text-3xl font-black">25+</div>
                 <div class="text-xs font-semibold text-blue-100">Years of Excellence</div>

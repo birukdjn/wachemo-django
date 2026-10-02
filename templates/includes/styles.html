@@ -1,10 +1,7 @@
-{% load static %}
+<!-- Local Tailwind CSS -->
+<script src="{% static 'vendor/tailwind/tailwind.min.js' %}"></script>
 
-<!-- Tailwind CSS (CDN) -->
-<script src="https://cdn.tailwindcss.com"></script>
-
-<!-- Font Awesome for icons used across templates -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<!-- Page base styles (optional small overrides) -->
-<!-- Removed Bootstrap and legacy CSS to use Tailwind exclusively -->
+<!-- Font Awesome & Local Inter font -->
+<link rel="stylesheet" href="{% static 'vendor/fonts/inter.css' %}">
+<link rel="stylesheet" href="{% static 'vendor/fontawesome/all.min.css' %}">
+<script src="{% static 'vendor/fontawesome/all.min.js' %}"></script>

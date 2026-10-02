@@ -1,6 +1,6 @@
 /* login.css - Optimized */
 /* Google Fonts - Load with &display=swap for better performance */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap');
+@import url('../vendor/fonts/poppins.css');
 
 /* CSS Variables - Organized by type */
 :root {
@@ -58,7 +58,7 @@ body {
   color: var(--text-color);
   line-height: 1.6;
   /* background: linear-gradient(135deg, var(--bg-color-dark), var(--light-color)); */
-  background-image: url('https://cdn.pixabay.com/photo/2023/07/19/06/20/ai-generated-8136171_1280.png');
+  background-image: url('../images/login-card-bg.png');
   background-size: cover;
   background-position: center;
 }
