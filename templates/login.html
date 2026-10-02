@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,36 +11,103 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         * { font-family: 'Inter', sans-serif; }
+        /* ---- Theme Variables ---- */
+        :root, [data-theme="dark"] {
+            --c-bg: linear-gradient(135deg, #060d1a 0%, #0d1a2e 40%, #0a0f1e 100%);
+            --c-panel: rgba(255,255,255,0.07);
+            --c-panel-border: rgba(255,255,255,0.12);
+            --c-input-bg: rgba(255,255,255,0.08);
+            --c-input-border: rgba(255,255,255,0.15);
+            --c-input-text: #ffffff;
+            --c-placeholder: rgba(255,255,255,0.4);
+            --c-text: #ffffff;
+            --c-text-2: #9ca3af;
+            --c-text-3: #6b7280;
+            --c-orb-1: rgba(37,99,235,0.10);
+            --c-orb-2: rgba(37,99,235,0.08);
+        }
+        [data-theme="light"] {
+            --c-bg: linear-gradient(135deg, #dbeafe 0%, #f1f5f9 40%, #e0e7ff 100%);
+            --c-panel: rgba(255,255,255,0.88);
+            --c-panel-border: rgba(15,23,42,0.08);
+            --c-input-bg: #f8fafc;
+            --c-input-border: #cbd5e1;
+            --c-input-text: #0f172a;
+            --c-placeholder: #94a3b8;
+            --c-text: #0f172a;
+            --c-text-2: #475569;
+            --c-text-3: #94a3b8;
+            --c-orb-1: rgba(37,99,235,0.06);
+            --c-orb-2: rgba(99,102,241,0.05);
+        }
+        body.auth-bg {
+            background: var(--c-bg) !important;
+            color: var(--c-text);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
         .glass-form {
-            background: rgba(255,255,255,0.07);
+            background: var(--c-panel);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.12);
+            border: 1px solid var(--c-panel-border);
+            transition: background 0.3s ease;
         }
         .input-field {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-            color: #fff;
+            background: var(--c-input-bg) !important;
+            border: 1px solid var(--c-input-border) !important;
+            color: var(--c-input-text) !important;
             transition: all 0.2s;
         }
-        .input-field::placeholder { color: rgba(255,255,255,0.4); }
+        .input-field::placeholder { color: var(--c-placeholder) !important; }
         .input-field:focus {
             outline: none;
-            border-color: #2563eb;
-            background: rgba(255,255,255,0.12);
+            border-color: #2563eb !important;
             box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
         }
+        [data-theme="light"] .text-white { color: var(--c-text) !important; }
+        [data-theme="light"] .text-gray-400 { color: var(--c-text-2) !important; }
+        [data-theme="light"] .text-gray-500, [data-theme="light"] .text-gray-600 { color: var(--c-text-3) !important; }
+        [data-theme="light"] label { color: var(--c-text-2) !important; }
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed; top: 1rem; right: 1rem; z-index: 999;
+            width: 2.25rem; height: 2.25rem; border-radius: 0.625rem;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; border: 1px solid var(--c-panel-border);
+            background: var(--c-panel); color: var(--c-text-2);
+            transition: all 0.2s ease; backdrop-filter: blur(8px);
+        }
+        .theme-toggle:hover { background: #2563eb; color: #fff; border-color: #2563eb; }
+        .theme-toggle .icon-sun  { display: none; }
+        .theme-toggle .icon-moon { display: block; }
+        [data-theme="light"] .theme-toggle .icon-sun  { display: block; }
+        [data-theme="light"] .theme-toggle .icon-moon { display: none; }
+        /* Orbs */
+        .orb { background: var(--c-orb-1) !important; }
+        .orb-2 { background: var(--c-orb-2) !important; }
     </style>
+    <script>
+        (function() {
+            var saved = localStorage.getItem('wsaps-theme') ||
+                (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+            document.documentElement.setAttribute('data-theme', saved);
+        })();
+    </script>
 </head>
 <body class="min-h-screen flex items-center justify-center relative overflow-hidden"
-      style="background: linear-gradient(135deg, #060d1a 0%, #0d1a2e 40%, #0a0f1e 100%);">
+      class="auth-bg min-h-screen flex items-center justify-center relative overflow-hidden">
 
     <!-- Background Orbs -->
     <div class="fixed inset-0 pointer-events-none overflow-hidden">
-        <div class="absolute -top-40 -right-40 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-800/10 rounded-full blur-3xl"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-900/5 rounded-full blur-3xl"></div>
+        <div class="orb absolute -top-40 -right-40 w-96 h-96 rounded-full blur-3xl"></div>
+        <div class="orb-2 absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-3xl"></div>
+        <div class="orb absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-3xl"></div>
     </div>
+    <!-- Theme Toggle -->
+    <button data-theme-toggle aria-label="Toggle theme" class="theme-toggle">
+        <i class="fas fa-sun icon-sun text-sm"></i>
+        <i class="fas fa-moon icon-moon text-sm"></i>
+    </button>
 
     <div class="relative z-10 w-full max-w-4xl mx-4 grid grid-cols-1 md:grid-cols-2 gap-0 rounded-3xl overflow-hidden shadow-2xl shadow-black/50" style="min-height: 520px;">
         
@@ -168,6 +235,15 @@
                 icon.classList.replace('fa-eye-slash', 'fa-eye');
             }
         }
+        // Theme toggle
+        document.querySelectorAll('[data-theme-toggle]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var html = document.documentElement;
+                var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                html.setAttribute('data-theme', next);
+                localStorage.setItem('wsaps-theme', next);
+            });
+        });
     </script>
 </body>
 </html>

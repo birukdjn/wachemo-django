@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="flex min-h-screen bg-[#0a1020]">
+<div class="flex min-h-screen" style="background: var(--c-bg);">
     <!-- Sidebar -->
     {% include 'student/sidebar.html' %}
 
@@ -32,7 +32,12 @@
                     <p class="text-gray-500 text-xs">{% block page_subtitle %}Wachemo School Academic Portal System{% endblock %}</p>
                 </div>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2">
+                <!-- Theme Toggle -->
+                <button data-theme-toggle aria-label="Toggle theme" class="theme-toggle" title="Toggle light/dark mode">
+                    <i class="fas fa-sun icon-sun text-xs"></i>
+                    <i class="fas fa-moon icon-moon text-xs"></i>
+                </button>
                 <!-- Notifications Bell -->
                 <div class="relative group">
                     <button class="w-8 h-8 bg-white/5 hover:bg-white/10 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-all relative">
