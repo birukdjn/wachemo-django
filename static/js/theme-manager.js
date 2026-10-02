@@ -34,11 +34,11 @@
         document.querySelectorAll('[data-theme-set]').forEach(btn => {
             const btnMode = btn.getAttribute('data-theme-set');
             if (btnMode === mode) {
-                btn.classList.add('bg-brand-blue', 'text-white', 'shadow-sm', 'font-semibold');
+                btn.classList.add('bg-blue-600', 'text-white', 'shadow-sm', 'font-semibold');
                 btn.classList.remove('text-gray-400', 'hover:text-white', 'opacity-60');
                 btn.setAttribute('aria-pressed', 'true');
             } else {
-                btn.classList.remove('bg-brand-blue', 'text-white', 'shadow-sm', 'font-semibold');
+                btn.classList.remove('bg-blue-600', 'text-white', 'shadow-sm', 'font-semibold');
                 btn.classList.add('text-gray-400', 'hover:text-white', 'opacity-60');
                 btn.setAttribute('aria-pressed', 'false');
             }
