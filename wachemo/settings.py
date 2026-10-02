@@ -73,6 +73,8 @@ WSGI_APPLICATION = 'wachemo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+import dj_database_url
+
 DB_PATH = BASE_DIR / 'db.sqlite3'
 if os.environ.get('VERCEL') or not os.access(BASE_DIR, os.W_OK):
     tmp_db = Path('/tmp/db.sqlite3')
@@ -85,12 +87,20 @@ if os.environ.get('VERCEL') or not os.access(BASE_DIR, os.W_OK):
     if tmp_db.exists():
         DB_PATH = tmp_db
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': DB_PATH,
+if os.environ.get('DATABASE_URL'):
+    DATABASES = {
+        'default': dj_database_url.config(
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': DB_PATH,
+        }
+    }
 
 
 AUTH_PASSWORD_VALIDATORS = [
