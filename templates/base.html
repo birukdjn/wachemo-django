@@ -14,6 +14,7 @@
                 extend: {
                     colors: {
                         navy: {
+                            950: '#060c18',
                             900: '#0d1a2e',
                             800: '#112240',
                             700: '#162d50',
@@ -47,9 +48,9 @@
             --c-text:         #ffffff;
             --c-text-2:       #94a3b8;
             --c-text-3:       #64748b;
-            --c-glass:        rgba(255,255,255,0.07);
-            --c-glass-border: rgba(255,255,255,0.12);
-            --c-shadow:       rgba(0,0,0,0.5);
+            --c-glass:        rgba(8, 17, 32, 0.82);
+            --c-glass-border: rgba(255,255,255,0.15);
+            --c-shadow:       rgba(0,0,0,0.6);
             --c-hover:        rgba(255,255,255,0.05);
             --c-scrollbar:    #0d1a2e;
             --c-accent:       #2563eb;
@@ -70,9 +71,9 @@
             --c-text:         #0f172a;
             --c-text-2:       #475569;
             --c-text-3:       #94a3b8;
-            --c-glass:        rgba(255,255,255,0.92);
-            --c-glass-border: rgba(15,23,42,0.08);
-            --c-shadow:       rgba(15,23,42,0.1);
+            --c-glass:        rgba(255,255,255,0.85);
+            --c-glass-border: rgba(255,255,255,0.90);
+            --c-shadow:       rgba(15,23,42,0.15);
             --c-hover:        rgba(15,23,42,0.04);
             --c-scrollbar:    #e2e8f0;
             --c-accent:       #2563eb;
@@ -90,6 +91,25 @@
             background: var(--c-bg);
             color: var(--c-text);
             transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Hero Glass Panel - Responsive Day (Light) and Night (Dark) */
+        .hero-glass-box {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        html.dark .hero-glass-box,
+        [data-theme="dark"] .hero-glass-box {
+            background: rgba(8, 17, 32, 0.82) !important;
+            backdrop-filter: blur(24px) !important;
+            -webkit-backdrop-filter: blur(24px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.08) inset !important;
         }
 
         /* Scrollbar */
