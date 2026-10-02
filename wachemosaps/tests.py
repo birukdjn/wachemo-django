@@ -194,5 +194,36 @@ class RBACAndSecurityTestCase(TestCase):
         res = self.client.get(reverse('mark_notification_read', args=[notif.id]))
         self.assertEqual(res.status_code, 404) # Direct object-level 404 rejection!
 
+    def test_domain_services_and_constraints(self):
+        """Verify domain services (EnrollmentService, GradingService, ParentService) and DB constraints."""
+        from services.enrollment_service import EnrollmentService
+        from services.grading_service import GradingService
+        from services.parent_service import ParentService
+        from django.db import IntegrityError
+
+        # 1. ParentService security checks
+        children = ParentService.get_linked_children(self.parent1_user)
+        self.assertEqual(len(children), 1)
+        self.assertEqual(children[0].id, self.student1.id)
+
+        selected = ParentService.get_selected_child(self.parent1_user, requested_student_id=str(self.student2.id))
+        self.assertEqual(selected.id, self.student1.id) # Rejects unlinked student2!
+
+        # 2. EnrollmentService capacity & duplicate prevention
+        enr = EnrollmentService.enroll_student(self.student2, self.course1, semester='Fall 2026', academic_year='2025/2026')
+        self.assertIsNotNone(enr)
+        self.assertTrue(enr.is_active)
+
+        # 3. GradingService final grade calculation
+        exam = Exam.objects.create(course=self.course1, title='Midterm', exam_type='midterm', exam_date='2026-12-01 10:00:00', max_points=100)
+        ExamResult.objects.create(exam=exam, student=self.student1, points_earned=92, is_published=True)
+        letter = GradingService.update_course_grade(self.student1, self.course1)
+        self.assertEqual(letter, 'A')
+
+        # 4. Database Unique Constraint checks
+        with self.assertRaises(IntegrityError):
+            ExamResult.objects.create(exam=exam, student=self.student1, points_earned=88)
+
+
 
 

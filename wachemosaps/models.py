@@ -80,6 +80,7 @@ class UserProfile(models.Model):
         ('student', 'Student'),
         ('parent', 'Parent'),
         ('teacher', 'Teacher'),
+        ('admin', 'Admin'),
     ]
     
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -89,6 +90,8 @@ class UserProfile(models.Model):
     student_id = models.CharField(max_length=20, blank=True, null=True)
     teacher_subject = models.CharField(max_length=50, blank=True, null=True)
     parent_phone = models.CharField(max_length=15, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
     
     def __str__(self):
         return f"{self.user.username} - {self.get_role_display()}"

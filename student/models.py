@@ -11,6 +11,7 @@ class Department(models.Model):
     description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return f"{self.code} - {self.name}"
@@ -26,6 +27,7 @@ class Instructor(models.Model):
     hire_date = models.DateField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def get_full_name(self):
         return f"{self.user.first_name} {self.user.last_name}"
@@ -57,6 +59,7 @@ class Student(models.Model):
     emergency_contact = models.CharField(max_length=100, blank=True)
     emergency_phone = models.CharField(max_length=15, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def get_full_name(self):
         return f"{self.user.first_name} {self.user.last_name}"
@@ -78,6 +81,7 @@ class Course(models.Model):
     semester = models.CharField(max_length=20, blank=True)
     academic_year = models.CharField(max_length=10, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return f"{self.code} - {self.name}"
@@ -90,9 +94,22 @@ class Enrollment(models.Model):
     is_active = models.BooleanField(default=True)
     semester = models.CharField(max_length=20, blank=True)
     academic_year = models.CharField(max_length=10, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     class Meta:
         unique_together = ['student', 'course', 'semester', 'academic_year']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['student', 'course', 'semester', 'academic_year'],
+                name='unique_student_course_period'
+            )
+        ]
+        indexes = [
+            models.Index(fields=['student', 'course']),
+            models.Index(fields=['student', 'semester', 'academic_year']),
+            models.Index(fields=['course', 'semester', 'academic_year']),
+        ]
 
     def __str__(self):
         return f"{self.student.student_id} - {self.course.code}"
@@ -105,6 +122,7 @@ class Assignment(models.Model):
     max_points = models.PositiveIntegerField(default=100)
     is_published = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return f"{self.course.code} - {self.title}"
@@ -118,9 +136,20 @@ class AssignmentSubmission(models.Model):
     points_earned = models.PositiveIntegerField(null=True, blank=True)
     feedback = models.TextField(blank=True)
     is_graded = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     class Meta:
         unique_together = ['assignment', 'student']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['assignment', 'student'],
+                name='unique_assignment_student_submission'
+            )
+        ]
+        indexes = [
+            models.Index(fields=['assignment', 'student']),
+        ]
 
     def __str__(self):
         return f"{self.student.student_id} - {self.assignment.title}"
@@ -140,9 +169,19 @@ class Attendance(models.Model):
     notes = models.TextField(blank=True)
     marked_by = models.ForeignKey(Instructor, on_delete=models.SET_NULL, null=True, related_name='marked_attendance')
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     class Meta:
         unique_together = ['student', 'course', 'date']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['student', 'course', 'date'],
+                name='unique_student_course_attendance_date'
+            )
+        ]
+        indexes = [
+            models.Index(fields=['student', 'course', 'date']),
+        ]
 
     def __str__(self):
         return f"{self.student.student_id} - {self.course.code} - {self.date}"
@@ -165,6 +204,7 @@ class Exam(models.Model):
     location = models.CharField(max_length=100, blank=True)
     is_published = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return f"{self.course.code} - {self.title}"
@@ -177,9 +217,19 @@ class ExamResult(models.Model):
     feedback = models.TextField(blank=True)
     is_published = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     class Meta:
         unique_together = ['exam', 'student']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['exam', 'student'],
+                name='unique_exam_student_result'
+            )
+        ]
+        indexes = [
+            models.Index(fields=['exam', 'student']),
+        ]
 
     def __str__(self):
         return f"{self.student.student_id} - {self.exam.title}"
@@ -205,6 +255,7 @@ class Book(models.Model):
     location = models.CharField(max_length=100, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return f"{self.title} by {self.author}"
@@ -225,6 +276,8 @@ class BookBorrowing(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='borrowed')
     fine_amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
     notes = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return f"{self.student.student_id} - {self.book.title}"
@@ -247,6 +300,7 @@ class Announcement(models.Model):
     expiry_date = models.DateTimeField(null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_announcements')
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -259,10 +313,15 @@ class Notification(models.Model):
     notification_type = models.CharField(max_length=50, default='info')  # info, warning, success, error
     related_url = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['user', 'is_read']),
+        ]
 
     def __str__(self):
         return f"{self.user.username} - {self.title}"
-
 
 class TimetableSchedule(models.Model):
     DAY_CHOICES = [
@@ -278,13 +337,14 @@ class TimetableSchedule(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     room = models.CharField(max_length=50, default='Hall A')
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     class Meta:
         ordering = ['start_time']
 
     def __str__(self):
         return f"{self.course.code} ({self.day_of_week} {self.start_time}-{self.end_time})"
-
 
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
@@ -293,13 +353,17 @@ class Message(models.Model):
     body = models.TextField()
     sent_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     class Meta:
         ordering = ['-sent_at']
+        indexes = [
+            models.Index(fields=['sender', 'recipient']),
+            models.Index(fields=['recipient', 'is_read']),
+        ]
 
     def __str__(self):
         return f"From {self.sender.username} to {self.recipient.username}: {self.subject}"
-
 
 class StudentClub(models.Model):
     name = models.CharField(max_length=100)
@@ -308,19 +372,30 @@ class StudentClub(models.Model):
     advisor = models.ForeignKey(Instructor, on_delete=models.SET_NULL, null=True, blank=True)
     logo_icon = models.CharField(max_length=50, default='fa-users')
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return self.name
-
 
 class ClubMembership(models.Model):
     club = models.ForeignKey(StudentClub, on_delete=models.CASCADE, related_name='memberships')
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='club_memberships')
     role = models.CharField(max_length=50, default='Member') # Member, President, Secretary
     joined_date = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     class Meta:
         unique_together = ['club', 'student']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['club', 'student'],
+                name='unique_club_student_membership'
+            )
+        ]
+        indexes = [
+            models.Index(fields=['club', 'student']),
+        ]
 
     def __str__(self):
         return f"{self.student.student_id} in {self.club.name}"
