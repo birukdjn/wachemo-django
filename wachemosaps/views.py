@@ -762,13 +762,18 @@ def admin_gallery(request):
             image_file = request.FILES.get('image_file')
             image_url = request.POST.get('image_url', '').strip()
 
-            if image_source == 'file' and image_file:
-                gallery = Gallery.objects.create(
-                    image_file=image_file,
+            if image_file:
+                import base64
+                file_bytes = image_file.read()
+                content_type = getattr(image_file, 'content_type', 'image/jpeg') or 'image/jpeg'
+                encoded = base64.b64encode(file_bytes).decode('utf-8')
+                data_url = f"data:{content_type};base64,{encoded}"
+
+                Gallery.objects.create(
+                    image_url=data_url,
+                    image=data_url,
                     description=description
                 )
-                gallery.image = gallery.image_file.url
-                gallery.save(update_fields=['image'])
                 messages.success(request, 'Gallery image uploaded from local storage successfully.')
                 return redirect('admin_gallery')
             elif image_url:
@@ -778,15 +783,6 @@ def admin_gallery(request):
                     description=description
                 )
                 messages.success(request, 'Gallery image added from URL link successfully.')
-                return redirect('admin_gallery')
-            elif image_file:
-                gallery = Gallery.objects.create(
-                    image_file=image_file,
-                    description=description
-                )
-                gallery.image = gallery.image_file.url
-                gallery.save(update_fields=['image'])
-                messages.success(request, 'Gallery image uploaded from local storage successfully.')
                 return redirect('admin_gallery')
             else:
                 messages.error(request, 'Please select an image file to upload or provide a valid image URL.')

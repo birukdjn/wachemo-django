@@ -31,14 +31,17 @@ class News(models.Model):
      
 class Gallery(models.Model):
     image_file = models.ImageField(upload_to='gallery/', blank=True, null=True)
-    image_url = models.CharField(max_length=500, blank=True, null=True)
-    image = models.CharField(max_length=500, blank=True, null=True)
+    image_url = models.TextField(blank=True, null=True)
+    image = models.TextField(blank=True, null=True)
     description = models.CharField(max_length=255, blank=True, null=True)
 
     @property
     def display_image(self):
         if self.image_file:
-            return self.image_file.url
+            try:
+                return self.image_file.url
+            except Exception:
+                pass
         return self.image_url or self.image or ""
 
     def __str__(self):
