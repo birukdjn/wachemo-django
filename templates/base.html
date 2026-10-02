@@ -273,7 +273,11 @@
         {% block content %}{% endblock %}
     </main>
 
-    {% include 'includes/footer.html' %}
+    {% block footer %}
+    {% if not hide_footer and not '/student/' in request.path and not '/teacher/' in request.path and not '/admin-dashboard' in request.path and request.path != '/dashboard/' and request.path != '/dashboard' %}
+        {% include 'includes/footer.html' %}
+    {% endif %}
+    {% endblock %}
 
     <script>
         // ===== Mobile Nav Toggle =====
