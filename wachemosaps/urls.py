@@ -14,6 +14,7 @@ urlpatterns = [
     path('gallery/', views.gallery, name='gallery'),
     path('news/', views.news, name='news'),
     path('exams/', views.exams, name='exams'),
+    path('subscribe-newsletter/', views.subscribe_newsletter, name='subscribe_newsletter'),
     path('logout/', auth_views.LogoutView.as_view(next_page='index',
          extra_context={'no_cache': True}), name='logout'),
 

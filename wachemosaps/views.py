@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 from django.db.models import Q, Count, Avg
 from django.contrib import messages
 from django.contrib.auth.models import User, auth, Permission
 from django.contrib.auth import login as auth_login
-from .models import News, Gallery, Event, UserProfile
+from .models import News, Gallery, Event, UserProfile, NewsletterSubscriber
 from .decorators import admin_required, parent_required
 
 from student.models import (
@@ -1169,3 +1170,46 @@ def parent_profile(request):
         'children_count': children.count(),
     }
     return render(request, 'parent/profile.html', context)
+
+
+def subscribe_newsletter(request):
+    """
+    Handle newsletter subscription requests.
+    Supports both standard POST redirect and AJAX inline toast responses.
+    """
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip().lower()
+        if not email or '@' not in email or '.' not in email:
+            msg = 'Please enter a valid email address.'
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'status': 'error', 'message': msg})
+            messages.error(request, msg)
+            return redirect(request.META.get('HTTP_REFERER', 'index'))
+
+        subscriber, created = NewsletterSubscriber.objects.get_or_create(
+            email=email,
+            defaults={'is_active': True}
+        )
+
+        if created:
+            msg = 'Thank you for subscribing! You will receive WSaPS news & updates.'
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'status': 'success', 'message': msg})
+            messages.success(request, msg)
+        else:
+            if not subscriber.is_active:
+                subscriber.is_active = True
+                subscriber.save()
+                msg = 'Welcome back! Your subscription has been reactivated.'
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse({'status': 'success', 'message': msg})
+                messages.success(request, msg)
+            else:
+                msg = 'This email address is already subscribed to our newsletter.'
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse({'status': 'warning', 'message': msg})
+                messages.warning(request, msg)
+
+        return redirect(request.META.get('HTTP_REFERER', 'index'))
+
+    return redirect('index')

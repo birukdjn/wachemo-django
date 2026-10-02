@@ -7,19 +7,67 @@
                 <h3 class="text-xl font-black text-slate-900 dark:text-white mb-1">Subscribe to Our Newsletter</h3>
                 <p class="text-slate-600 dark:text-gray-400 text-sm">Get the latest news, events, and announcements from Wachemo Secondary and Preparatory School straight to your inbox.</p>
             </div>
-            <form class="flex gap-2">
+            <form action="{% url 'subscribe_newsletter' %}" method="post" id="newsletterForm" onsubmit="handleNewsletterSubmit(event)" class="flex gap-2">
+                {% csrf_token %}
                 <div class="relative flex-1">
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 dark:text-gray-500"><i class="fas fa-envelope text-sm"></i></span>
-                    <input type="email" placeholder="Enter your email address"
+                    <input type="email" name="email" required placeholder="Enter your email address" id="newsletterEmail"
                         class="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 text-sm pl-10 pr-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
                 </div>
-                <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-3 rounded-xl text-sm transition-all whitespace-nowrap shadow-lg shadow-blue-600/20">
-                    Subscribe
+                <button type="submit" id="newsletterSubmitBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-3 rounded-xl text-sm transition-all whitespace-nowrap shadow-lg shadow-blue-600/20 flex items-center gap-2">
+                    <span>Subscribe</span>
                 </button>
             </form>
         </div>
     </div>
 </section>
+
+<script>
+function handleNewsletterSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const input = document.getElementById('newsletterEmail');
+    const btn = document.getElementById('newsletterSubmitBtn');
+    if (!input || !input.value.trim()) return;
+
+    const formData = new FormData(form);
+    btn.disabled = true;
+    btn.classList.add('opacity-75');
+
+    fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+        },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        btn.disabled = false;
+        btn.classList.remove('opacity-75');
+        if (data.status === 'success') {
+            if (typeof showToast === 'function') {
+                showToast(data.message, 'success', 'Subscribed!');
+            }
+            input.value = '';
+        } else if (data.status === 'warning') {
+            if (typeof showToast === 'function') {
+                showToast(data.message, 'warning', 'Already Subscribed');
+            }
+        } else {
+            if (typeof showToast === 'function') {
+                showToast(data.message || 'Error subscribing', 'error');
+            }
+        }
+    })
+    .catch(err => {
+        btn.disabled = false;
+        btn.classList.remove('opacity-75');
+        form.submit();
+    });
+}
+</script>
 
 <!-- Main Footer -->
 <footer class="bg-slate-50 dark:bg-navy-900 border-t border-slate-200 dark:border-white/5 transition-colors duration-300">
