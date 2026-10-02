@@ -1,20 +1,84 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}wachemoSaPS{% endblock %}</title>
-    {% include 'includes/styles.html' %}  <!-- CSS links -->
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}WSaPS | Wachemo School Academic Portal{% endblock %}</title>
+    <meta name="description" content="WSaPS - Wachemo School Academic Portal System. Modern digital learning tools for students and teachers.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            900: '#0d1a2e',
+                            800: '#112240',
+                            700: '#162d50',
+                            600: '#1a3660',
+                        },
+                        brand: {
+                            blue: '#2563eb',
+                            light: '#3b82f6',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .hero-slide { transition: opacity 0.8s ease-in-out; }
+        .glass-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .nav-link.active { border-bottom: 2px solid #fff; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #0d1a2e; }
+        ::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 999px; }
+    </style>
+    {% block extra_head %}{% endblock %}
 </head>
-<body>
-    {% include 'includes/header.html' %}  <!-- Navigation -->
+<body class="bg-navy-900 text-white antialiased">
+
+    {% include 'includes/header.html' %}
 
     <main>
-        {% block content %}  <!-- Content changes per page -->
-        {% endblock %}
+        {% block content %}{% endblock %}
     </main>
 
-    {% include 'includes/footer.html' %}  <!-- Footer -->
-    {% include 'includes/scripts.html' %} <!-- JS files -->
+    {% include 'includes/footer.html' %}
+
+    <script>
+        // Mobile menu toggle
+        const navToggle = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navbarNav');
+        if (navToggle && navMenu) {
+            navToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Auto-dismiss messages
+        setTimeout(() => {
+            document.querySelectorAll('[data-auto-dismiss]').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transition = 'opacity 0.4s';
+                setTimeout(() => el.remove(), 400);
+            });
+        }, 5000);
+    </script>
+    {% block extra_scripts %}{% endblock %}
 </body>
 </html>

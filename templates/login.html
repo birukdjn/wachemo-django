@@ -1,59 +1,173 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Wachemo School</title>
+    <title>Sign In | WSaPS - Wachemo School Academic Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .glass-form {
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .input-field {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+            transition: all 0.2s;
+        }
+        .input-field::placeholder { color: rgba(255,255,255,0.4); }
+        .input-field:focus {
+            outline: none;
+            border-color: #2563eb;
+            background: rgba(255,255,255,0.12);
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+        }
+    </style>
 </head>
-<body class="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-    <div class="w-full max-w-md bg-white shadow rounded p-6">
-        <div class="text-center mb-4 text-blue-600 text-4xl"><i class="fas fa-lock"></i></div>
-        <h2 class="text-center text-xl font-semibold mb-4">Login to Your Account</h2>
-        {% if request.GET.session_expired %}
-        <div class="mb-3 text-yellow-800 bg-yellow-100 border border-yellow-200 rounded p-3">
-            Your session expired due to inactivity. Please login again.
+<body class="min-h-screen flex items-center justify-center relative overflow-hidden"
+      style="background: linear-gradient(135deg, #060d1a 0%, #0d1a2e 40%, #0a0f1e 100%);">
+
+    <!-- Background Orbs -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden">
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-800/10 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-900/5 rounded-full blur-3xl"></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-4xl mx-4 grid grid-cols-1 md:grid-cols-2 gap-0 rounded-3xl overflow-hidden shadow-2xl shadow-black/50" style="min-height: 520px;">
+        
+        <!-- LEFT PANEL – Blue Illustration Side -->
+        <div class="bg-gradient-to-br from-blue-700 to-blue-500 hidden md:flex flex-col items-center justify-center p-10 text-white text-center relative overflow-hidden">
+            <!-- Decorative rings -->
+            <div class="absolute -top-20 -left-20 w-64 h-64 bg-white/5 rounded-full"></div>
+            <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-white/5 rounded-full"></div>
+            
+            <div class="relative z-10">
+                <div class="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur shadow-lg">
+                    <i class="fas fa-graduation-cap text-4xl text-white"></i>
+                </div>
+                <h2 class="text-3xl font-black mb-3">Welcome Back!</h2>
+                <p class="text-blue-100 text-sm leading-relaxed mb-8 max-w-xs mx-auto">Sign in to access your academic dashboard, courses, grades and more.</p>
+                <div class="flex flex-col gap-3 text-left max-w-xs mx-auto">
+                    <div class="flex items-center gap-3 bg-white/10 rounded-xl p-3">
+                        <i class="fas fa-book-open text-white/80 w-5"></i>
+                        <span class="text-sm font-medium text-blue-50">Access Course Materials</span>
+                    </div>
+                    <div class="flex items-center gap-3 bg-white/10 rounded-xl p-3">
+                        <i class="fas fa-chart-line text-white/80 w-5"></i>
+                        <span class="text-sm font-medium text-blue-50">Track Grades & Progress</span>
+                    </div>
+                    <div class="flex items-center gap-3 bg-white/10 rounded-xl p-3">
+                        <i class="fas fa-bell text-white/80 w-5"></i>
+                        <span class="text-sm font-medium text-blue-50">Get Instant Notifications</span>
+                    </div>
+                </div>
+            </div>
+            <p class="relative z-10 text-blue-100 text-xs mt-8">
+                Don't have an account? <a href="{% url 'signup' %}" class="font-bold text-white underline">Sign Up</a>
+            </p>
         </div>
-        {% endif %}
-        {% if messages %}
-            <div class="mb-3 text-red-700 bg-red-100 border border-red-200 rounded p-3">
+
+        <!-- RIGHT PANEL – Login Form -->
+        <div class="glass-form flex flex-col justify-center p-8 md:p-10">
+            <!-- Logo Header -->
+            <div class="flex items-center justify-center md:justify-start gap-2.5 mb-8">
+                <div class="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-600/30">
+                    <i class="fas fa-graduation-cap text-white text-sm"></i>
+                </div>
+                <span class="font-black text-white text-lg">WSaPS</span>
+            </div>
+
+            <h1 class="text-2xl font-black text-white mb-1">Sign In</h1>
+            <p class="text-gray-400 text-sm mb-7">Enter your credentials to access your portal</p>
+
+            <!-- Session Expired Alert -->
+            {% if request.GET.session_expired %}
+            <div class="mb-5 flex items-start gap-3 bg-yellow-500/10 border border-yellow-500/20 text-yellow-300 rounded-xl p-4 text-sm">
+                <i class="fas fa-exclamation-triangle mt-0.5 shrink-0"></i>
+                <span>Your session expired due to inactivity. Please sign in again.</span>
+            </div>
+            {% endif %}
+
+            <!-- Error Messages -->
+            {% if messages %}
+            <div class="mb-5 space-y-2" data-auto-dismiss>
                 {% for message in messages %}
-                    <p>{{ message }}</p>
+                <div class="flex items-start gap-3 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl p-4 text-sm">
+                    <i class="fas fa-circle-xmark mt-0.5 shrink-0"></i>
+                    <span>{{ message }}</span>
+                </div>
                 {% endfor %}
             </div>
-        {% endif %}
-        
-        <form action="login" method="POST" class="space-y-4">
-            {% csrf_token %}
+            {% endif %}
 
-            <div>
-                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                <div class="mt-1 relative">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fas fa-user"></i></span>
-                    <input type="text" id="username" name="username" placeholder="Username/email" required class="w-full pl-10 pr-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <form action="{% url 'login' %}" method="POST" class="space-y-4">
+                {% csrf_token %}
+                
+                <!-- Username -->
+                <div>
+                    <label for="username" class="block text-xs font-semibold text-gray-300 mb-1.5">Username</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-500"><i class="fas fa-user text-sm"></i></span>
+                        <input type="text" id="username" name="username" placeholder="Enter your username" required
+                            class="input-field w-full pl-10 pr-4 py-3 rounded-xl text-sm">
+                    </div>
                 </div>
-            </div>
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                <div class="mt-1 relative">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fas fa-lock"></i></span>
-                    <input type="password" id="password" name="password" placeholder="Password" required class="w-full pl-10 pr-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                <!-- Password -->
+                <div>
+                    <label for="password" class="block text-xs font-semibold text-gray-300 mb-1.5">Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-500"><i class="fas fa-lock text-sm"></i></span>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required
+                            class="input-field w-full pl-10 pr-12 py-3 rounded-xl text-sm">
+                        <button type="button" onclick="togglePwd()" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-500 hover:text-gray-300 transition-colors">
+                            <i id="eyeIcon" class="fas fa-eye text-sm"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div class="flex items-center justify-between">
-                <label class="inline-flex items-center gap-2">
-                    <input type="checkbox" id="remember" name="remember" class="rounded">
-                    <span class="text-sm">Remember me</span>
-                </label>
-                <a href="#" class="text-sm text-blue-600 hover:underline">Forgot password?</a>
-            </div>
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded">Login</button>
-            <p class="text-center text-sm">Don't have an account? <a class="text-blue-600 hover:underline" href="{% url 'signup' %}">Register here</a></p>
-        </form>
+
+                <!-- Remember + Forgot -->
+                <div class="flex items-center justify-between text-xs">
+                    <label class="flex items-center gap-2 text-gray-400 cursor-pointer">
+                        <input type="checkbox" name="remember" class="w-3.5 h-3.5 accent-blue-600 rounded"> Remember me
+                    </label>
+                    <a href="#" class="text-blue-400 hover:text-blue-300 font-medium transition-colors">Forgot password?</a>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-600/25 text-sm mt-2">
+                    Sign In to Portal
+                </button>
+
+                <!-- Register Link (mobile visible) -->
+                <p class="text-center text-xs text-gray-500 md:hidden">
+                    Don't have an account? <a href="{% url 'signup' %}" class="text-blue-400 hover:text-blue-300 font-semibold">Register here</a>
+                </p>
+            </form>
+        </div>
     </div>
-    <script src="{% static 'js/login.js' %}"></script>
+
+    <script>
+        function togglePwd() {
+            const pwd = document.getElementById('password');
+            const icon = document.getElementById('eyeIcon');
+            if (pwd.type === 'password') {
+                pwd.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                pwd.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+    </script>
 </body>
 </html>

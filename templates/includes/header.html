@@ -1,129 +1,130 @@
- <div class="bg-gray-100 text-sm">
-        <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
-            <ul class="flex gap-4 text-gray-600">
-                <li><a href="mailto:birukedjn@gmail.com" class="hover:text-gray-900"><i class="fas fa-envelope mr-1"></i> birukedjn@gmail.com</a></li>
-                <li><a href="tel:+251908574808" class="hover:text-gray-900"><i class="fas fa-phone mr-1"></i> +251 908 574 808</a></li>
-            </ul>
-            <ul class="flex gap-3 text-gray-600">
-                <li><a href="https://www.linkedin.com/in/birukdjn" class="hover:text-gray-900"><i class="fab fa-linkedin"></i></a></li>
-                <li><a href="https://www.instagram.com/birukdjn" class="hover:text-gray-900"><i class="fab fa-instagram"></i></a></li>
-                <li><a href="https://www.facebook.com/birukdjn" class="hover:text-gray-900"><i class="fab fa-facebook-f"></i></a></li>
-                <li><a href="https://www.twitter.com/birukdjn" class="hover:text-gray-900"><i class="fab fa-twitter"></i></a></li>
-                <li><a href="https://www.youtube.com/birukdjn" class="hover:text-gray-900"><i class="fab fa-youtube"></i></a></li>
+<!-- Top Info Bar -->
+<div class="bg-navy-800 text-gray-300 text-xs border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between flex-wrap gap-2">
+        <ul class="flex gap-5">
+            <li>
+                <a href="mailto:birukedjn@gmail.com" class="hover:text-white flex items-center gap-1.5 transition-colors">
+                    <i class="fas fa-envelope text-brand-blue"></i> birukedjn@gmail.com
+                </a>
+            </li>
+            <li>
+                <a href="tel:+251908574808" class="hover:text-white flex items-center gap-1.5 transition-colors">
+                    <i class="fas fa-phone text-brand-blue"></i> +251 908 574 808
+                </a>
+            </li>
+        </ul>
+        <ul class="flex gap-3">
+            <li><a href="https://www.linkedin.com/in/birukdjn" target="_blank" class="hover:text-brand-blue transition-colors"><i class="fab fa-linkedin"></i></a></li>
+            <li><a href="https://www.instagram.com/birukdjn" target="_blank" class="hover:text-brand-blue transition-colors"><i class="fab fa-instagram"></i></a></li>
+            <li><a href="https://www.facebook.com/birukdjn" target="_blank" class="hover:text-brand-blue transition-colors"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a href="https://www.twitter.com/birukdjn" target="_blank" class="hover:text-brand-blue transition-colors"><i class="fab fa-twitter"></i></a></li>
+            <li><a href="https://www.youtube.com/birukdjn" target="_blank" class="hover:text-brand-blue transition-colors"><i class="fab fa-youtube"></i></a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Main Navigation Bar -->
+<nav class="sticky top-0 z-50 bg-navy-800 border-b border-white/5 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        <!-- Logo -->
+        <a href="{% url 'index' %}" class="flex items-center gap-2.5 shrink-0">
+            <div class="w-9 h-9 bg-brand-blue rounded-lg flex items-center justify-center font-black text-white text-sm shadow">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <span class="font-black text-lg tracking-tight text-white">WSaPS</span>
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button id="navToggle" class="lg:hidden text-gray-300 hover:text-white p-2 rounded-md" aria-label="Toggle Menu">
+            <i class="fas fa-bars text-lg"></i>
+        </button>
+
+        <!-- Nav Links -->
+        <div id="navbarNav" class="hidden lg:flex lg:items-center lg:gap-1 absolute top-full left-0 right-0 bg-navy-800 border-b border-white/5 lg:static lg:border-0 lg:bg-transparent">
+            <ul class="flex flex-col lg:flex-row items-start lg:items-center px-4 lg:px-0 py-3 lg:py-0 gap-1 lg:gap-0">
+                <li>
+                    <a href="{% url 'index' %}" class="nav-link flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-200 hover:text-white rounded-md hover:bg-white/5 transition-all {% if request.resolver_match.url_name == 'index' %}text-white bg-white/5 border-b-2 border-brand-blue{% endif %}">
+                        <i class="fas fa-home text-xs"></i> Home
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'about' %}" class="nav-link flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-200 hover:text-white rounded-md hover:bg-white/5 transition-all {% if request.resolver_match.url_name == 'about' %}text-white bg-white/5{% endif %}">
+                        <i class="fas fa-info-circle text-xs"></i> About
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'features' %}" class="nav-link flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-200 hover:text-white rounded-md hover:bg-white/5 transition-all {% if request.resolver_match.url_name == 'features' %}text-white bg-white/5{% endif %}">
+                        <i class="fas fa-star text-xs"></i> Features
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'news' %}" class="nav-link flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-200 hover:text-white rounded-md hover:bg-white/5 transition-all {% if request.resolver_match.url_name == 'news' %}text-white bg-white/5{% endif %}">
+                        <i class="fas fa-newspaper text-xs"></i> News
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'gallery' %}" class="nav-link flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-200 hover:text-white rounded-md hover:bg-white/5 transition-all {% if request.resolver_match.url_name == 'gallery' %}text-white bg-white/5{% endif %}">
+                        <i class="fas fa-images text-xs"></i> Gallery
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'contact' %}" class="nav-link flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-200 hover:text-white rounded-md hover:bg-white/5 transition-all {% if request.resolver_match.url_name == 'contact' %}text-white bg-white/5{% endif %}">
+                        <i class="fas fa-envelope text-xs"></i> Contact
+                    </a>
+                </li>
+                <!-- Quick Links Dropdown -->
+                <li class="relative group">
+                    <button class="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-200 hover:text-white rounded-md hover:bg-white/5 transition-all">
+                        <i class="fas fa-external-link-alt text-xs"></i> Quick Links
+                        <i class="fas fa-chevron-down text-[10px] ml-0.5 group-hover:rotate-180 transition-transform duration-200"></i>
+                    </button>
+                    <ul class="absolute left-0 top-full hidden group-hover:block min-w-[200px] bg-navy-700 border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 mt-1">
+                        <li><a href="#" class="flex items-center gap-2 px-4 py-3 text-sm text-gray-200 hover:bg-brand-blue/20 hover:text-white transition-colors"><i class="fas fa-calendar-alt w-4"></i> Academic Calendar</a></li>
+                        <li><a href="{% url 'event' %}" class="flex items-center gap-2 px-4 py-3 text-sm text-gray-200 hover:bg-brand-blue/20 hover:text-white transition-colors"><i class="fas fa-calendar-check w-4"></i> School Events</a></li>
+                        <li><a href="{% url 'exams' %}" class="flex items-center gap-2 px-4 py-3 text-sm text-gray-200 hover:bg-brand-blue/20 hover:text-white transition-colors"><i class="fas fa-poll w-4"></i> Exam Results</a></li>
+                        <li class="border-t border-white/10"><a href="#" class="flex items-center gap-2 px-4 py-3 text-sm text-gray-200 hover:bg-brand-blue/20 hover:text-white transition-colors"><i class="fas fa-address-book w-4"></i> Staff Directory</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
-    </div>
 
-    <!-- Navigation Bar -->
-    <nav class="sticky top-0 z-40 bg-blue-700 text-white">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            <a class="flex items-center gap-2 font-semibold" href="{% url 'index' %}">
-                <img src="https://1drv.ms/i/c/7389654435428074/IQR-zoIv7SkQS5SzfdUf-3qWAZ-KzS2mwEMxqVcMwm6oLx8?width=500&height=500"  alt="logo" class="h-8 w-8 rounded-full">
-                <span class="tracking-wide">WSaPS</span>
-            </a>
-            <button class="lg:hidden" id="navToggle" aria-label="Toggle Menu">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div id="navbarNav" class="hidden lg:flex lg:items-center lg:gap-6">
-                <ul class="flex flex-col lg:flex-row gap-2 lg:gap-6">
+        <!-- Auth Area -->
+        <div class="hidden lg:block ml-2">
+            {% if user.is_authenticated %}
+            <div class="relative group">
+                <button class="flex items-center gap-2 bg-brand-blue hover:bg-brand-light text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm">
+                    <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center text-xs font-bold">
+                        {{ user.username|first|upper }}
+                    </div>
+                    {{ user.username }}
+                    <i class="fas fa-chevron-down text-[10px] group-hover:rotate-180 transition-transform duration-200"></i>
+                </button>
+                <ul class="absolute right-0 top-full hidden group-hover:block min-w-[200px] bg-navy-700 border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 mt-1">
                     <li>
-                       <a class="hover:text-gray-200 {% if request.path == '/' %}underline font-semibold{% endif %}" href="{% url 'index' %}">
-                            <i class="fas fa-home mr-1"></i> Home
+                        <a href="{% if user.userprofile.role == 'teacher' %}{% url 'teacher_dashboard' %}{% else %}{% url 'dashboard' %}{% endif %}" class="flex items-center gap-2.5 px-4 py-3 text-sm text-gray-200 hover:bg-brand-blue/20 hover:text-white transition-colors font-semibold">
+                            <i class="fas fa-gauge w-4 text-brand-blue"></i> Dashboard
                         </a>
                     </li>
                     <li>
-                        <a class="hover:text-gray-200 {% if request.path == '/about' %}underline font-semibold{% endif %}" href="{% url 'about' %}">
-                            <i class="fas fa-info-circle mr-1"></i> About
+                        <a href="{% url 'student_profile' %}" class="flex items-center gap-2.5 px-4 py-3 text-sm text-gray-200 hover:bg-brand-blue/20 hover:text-white transition-colors">
+                            <i class="fas fa-user-edit w-4"></i> Profile
                         </a>
                     </li>
-                    <li>
-                        <a class="hover:text-gray-200 {% if request.path == '/features' %}underline font-semibold{% endif %}" href="{% url 'features' %}">
-                            <i class="fas fa-star mr-1"></i> Features
-                        </a>
-                    </li>
-                    <li>
-                        <a class="hover:text-gray-200 {% if request.path == '/news' %}underline font-semibold{% endif %}" href="{% url 'news' %}">
-                            <i class="fas fa-newspaper mr-1"></i> News
-                        </a>
-                    </li>
-                    <li>
-                          <a class="hover:text-gray-200 {% if request.path == '/gallery' %}underline font-semibold{% endif %}" href="{% url 'gallery' %}">
-                            <i class="fas fa-images mr-1"></i> Gallery
-                        </a>
-                    </li>
-                    <li>
-                        <a class="hover:text-gray-200 {% if request.path == '/contact' %}underline font-semibold{% endif %}" href="{% url 'contact' %}">
-                            <i class="fas fa-envelope mr-1"></i> Contact
-                        </a>
-                    </li>
-                    <li class="relative group">
-                        <button class="hover:text-gray-200 flex items-center gap-1">
-                            <i class="fas fa-external-link-alt mr-1"></i> Quick Links
-                            <i class="fas fa-chevron-down text-xs"></i>
-                        </button>
-                        <ul class="absolute hidden group-hover:block bg-white text-gray-800 rounded shadow-lg mt-2 min-w-56">
-                            <li>
-                                <a class="block px-4 py-2 hover:bg-gray-100" href="#">
-                                    <i class="fas fa-calendar-alt mr-1"></i> Academic Calendar
-                                </a>
-                            </li>
-                            <li>
-                                <a class="block px-4 py-2 hover:bg-gray-100" href=" {% url 'event' %} ">
-                                    <i class="fas fa-calendar-check mr-1"></i> School Events
-                                </a>
-                            </li>
-                            <li>
-                                <a class="block px-4 py-2 hover:bg-gray-100" href="{% url 'exams' %}">
-                                    <i class="fas fa-poll mr-1"></i> Exam Results
-                                </a>
-                            </li>
-                            <li><hr class="my-1"></li>
-                            <li>
-                                <a class="block px-4 py-2 hover:bg-gray-100" href="#">
-                                    <i class="fas fa-address-book mr-1"></i> Staff Directory
-                                </a>
-                            </li>
-                        </ul>
+                    <li class="border-t border-white/10">
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors font-semibold">
+                                <i class="fas fa-sign-out-alt w-4"></i> Logout
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </div>
-            <div class="ml-4">
-                {% if user.is_authenticated %}
-                <div class="relative group inline-block text-left">
-                    <button class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded inline-flex items-center gap-2" type="button">
-                        <i class="fas fa-user-circle"></i> {{ user.username }}
-                        <i class="fas fa-chevron-down text-xs"></i>
-                    </button>
-                    <ul class="absolute right-0 hidden group-hover:block mt-1 w-48 bg-white text-gray-800 rounded shadow-xl border border-gray-200 z-50">
-                        <li>
-                            <a class="block px-4 py-2 hover:bg-gray-100 font-semibold text-blue-700" href="{% if user.userprofile.role == 'teacher' %}{% url 'teacher_dashboard' %}{% else %}{% url 'dashboard' %}{% endif %}">
-                                <i class="fas fa-gauge mr-1"></i> Dashboard
-                            </a>
-                        </li>
-                        <li>
-                            <a class="block px-4 py-2 hover:bg-gray-100 text-gray-700" href="{% url 'student_profile' %}">
-                                <i class="fas fa-user-edit mr-1"></i> Profile
-                            </a>
-                        </li>
-                        <li><hr class="my-1"></li>
-                        <li>
-                            <form method="post" action="{% url 'logout' %}">
-                                {% csrf_token %}
-                                <button type="submit" class="w-full text-left block px-4 py-2 hover:bg-red-50 text-red-600 font-semibold">
-                                    <i class="fas fa-sign-out-alt mr-1"></i> Logout
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-                {% else %}
-                <div class="relative inline-block text-left">
-                    <a class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded inline-flex items-center gap-2" href="{% url 'login' %}">
-                        <i class="fas fa-user-circle"></i> Account
-                    </a>
-                </div>
-                {% endif %}
-            </div>
-
+            {% else %}
+            <a href="{% url 'login' %}" class="flex items-center gap-2 bg-brand-blue hover:bg-brand-light text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm">
+                <i class="fas fa-user-circle"></i> Account
+            </a>
+            {% endif %}
         </div>
-    </nav>
+    </div>
+</nav>

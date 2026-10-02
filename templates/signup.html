@@ -1,127 +1,258 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - wachemoSaPS</title>
+    <title>Create Account | WSaPS - Wachemo School Academic Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .glass-form {
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .input-field {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+            transition: all 0.2s;
+        }
+        .input-field::placeholder { color: rgba(255,255,255,0.35); }
+        .input-field:focus {
+            outline: none;
+            border-color: #2563eb;
+            background: rgba(255,255,255,0.12);
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+        }
+        select.input-field option { background: #0d1a2e; color: #fff; }
+    </style>
 </head>
-<body class="min-h-screen bg-gray-50">
-    <div class="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-        <div class="text-center md:text-left">
-            <img src="https://1drv.ms/i/c/7389654435428074/IQTZbGaG657lTLdRZgLDKVPAAbB2gA2KPY0vrJoCJXe5RgI?width=5209&height=5209" class="mx-auto md:mx-0 h-48 w-48 rounded-full object-cover">
-            <h2 class="mt-4 text-2xl font-semibold">Join Our Community</h2>
-            <p class="text-gray-600">Already have an account? <a href= "{% url 'login'%}" class="text-blue-600 hover:underline">Sign in</a></p>
+<body class="min-h-screen flex items-center justify-center relative overflow-hidden py-8"
+      style="background: linear-gradient(135deg, #060d1a 0%, #0d1a2e 40%, #0a0f1e 100%);">
+
+    <!-- Background Orbs -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden">
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-800/10 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/3 left-1/3 w-[500px] h-[500px] bg-indigo-900/8 rounded-full blur-3xl"></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-5xl mx-4 grid grid-cols-1 md:grid-cols-2 gap-0 rounded-3xl overflow-hidden shadow-2xl shadow-black/50">
+        
+        <!-- LEFT PANEL – Blue Illustration Side -->
+        <div class="bg-gradient-to-br from-blue-700 to-blue-500 hidden md:flex flex-col items-center justify-center p-10 text-white text-center relative overflow-hidden">
+            <!-- Decorative rings -->
+            <div class="absolute -top-16 -left-16 w-56 h-56 bg-white/5 rounded-full"></div>
+            <div class="absolute -bottom-16 -right-16 w-56 h-56 bg-white/5 rounded-full"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-white/3 rounded-full"></div>
+
+            <div class="relative z-10">
+                <!-- Illustration icon -->
+                <div class="w-24 h-24 bg-white/10 rounded-3xl flex items-center justify-center mx-auto mb-6 backdrop-blur shadow-xl relative">
+                    <i class="fas fa-user-shield text-5xl text-white"></i>
+                    <div class="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-star text-yellow-900 text-xs"></i>
+                    </div>
+                </div>
+                <h2 class="text-3xl font-black mb-3">Join Our Community</h2>
+                <p class="text-blue-100 text-sm leading-relaxed mb-8 max-w-xs mx-auto">
+                    Create your account and get instant access to your personalized academic portal.
+                </p>
+                <div class="flex flex-col gap-3 text-left max-w-xs mx-auto">
+                    <div class="flex items-center gap-3 bg-white/10 rounded-xl p-3">
+                        <i class="fas fa-graduation-cap text-white/80 w-5"></i>
+                        <span class="text-sm font-medium text-blue-50">Student & Teacher Portals</span>
+                    </div>
+                    <div class="flex items-center gap-3 bg-white/10 rounded-xl p-3">
+                        <i class="fas fa-shield-alt text-white/80 w-5"></i>
+                        <span class="text-sm font-medium text-blue-50">Secure & Private Account</span>
+                    </div>
+                    <div class="flex items-center gap-3 bg-white/10 rounded-xl p-3">
+                        <i class="fas fa-mobile-alt text-white/80 w-5"></i>
+                        <span class="text-sm font-medium text-blue-50">Access from Any Device</span>
+                    </div>
+                </div>
+            </div>
+            <p class="relative z-10 text-blue-100 text-xs mt-8">
+                Already have an account? <a href="{% url 'login' %}" class="font-bold text-white underline">Sign In</a>
+            </p>
         </div>
-        <div class="bg-white shadow rounded p-6">
-            <div class="text-blue-600 text-3xl mb-2"><i class="fas fa-user-plus"></i></div>
-            <h2 class="text-xl font-semibold mb-4">Create Account</h2>
-            
-            {% for message in messages %}
-            <div class="mb-3 text-red-700 bg-red-100 border border-red-200 rounded p-3"> {{ message }}</div>
-            {% endfor %}
-            
-            <form action="signup" method="POST" class="space-y-4">
-                {% csrf_token %} 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <!-- RIGHT PANEL – Registration Form -->
+        <div class="glass-form flex flex-col justify-center p-8 md:p-10">
+            <!-- Logo -->
+            <div class="flex items-center justify-center md:justify-start gap-2.5 mb-6">
+                <div class="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-600/30">
+                    <i class="fas fa-graduation-cap text-white text-sm"></i>
+                </div>
+                <span class="font-black text-white text-lg">WSaPS</span>
+            </div>
+
+            <!-- Icon circle -->
+            <div class="w-12 h-12 bg-blue-600/20 border border-blue-500/30 rounded-full flex items-center justify-center mb-4">
+                <i class="fas fa-user-plus text-blue-400 text-xl"></i>
+            </div>
+
+            <h1 class="text-2xl font-black text-white mb-1">Create Account</h1>
+            <p class="text-gray-400 text-sm mb-6">Fill in your details to register for WSaPS</p>
+
+            {% if messages %}
+            <div class="mb-4 space-y-2">
+                {% for message in messages %}
+                <div class="flex items-start gap-3 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl p-3 text-sm">
+                    <i class="fas fa-circle-xmark mt-0.5 shrink-0"></i>
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form action="{% url 'signup' %}" method="POST" class="space-y-4">
+                {% csrf_token %}
+
+                <!-- Name Row -->
+                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label for="firstname" class="block text-sm font-medium text-gray-700">First Name</label>
-                        <div class="mt-1 relative">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fas fa-user"></i></span>
-                            <input type="text" id="firstname" name="firstname" placeholder="John" required class="w-full pl-10 pr-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <label class="block text-xs font-semibold text-gray-300 mb-1.5">First Name</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500"><i class="fas fa-user text-xs"></i></span>
+                            <input type="text" name="firstname" placeholder="John" required
+                                class="input-field w-full pl-9 pr-3 py-2.5 rounded-xl text-sm">
                         </div>
                     </div>
                     <div>
-                        <label for="lastname" class="block text-sm font-medium text-gray-700">Last Name</label>
-                        <div class="mt-1 relative">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fas fa-user"></i></span>
-                            <input type="text" id="lastname" name="lastname" placeholder="Doe" required class="w-full pl-10 pr-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                        <div class="mt-1 relative">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fas fa-envelope"></i></span>
-                            <input type="email" id="email" name="email" placeholder="your@email.com" required class="w-full pl-10 pr-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                        <div class="mt-1 relative">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fas fa-at"></i></span>
-                            <input type="text" id="username" name="username" placeholder="johndoe" required class="w-full pl-10 pr-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                        <div class="mt-1 relative">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fas fa-lock"></i></span>
-                            <input type="password" id="password" name="password" placeholder="••••••••" required class="w-full pl-10 pr-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="confirm-password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
-                        <div class="mt-1 relative">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fas fa-lock"></i></span>
-                            <input type="password" id="confirm-password" name="confirm_password" placeholder="••••••••" required class="w-full pl-10 pr-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <label class="block text-xs font-semibold text-gray-300 mb-1.5">Last Name</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500"><i class="fas fa-user text-xs"></i></span>
+                            <input type="text" name="lastname" placeholder="Doe" required
+                                class="input-field w-full pl-9 pr-3 py-2.5 rounded-xl text-sm">
                         </div>
                     </div>
                 </div>
+
+                <!-- Email + Username Row -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1.5">Email</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500"><i class="fas fa-envelope text-xs"></i></span>
+                            <input type="email" name="email" placeholder="your@email.com" required
+                                class="input-field w-full pl-9 pr-3 py-2.5 rounded-xl text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1.5">Username</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500"><i class="fas fa-at text-xs"></i></span>
+                            <input type="text" name="username" placeholder="birukdjn" required
+                                class="input-field w-full pl-9 pr-3 py-2.5 rounded-xl text-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Password Row -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1.5">Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500"><i class="fas fa-lock text-xs"></i></span>
+                            <input type="password" name="password" placeholder="••••••••" required
+                                class="input-field w-full pl-9 pr-3 py-2.5 rounded-xl text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1.5">Confirm Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500"><i class="fas fa-lock text-xs"></i></span>
+                            <input type="password" name="confirm_password" placeholder="••••••••" required
+                                class="input-field w-full pl-9 pr-3 py-2.5 rounded-xl text-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Role Selector -->
                 <div>
-                    <label for="role" class="block text-sm font-medium text-gray-700">Register as</label>
-                    <select id="role" name="role" required onchange="showRoleFields()" class="mt-1 w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="" disabled selected>Select your role</option>
-                        <option value="student">Student</option>
-                        <option value="parent">Parent</option>
-                        <option value="teacher">Teacher</option>
-                    </select>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1.5">Register as</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500"><i class="fas fa-id-badge text-xs"></i></span>
+                        <select name="role" id="role" required onchange="showRoleFields()"
+                            class="input-field w-full pl-9 pr-4 py-2.5 rounded-xl text-sm appearance-none cursor-pointer">
+                            <option value="" disabled selected>Select your role</option>
+                            <option value="student">Student</option>
+                            <option value="teacher">Teacher</option>
+                            <option value="parent">Parent</option>
+                        </select>
+                        <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 pointer-events-none"><i class="fas fa-chevron-down text-xs"></i></span>
+                    </div>
                 </div>
 
                 <!-- Student Fields -->
                 <div id="studentFields" class="hidden">
-                    <label for="student_id" class="block text-sm font-medium text-gray-700">Student ID</label>
-                    <input type="text" id="student_id" name="student_id" placeholder="Enter your student ID" class="mt-1 w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label class="block text-xs font-semibold text-gray-300 mb-1.5">Student ID</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500"><i class="fas fa-id-card text-xs"></i></span>
+                        <input type="text" name="student_id" placeholder="Enter your student ID"
+                            class="input-field w-full pl-9 pr-3 py-2.5 rounded-xl text-sm">
+                    </div>
                 </div>
 
                 <!-- Teacher Fields -->
                 <div id="teacherFields" class="hidden">
-                    <label for="teacher_subject" class="block text-sm font-medium text-gray-700">Subject</label>
-                    <input type="text" id="teacher_subject" name="teacher_subject" placeholder="Enter your subject" class="mt-1 w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label class="block text-xs font-semibold text-gray-300 mb-1.5">Teaching Subject</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500"><i class="fas fa-chalkboard text-xs"></i></span>
+                        <input type="text" name="teacher_subject" placeholder="e.g. Mathematics"
+                            class="input-field w-full pl-9 pr-3 py-2.5 rounded-xl text-sm">
+                    </div>
                 </div>
 
                 <!-- Parent Fields -->
                 <div id="parentFields" class="hidden">
-                    <label for="parent_phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                    <input type="text" id="parent_phone" name="parent_phone" placeholder="Enter your phone number" class="mt-1 w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label class="block text-xs font-semibold text-gray-300 mb-1.5">Phone Number</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500"><i class="fas fa-phone text-xs"></i></span>
+                        <input type="text" name="parent_phone" placeholder="+251 9xx xxx xxx"
+                            class="input-field w-full pl-9 pr-3 py-2.5 rounded-xl text-sm">
+                    </div>
                 </div>
 
-                <label class="inline-flex items-center gap-2">
-                    <input type="checkbox" id="terms" name="terms" required class="rounded">
-                    <span class="text-sm">I agree to the <a href="#" class="text-blue-600 hover:underline">Terms & Conditions</a></span>
+                <!-- Terms -->
+                <label class="flex items-start gap-2.5 cursor-pointer group">
+                    <input type="checkbox" name="terms" id="terms" required
+                        class="mt-0.5 w-4 h-4 accent-blue-600 rounded shrink-0">
+                    <span class="text-xs text-gray-400 leading-relaxed">
+                        I agree to the <a href="#" class="text-blue-400 hover:text-blue-300 font-semibold transition-colors">Terms &amp; Conditions</a> and <a href="#" class="text-blue-400 hover:text-blue-300 font-semibold transition-colors">Privacy Policy</a>
+                    </span>
                 </label>
-                
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded">Register Now</button>
+
+                <!-- Submit -->
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-600/25 text-sm">
+                    Register Now
+                </button>
+
+                <!-- Sign In Link (mobile) -->
+                <p class="text-center text-xs text-gray-500 md:hidden">
+                    Already have an account? <a href="{% url 'login' %}" class="text-blue-400 hover:text-blue-300 font-semibold">Sign In</a>
+                </p>
             </form>
         </div>
     </div>
 
-<script>
-function showRoleFields() {
-    document.getElementById('studentFields').classList.add('hidden');
-    document.getElementById('teacherFields').classList.add('hidden');
-    document.getElementById('parentFields').classList.add('hidden');
-    const role = document.getElementById('role').value;
-    if (role === 'student') {
-        document.getElementById('studentFields').classList.remove('hidden');
-    } else if (role === 'teacher') {
-        document.getElementById('teacherFields').classList.remove('hidden');
-    } else if (role === 'parent') {
-        document.getElementById('parentFields').classList.remove('hidden');
+    <script>
+    function showRoleFields() {
+        ['studentFields', 'teacherFields', 'parentFields'].forEach(id => {
+            document.getElementById(id).classList.add('hidden');
+        });
+        const role = document.getElementById('role').value;
+        const map = { student: 'studentFields', teacher: 'teacherFields', parent: 'parentFields' };
+        if (map[role]) document.getElementById(map[role]).classList.remove('hidden');
     }
-}
-</script>
+    </script>
 </body>
 </html>
